@@ -394,81 +394,6 @@ const peluqueriaSections: PresetSection[] = [
 
 const peluqueriaBlocks: PresetBlock[] = [
     {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-8' },
-    },
-    {
-        type: 'heading',
-        visible: true,
-        content: {
-            text: 'Sobre el estudio',
-            level: 'h2',
-            align: 'center',
-        },
-    },
-    {
-        type: 'paragraph',
-        visible: true,
-        content: {
-            content: {
-                type: 'doc',
-                content: [
-                    {
-                        type: 'paragraph',
-                        content: [
-                            {
-                                type: 'text',
-                                text: 'Somos un equipo de ',
-                            },
-                            {
-                                type: 'text',
-                                marks: [{ type: 'bold' }],
-                                text: 'especialistas en belleza',
-                            },
-                            {
-                                type: 'text',
-                                text: ' con más de 10 años de experiencia en La Paz. Trabajamos con productos de primera línea y nos capacitamos constantemente para traerte las últimas tendencias.',
-                            },
-                        ],
-                    },
-                ],
-            },
-            align: 'center',
-        },
-    },
-    {
-        type: 'image',
-        visible: true,
-        content: {
-            image_media_id: 27,
-            alt: 'Camila trabajando en el estudio',
-            aspect: 'wide',
-            rounded: true,
-        },
-    },
-    {
-        type: 'button',
-        visible: true,
-        content: {
-            label: 'Conocé a nuestro equipo',
-            href: '#team',
-            variant: 'outline',
-            size: 'md',
-            align: 'center',
-        },
-    },
-    {
-        type: 'divider',
-        visible: true,
-        content: { style: 'solid' },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-4' },
-    },
-    {
         type: 'gallery',
         visible: true,
         content: {
@@ -513,16 +438,6 @@ const peluqueriaBlocks: PresetBlock[] = [
         },
     },
     {
-        type: 'divider',
-        visible: true,
-        content: { style: 'solid' },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-8' },
-    },
-    {
         type: 'heading',
         visible: true,
         content: {
@@ -560,29 +475,9 @@ const peluqueriaBlocks: PresetBlock[] = [
         },
     },
     {
-        type: 'map',
-        visible: true,
-        content: {
-            address: 'Av. Ballivián, La Paz',
-            lat: -16.5228,
-            lng: -68.0843,
-            zoom: 15,
-            marker: true,
-            scroll_wheel_zoom: false,
-            height: 'md',
-            radius: 'xl',
-            caption: 'Estudio Camila · Av. Ballivián, La Paz',
-        },
-    },
-    {
-        type: 'divider',
-        visible: true,
-        content: { style: 'solid' },
-    },
-    {
         type: 'spacer',
         visible: true,
-        content: { height: 'h-8' },
+        content: { height: 'h-12' },
     },
 ];
 
