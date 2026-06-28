@@ -376,62 +376,6 @@
                     }
                 ]
             }
-        },
-        {
-            "id": "location",
-            "visible": true,
-            "content": {
-                "eyebrow": "Ubicación",
-                "title": "¿Dónde encontrarnos?",
-                "description": "Pasá por nuestro estudio, escribinos o agendá tu turno por WhatsApp.",
-                "show_contact_info": true,
-                "address": "Av. Ballivián, La Paz",
-                "lat": -16.5228,
-                "lng": -68.0843,
-                "zoom": 15,
-                "marker": true,
-                "scroll_wheel_zoom": false,
-                "map_height": "lg",
-                "map_radius": "xl",
-                "contact_info": [
-                    {
-                        "icon": "MapPin",
-                        "label": "Dirección",
-                        "value": "Av. Ballivián, La Paz",
-                        "href": ""
-                    },
-                    {
-                        "icon": "Phone",
-                        "label": "Teléfono",
-                        "value": "+591 70000000",
-                        "href": "tel:+59170000000"
-                    },
-                    {
-                        "icon": "Mail",
-                        "label": "Email",
-                        "value": "hola@estudiocamila.bo",
-                        "href": "mailto:hola@estudiocamila.bo"
-                    },
-                    {
-                        "icon": "Clock",
-                        "label": "Horarios",
-                        "value": "Lun a Sáb · 9 a 20 hs",
-                        "href": ""
-                    }
-                ]
-            }
-        },
-        {
-            "id": "cta",
-            "visible": true,
-            "content": {
-                "title": "¿Lista para tu nuevo look?",
-                "subtitle": "Reservá tu turno ahora y dejate cuidar por nuestras especialistas.",
-                "button_label": "Reservar por WhatsApp",
-                "button_href": "https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20un%20turno",
-                "secondary_label": "Llamar ahora",
-                "secondary_href": "tel:+59170000000"
-            }
         }
     ],
     "blocks": [
@@ -518,31 +462,6 @@
             "visible": true,
             "content": {
                 "height": "h-4"
-            }
-        },
-        {
-            "type": "heading",
-            "visible": true,
-            "content": {
-                "text": "Mirá nuestro trabajo",
-                "level": "h2",
-                "align": "center"
-            }
-        },
-        {
-            "type": "video",
-            "visible": true,
-            "content": {
-                "source": "url",
-                "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                "media_id": null,
-                "title": "Transformación completa · Balayage + Corte",
-                "autoplay": false,
-                "controls": true,
-                "loop": false,
-                "muted": false,
-                "aspect": "video",
-                "radius": "xl"
             }
         },
         {
