@@ -1,15 +1,18 @@
 import type { ComponentType } from 'react';
-import type { ContentField } from '@site/lib/template-registry';
-import { HeadingBlock } from '@site/blocks/heading-block';
-import { ParagraphBlock } from '@site/blocks/paragraph-block';
-import { ImageBlock } from '@site/blocks/image-block';
+import { BeforeAfterBlock } from '@site/blocks/before-after-block';
 import { ButtonBlock } from '@site/blocks/button-block';
-import { SpacerBlock } from '@site/blocks/spacer-block';
+import { CountdownBlock } from '@site/blocks/countdown-block';
 import { DividerBlock } from '@site/blocks/divider-block';
 import { GalleryBlock } from '@site/blocks/gallery-block';
-import { VideoBlock } from '@site/blocks/video-block';
+import { HeadingBlock } from '@site/blocks/heading-block';
+import { ImageBlock } from '@site/blocks/image-block';
 import { MapBlock } from '@site/blocks/map-block';
-import { CountdownBlock } from '@site/blocks/countdown-block';
+import { ParagraphBlock } from '@site/blocks/paragraph-block';
+import { ScheduleBlock } from '@site/blocks/schedule-block';
+import { SpacerBlock } from '@site/blocks/spacer-block';
+import { StatsBlock } from '@site/blocks/stats-block';
+import { VideoBlock } from '@site/blocks/video-block';
+import type { ContentField } from '@site/lib/template-registry';
 
 export type BlockContent = Record<string, unknown>;
 
@@ -134,8 +137,8 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
         icon: 'Image',
         component: ImageBlock,
         defaultContent: {
-            image_media_id: null,
-            alt: '',
+            image_media_id: '__MEDIA:sample-image__',
+            alt: 'Imagen de muestra',
             aspect: 'auto',
             rounded: false,
         },
@@ -255,7 +258,18 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
         icon: 'Images',
         component: GalleryBlock,
         defaultContent: {
-            items: [],
+            items: [
+                {
+                    image_media_id: '__MEDIA:sample-gallery-1__',
+                    alt: 'Imagen de muestra 1',
+                    caption: 'Imagen 1',
+                },
+                {
+                    image_media_id: '__MEDIA:sample-gallery-2__',
+                    alt: 'Imagen de muestra 2',
+                    caption: 'Imagen 2',
+                },
+            ],
             columns: '3',
             aspect: 'square',
             gap: 'md',
@@ -333,6 +347,7 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
         ],
         isEmpty: (content) => {
             const items = Array.isArray(content.items) ? content.items : [];
+
             return items.length === 0;
         },
     },
@@ -436,6 +451,7 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                     (!media ||
                         (media.id == null && !media.url))
                 ));
+
             return !url && !hasMedia;
         },
     },
@@ -533,7 +549,98 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                 typeof content.lng === 'number'
                     ? content.lng
                     : Number.NaN;
+
             return !address && (Number.isNaN(lat) || Number.isNaN(lng));
+        },
+    },
+    'before-after': {
+        id: 'before-after',
+        label: 'Antes / Después',
+        description:
+            'Slider interactivo para comparar dos imágenes (transformaciones).',
+        icon: 'ArrowLeftRight',
+        component: BeforeAfterBlock,
+        defaultContent: {
+            title: 'Transformaciones reales',
+            subtitle:
+                'Deslizá para ver el antes y el después de cada trabajo.',
+            columns: '1',
+            aspect: 'video',
+            columns_mobile_stack: true,
+            items: [
+                {
+                    before_media_id: '__MEDIA:sample-ba-before__',
+                    before_url: null,
+                    after_media_id: '__MEDIA:sample-ba-after__',
+                    after_url: null,
+                    caption: 'Antes y después de muestra',
+                    before_label: 'Antes',
+                    after_label: 'Después',
+                },
+            ],
+        },
+        schema: [
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
+            {
+                key: 'columns',
+                label: 'Columnas',
+                type: 'radio',
+                options: [
+                    { label: '1', value: '1' },
+                    { label: '2', value: '2' },
+                ],
+            },
+            {
+                key: 'aspect',
+                label: 'Proporción',
+                type: 'radio',
+                options: [
+                    { label: 'Cuadrado', value: 'square' },
+                    { label: 'Video (16:9)', value: 'video' },
+                    { label: 'Vertical (3:4)', value: 'tall' },
+                    { label: 'Ancho (16:9 wide)', value: 'wide' },
+                ],
+            },
+            {
+                key: 'columns_mobile_stack',
+                label: 'Stack en mobile',
+                type: 'boolean',
+            },
+            {
+                key: 'items',
+                label: 'Pares de imágenes',
+                type: 'list',
+                itemLabel: 'Antes / Después',
+                itemSchema: [
+                    {
+                        key: 'before_media_id',
+                        label: 'Imagen "antes"',
+                        type: 'image',
+                    },
+                    {
+                        key: 'after_media_id',
+                        label: 'Imagen "después"',
+                        type: 'image',
+                    },
+                    {
+                        key: 'before_label',
+                        label: 'Etiqueta "antes"',
+                        type: 'text',
+                    },
+                    {
+                        key: 'after_label',
+                        label: 'Etiqueta "después"',
+                        type: 'text',
+                    },
+                    { key: 'caption', label: 'Caption', type: 'text' },
+                ],
+            },
+        ],
+        isEmpty: (content) => {
+            const items = Array.isArray(content.items) ? content.items : [];
+
+            return items.length === 0;
         },
     },
     countdown: {
@@ -550,6 +657,7 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
             )}-${pad(inSevenDays.getDate())}T${pad(inSevenDays.getHours())}:${pad(
                 inSevenDays.getMinutes(),
             )}`;
+
             return {
                 target_date: target,
                 title: 'Oferta termina en',
@@ -608,7 +716,146 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                 typeof content.target_date === 'string'
                     ? content.target_date.trim()
                     : '';
+
             return !target;
+        },
+    },
+    stats: {
+        id: 'stats',
+        label: 'Estadísticas',
+        description: 'Contadores animados de subs, viewers, horas, etc.',
+        icon: 'BarChart3',
+        component: StatsBlock,
+        defaultContent: {
+            eyebrow: 'En números',
+            title: 'Lo que conseguimos juntos',
+            subtitle:
+                'Gracias a la comunidad por hacer posible cada stream.',
+            accent: 'primary',
+            items: [
+                { icon: 'Users', value: 12500, suffix: '+', label: 'Suscriptores' },
+                { icon: 'Eye', value: 850000, suffix: '', label: 'Vistas totales' },
+                { icon: 'Clock', value: 2400, suffix: ' h', label: 'Horas en vivo' },
+                { icon: 'Heart', value: 4800, suffix: '+', label: 'Miembros' },
+            ],
+        },
+        schema: [
+            { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
+            {
+                key: 'accent',
+                label: 'Color de acento',
+                type: 'radio',
+                options: [
+                    { label: 'Primario', value: 'primary' },
+                    { label: 'Violeta', value: 'violet' },
+                    { label: 'Cian', value: 'cyan' },
+                ],
+            },
+            {
+                key: 'items',
+                label: 'Estadísticas',
+                type: 'list',
+                itemLabel: 'Stat',
+                itemSchema: [
+                    {
+                        key: 'icon',
+                        label: 'Icono',
+                        type: 'radio',
+                        options: [
+                            { label: 'Usuarios', value: 'Users' },
+                            { label: 'Ojo', value: 'Eye' },
+                            { label: 'Reloj', value: 'Clock' },
+                            { label: 'Corazón', value: 'Heart' },
+                            { label: 'Video', value: 'Video' },
+                            { label: 'Estrella', value: 'Star' },
+                            { label: 'Trofeo', value: 'Trophy' },
+                            { label: 'Rayo', value: 'Zap' },
+                        ],
+                    },
+                    { key: 'value', label: 'Valor', type: 'text' },
+                    { key: 'suffix', label: 'Sufijo', type: 'text' },
+                    { key: 'label', label: 'Etiqueta', type: 'text' },
+                ],
+            },
+        ],
+        isEmpty: (content) => {
+            const items = Array.isArray(content.items) ? content.items : [];
+
+            return items.length === 0;
+        },
+    },
+    schedule: {
+        id: 'schedule',
+        label: 'Agenda semanal',
+        description: 'Grid semanal con días, horarios y estado (live/off).',
+        icon: 'CalendarDays',
+        component: ScheduleBlock,
+        defaultContent: {
+            eyebrow: 'Agenda semanal',
+            title: 'Cuándo estoy en vivo',
+            subtitle: 'Mismos horarios cada semana.',
+            timezone: 'BO (UTC-4)',
+            accent: 'primary',
+            show_today: true,
+            slots: [
+                { day: 'Lunes', time: '20:00', title: 'Gaming · Ranked', active: true },
+                { day: 'Martes', time: '20:00', title: 'IRL · Paseo', active: true },
+                { day: 'Miércoles', time: '21:00', title: 'Just Chatting', active: true },
+                { day: 'Jueves', time: '20:00', title: 'Gaming · Coop', active: true },
+                { day: 'Viernes', time: '22:00', title: 'Torneo comunidad', active: true },
+                { day: 'Sábado', time: '18:00', title: 'Maratón', active: false },
+                { day: 'Domingo', time: '—', title: 'Descanso', active: false },
+            ],
+        },
+        schema: [
+            { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
+            { key: 'timezone', label: 'Zona horaria', type: 'text' },
+            {
+                key: 'accent',
+                label: 'Color de acento',
+                type: 'radio',
+                options: [
+                    { label: 'Primario', value: 'primary' },
+                    { label: 'Violeta', value: 'violet' },
+                    { label: 'Cian', value: 'cyan' },
+                    { label: 'Rosa', value: 'rose' },
+                ],
+            },
+            { key: 'show_today', label: 'Marcar día actual', type: 'boolean' },
+            {
+                key: 'slots',
+                label: 'Días',
+                type: 'list',
+                itemLabel: 'Día',
+                itemSchema: [
+                    {
+                        key: 'day',
+                        label: 'Día',
+                        type: 'radio',
+                        options: [
+                            { label: 'Lunes', value: 'Lunes' },
+                            { label: 'Martes', value: 'Martes' },
+                            { label: 'Miércoles', value: 'Miércoles' },
+                            { label: 'Jueves', value: 'Jueves' },
+                            { label: 'Viernes', value: 'Viernes' },
+                            { label: 'Sábado', value: 'Sábado' },
+                            { label: 'Domingo', value: 'Domingo' },
+                        ],
+                    },
+                    { key: 'time', label: 'Hora (HH:MM)', type: 'text' },
+                    { key: 'title', label: 'Título del stream', type: 'text' },
+                    { key: 'active', label: 'En vivo', type: 'boolean' },
+                ],
+            },
+        ],
+        isEmpty: (content) => {
+            const slots = Array.isArray(content.slots) ? content.slots : [];
+
+            return slots.length === 0;
         },
     },
 };

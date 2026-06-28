@@ -1,0 +1,418 @@
+{
+    "name": "Streaming",
+    "slug": "streamerhub",
+    "description": "Gaming, IRL y charas en vivo. Todos los días a las 20:00 hs (BO).",
+    "sections": [
+        {
+            "id": "hero",
+            "visible": true,
+            "content": {
+                "eyebrow": "🔴 En vivo · Lun a Vie 20:00 hs",
+                "headline": "Stream, comunidad y buena energía",
+                "subheadline": "Gaming competitivo, IRL y charas con la comunidad. Sumate a Twitch o YouTube para no perderte nada.",
+                "cta_label": "Ver en Twitch",
+                "cta_href": "https://twitch.tv/",
+                "secondary_label": "Apoyar el canal",
+                "secondary_href": "#pricing",
+                "image_media_id": "__MEDIA:hero-streaming__"
+            }
+        },
+        {
+            "id": "features",
+            "visible": true,
+            "content": {
+                "title": "¿Dónde encontrarme?",
+                "subtitle": "Mismo stream, todas las plataformas. Sumate donde te quede más cómodo.",
+                "items": [
+                    {
+                        "icon": "Twitch",
+                        "title": "Twitch",
+                        "description": "Stream principal con chat en vivo, emotes y clips."
+                    },
+                    {
+                        "icon": "Youtube",
+                        "title": "YouTube",
+                        "description": "VODs subidos automáticamente y shorts destacados."
+                    },
+                    {
+                        "icon": "MessageCircle",
+                        "title": "Discord",
+                        "description": "Comunidad activa 24/7 con canales temáticos y eventos."
+                    },
+                    {
+                        "icon": "Bell",
+                        "title": "Patreon",
+                        "description": "Contenido exclusivo y beneficios para suscriptores."
+                    },
+                    {
+                        "icon": "Instagram",
+                        "title": "Instagram",
+                        "description": "Stories diarias, behind the scenes y sorteos."
+                    },
+                    {
+                        "icon": "Twitter",
+                        "title": "X (Twitter)",
+                        "description": "Updates, clips cortos y memes de la comunidad."
+                    }
+                ]
+            }
+        },
+        {
+            "id": "gallery",
+            "visible": true,
+            "content": {
+                "title": "Highlights recientes",
+                "subtitle": "Los mejores momentos del último mes.",
+                "items": [
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-setup__",
+                        "alt": "Setup del stream",
+                        "caption": "Mi setup"
+                    },
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-win-epico__",
+                        "alt": "Clip destacado · Win épico",
+                        "caption": "Win épico"
+                    },
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-irl-calle__",
+                        "alt": "IRL en la calle",
+                        "caption": "IRL stream"
+                    },
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-torneo__",
+                        "alt": "Torneo con la comunidad",
+                        "caption": "Torneo"
+                    },
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-charla__",
+                        "alt": "Charla con viewer",
+                        "caption": "Charla"
+                    },
+                    {
+                        "image_media_id": "__MEDIA:gallery-streaming-highlights__",
+                        "alt": "Highlights del mes",
+                        "caption": "Highlights"
+                    }
+                ],
+                "columns": "3",
+                "aspect": "video",
+                "gap": "md",
+                "radius": "md"
+            }
+        },
+        {
+            "id": "pricing",
+            "visible": true,
+            "content": {
+                "title": "Apoyá el canal",
+                "subtitle": "Con tu ayuda puedo seguir creando contenido. Elegí cómo querés apoyar.",
+                "items": [
+                    {
+                        "name": "Viewer",
+                        "description": "Gratis, pero no menos importante.",
+                        "price": "$0",
+                        "features": [
+                            {
+                                "feature": "Chat en vivo"
+                            },
+                            {
+                                "feature": "Alertas de stream"
+                            }
+                        ],
+                        "highlighted": false,
+                        "cta_label": "Ver stream",
+                        "cta_href": "https://twitch.tv/"
+                    },
+                    {
+                        "name": "Sub Twitch",
+                        "description": "Emotes exclusivos, badge en chat y sin publicidad.",
+                        "price": "$5/mes",
+                        "features": [
+                            {
+                                "feature": "Emotes del canal"
+                            },
+                            {
+                                "feature": "Sin anuncios"
+                            },
+                            {
+                                "feature": "Badge en chat"
+                            }
+                        ],
+                        "highlighted": true,
+                        "cta_label": "Suscribirme",
+                        "cta_href": "https://twitch.tv/"
+                    },
+                    {
+                        "name": "Patreon VIP",
+                        "description": "Todo lo de Sub + contenido exclusivo y acceso al Discord VIP.",
+                        "price": "$10/mes",
+                        "features": [
+                            {
+                                "feature": "Todo lo de Sub"
+                            },
+                            {
+                                "feature": "Videos exclusivos"
+                            },
+                            {
+                                "feature": "Discord VIP"
+                            },
+                            {
+                                "feature": "Nombre en créditos"
+                            }
+                        ],
+                        "highlighted": false,
+                        "cta_label": "Apoyar en Patreon",
+                        "cta_href": "https://patreon.com/"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "testimonials",
+            "visible": true,
+            "content": {
+                "eyebrow": "Comunidad",
+                "title": "Lo que dice la comunidad",
+                "description": "Mensajes reales de viewers que ya están suscriptos.",
+                "columns": "3",
+                "variant": "card",
+                "show_rating": true,
+                "items": [
+                    {
+                        "quote": "El stream de todos los días se volvió mi rutina favorita. La comunidad es lo mejor.",
+                        "author_name": "Carlos M.",
+                        "author_role": "Sub hace 8 meses",
+                        "author_image_media_id": "__MEDIA:avatar-streaming-carlos__",
+                        "rating": 5
+                    },
+                    {
+                        "quote": "La calidad del stream y el carisma del streamer son únicos. Vale cada peso.",
+                        "author_name": "Lucía R.",
+                        "author_role": "Patreon VIP",
+                        "author_image_media_id": "__MEDIA:avatar-streaming-lucia__",
+                        "rating": 5
+                    },
+                    {
+                        "quote": "Encontré una comunidad increíble. El Discord es lo mejor que me pasó este año.",
+                        "author_name": "Diego S.",
+                        "author_role": "Viewer hace 1 año",
+                        "author_image_media_id": "__MEDIA:avatar-streaming-diego__",
+                        "rating": 5
+                    }
+                ]
+            }
+        },
+        {
+            "id": "cta",
+            "visible": true,
+            "content": {
+                "title": "¿Te sumás al stream?",
+                "subtitle": "Sumate a la comunidad. Twitch, YouTube o Discord, vos elegís dónde.",
+                "button_label": "Ver en Twitch",
+                "button_href": "https://twitch.tv/",
+                "secondary_label": "Unirme al Discord",
+                "secondary_href": "https://discord.com/"
+            }
+        }
+    ],
+    "blocks": [
+        {
+            "type": "stats",
+            "visible": true,
+            "content": {
+                "eyebrow": "En números",
+                "title": "Lo que conseguimos juntos",
+                "subtitle": "Gracias a la comunidad por hacer posible cada stream.",
+                "accent": "violet",
+                "items": [
+                    {
+                        "icon": "Users",
+                        "value": 12500,
+                        "suffix": "+",
+                        "label": "Suscriptores"
+                    },
+                    {
+                        "icon": "Eye",
+                        "value": 850000,
+                        "suffix": "",
+                        "label": "Vistas totales"
+                    },
+                    {
+                        "icon": "Clock",
+                        "value": 2400,
+                        "suffix": " h",
+                        "label": "Horas en vivo"
+                    },
+                    {
+                        "icon": "Heart",
+                        "value": 4800,
+                        "suffix": "+",
+                        "label": "Miembros"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "schedule",
+            "visible": true,
+            "content": {
+                "eyebrow": "Agenda semanal",
+                "title": "Cuándo estoy en vivo",
+                "subtitle": "Mismos horarios cada semana.",
+                "timezone": "BO (UTC-4)",
+                "accent": "violet",
+                "show_today": true,
+                "slots": [
+                    {
+                        "day": "Lunes",
+                        "time": "20:00",
+                        "title": "Gaming · Ranked",
+                        "active": true
+                    },
+                    {
+                        "day": "Martes",
+                        "time": "20:00",
+                        "title": "IRL · Paseo",
+                        "active": true
+                    },
+                    {
+                        "day": "Miércoles",
+                        "time": "21:00",
+                        "title": "Just Chatting",
+                        "active": true
+                    },
+                    {
+                        "day": "Jueves",
+                        "time": "20:00",
+                        "title": "Gaming · Coop",
+                        "active": true
+                    },
+                    {
+                        "day": "Viernes",
+                        "time": "22:00",
+                        "title": "Torneo comunidad",
+                        "active": true
+                    },
+                    {
+                        "day": "Sábado",
+                        "time": "18:00",
+                        "title": "Maratón",
+                        "active": false
+                    },
+                    {
+                        "day": "Domingo",
+                        "time": "—",
+                        "title": "Descanso",
+                        "active": false
+                    }
+                ]
+            }
+        },
+        {
+            "type": "spacer",
+            "visible": true,
+            "content": {
+                "height": "h-8"
+            }
+        },
+        {
+            "type": "heading",
+            "visible": true,
+            "content": {
+                "text": "Próximo stream",
+                "level": "h2",
+                "align": "center"
+            }
+        },
+        {
+            "type": "countdown",
+            "visible": true
+        },
+        {
+            "type": "divider",
+            "visible": true,
+            "content": {
+                "style": "solid"
+            }
+        },
+        {
+            "type": "spacer",
+            "visible": true,
+            "content": {
+                "height": "h-4"
+            }
+        },
+        {
+            "type": "heading",
+            "visible": true,
+            "content": {
+                "text": "Trailer del canal",
+                "level": "h2",
+                "align": "center"
+            }
+        },
+        {
+            "type": "video",
+            "visible": true,
+            "content": {
+                "source": "url",
+                "url": "",
+                "media_id": null,
+                "title": "Trailer oficial",
+                "autoplay": false,
+                "controls": true,
+                "loop": false,
+                "muted": false,
+                "aspect": "video",
+                "radius": "xl"
+            }
+        },
+        {
+            "type": "divider",
+            "visible": true,
+            "content": {
+                "style": "solid"
+            }
+        },
+        {
+            "type": "spacer",
+            "visible": true,
+            "content": {
+                "height": "h-8"
+            }
+        }
+    ],
+    "menu_items": [
+        {
+            "label": "Inicio",
+            "href": "#hero",
+            "icon": "Home"
+        },
+        {
+            "label": "Plataformas",
+            "href": "#features",
+            "icon": "Twitch"
+        },
+        {
+            "label": "VODs",
+            "href": "#gallery",
+            "icon": "Video"
+        },
+        {
+            "label": "Apoyar",
+            "href": "#pricing",
+            "icon": "Heart"
+        },
+        {
+            "label": "Comunidad",
+            "href": "#testimonials",
+            "icon": "Users"
+        },
+        {
+            "label": "Twitch",
+            "href": "https://twitch.tv/",
+            "icon": "Twitch"
+        }
+    ]
+}

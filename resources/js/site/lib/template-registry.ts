@@ -1,11 +1,13 @@
 import type { ComponentType } from 'react';
-import { HeroSection } from '@site/sections/hero-section';
-import { FaqSection } from '@site/sections/faq-section';
-import { PricingSection } from '@site/sections/pricing-section';
-import { FeaturesSection } from '@site/sections/features-section';
 import { CtaSection } from '@site/sections/cta-section';
-import { TestimonialsSection } from '@site/sections/testimonials-section';
+import { FaqSection } from '@site/sections/faq-section';
+import { FeaturesSection } from '@site/sections/features-section';
+import { HeroSection } from '@site/sections/hero-section';
 import { LocationSection } from '@site/sections/location-section';
+import { PricingSection } from '@site/sections/pricing-section';
+import { ServicesGridSection } from '@site/sections/services-grid-section';
+import { TeamSection } from '@site/sections/team-section';
+import { TestimonialsSection } from '@site/sections/testimonials-section';
 
 export type SectionTheme = {
     primary_color?: string;
@@ -73,7 +75,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             cta_href: '#contact',
             secondary_label: 'Ver demo',
             secondary_href: '#features',
-            image_media_id: null,
+            image_media_id: '__MEDIA:sample-image__',
         },
         schema: [
             { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
@@ -111,7 +113,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                         'Cambió completamente cómo trabajamos. En una semana ya éramos 3x más rápidos.',
                     author_name: 'María Pérez',
                     author_role: 'CTO, Acme Inc.',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-carlos__',
                     rating: 5,
                 },
                 {
@@ -119,7 +121,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                         'La mejor inversión que hicimos este año. El soporte responde en minutos.',
                     author_name: 'Juan López',
                     author_role: 'CEO, Studio Norte',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-lucia__',
                     rating: 5,
                 },
                 {
@@ -127,7 +129,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                         'Simple, rápido y funciona. Sin sorpresas ni curvas de aprendizaje.',
                     author_name: 'Lucía Méndez',
                     author_role: 'Head of Growth, Beta Co.',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-diego__',
                     rating: 5,
                 },
             ],
@@ -196,6 +198,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
         ],
         isEmpty: (content) => {
             const items = Array.isArray(content.items) ? content.items : [];
+
             return items.length === 0;
         },
     },
@@ -460,6 +463,252 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
         ],
         isEmpty: (content) => !content.title && !content.button_label,
     },
+    team: {
+        id: 'team',
+        label: 'Equipo',
+        description: 'Cards de staff con foto, especialidad y horario.',
+        icon: 'Users',
+        component: TeamSection,
+        defaultContent: {
+            eyebrow: 'Equipo',
+            title: 'Las manos detrás de cada look',
+            subtitle:
+                'Especialistas con años de experiencia, capacitadas en las últimas tendencias.',
+            columns: '3',
+            variant: 'card',
+            items: [
+                {
+                    name: 'Camila M.',
+                    role: 'Directora & Colorista',
+                    specialties: [
+                        { specialty: 'Balayage' },
+                        { specialty: 'Color' },
+                        { specialty: 'Novias' },
+                    ],
+                    photo_media_id: '__MEDIA:avatar-streaming-carlos__',
+                    schedule: 'Lun a Vie',
+                    instagram_handle: 'estudio.camila',
+                },
+                {
+                    name: 'Lucía R.',
+                    role: 'Estilista',
+                    specialties: [
+                        { specialty: 'Corte' },
+                        { specialty: 'Peinado' },
+                    ],
+                    photo_media_id: '__MEDIA:avatar-streaming-lucia__',
+                    schedule: 'Mar a Sáb',
+                    instagram_handle: '',
+                },
+                {
+                    name: 'Diego S.',
+                    role: 'Barber',
+                    specialties: [
+                        { specialty: 'Fade' },
+                        { specialty: 'Barba' },
+                        { specialty: 'Diseño de cejas' },
+                    ],
+                    photo_media_id: '__MEDIA:avatar-streaming-diego__',
+                    schedule: 'Lun a Sáb',
+                    instagram_handle: '',
+                },
+            ],
+        },
+        schema: [
+            { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
+            {
+                key: 'columns',
+                label: 'Columnas',
+                type: 'radio',
+                options: [
+                    { label: '2', value: '2' },
+                    { label: '3', value: '3' },
+                    { label: '4', value: '4' },
+                ],
+            },
+            {
+                key: 'variant',
+                label: 'Estilo',
+                type: 'radio',
+                options: [
+                    { label: 'Con tarjeta', value: 'card' },
+                    { label: 'Minimal', value: 'minimal' },
+                ],
+            },
+            {
+                key: 'items',
+                label: 'Miembros',
+                type: 'list',
+                itemLabel: 'Miembro',
+                itemSchema: [
+                    { key: 'name', label: 'Nombre', type: 'text' },
+                    { key: 'role', label: 'Rol', type: 'text' },
+                    {
+                        key: 'specialties',
+                        label: 'Especialidades',
+                        type: 'list',
+                        itemLabel: 'Especialidad',
+                        itemSchema: [
+                            {
+                                key: 'specialty',
+                                label: 'Especialidad',
+                                type: 'text',
+                            },
+                        ],
+                    },
+                    {
+                        key: 'photo_media_id',
+                        label: 'Foto',
+                        type: 'image',
+                    },
+                    {
+                        key: 'schedule',
+                        label: 'Horario (texto libre)',
+                        type: 'text',
+                    },
+                    {
+                        key: 'instagram_handle',
+                        label: 'Instagram (sin @)',
+                        type: 'text',
+                    },
+                ],
+            },
+        ],
+        isEmpty: (content) => {
+            const items = Array.isArray(content.items) ? content.items : [];
+
+            return items.length === 0 && !content.title;
+        },
+    },
+    'services-grid': {
+        id: 'services-grid',
+        label: 'Servicios (grid)',
+        description:
+            'Catálogo de servicios con imagen, duración, precio desde y CTA.',
+        icon: 'Sparkles',
+        component: ServicesGridSection,
+        defaultContent: {
+            eyebrow: 'Servicios',
+            title: 'Nuestros servicios',
+            subtitle:
+                'Conocé qué incluye cada uno, cuánto tarda y desde cuánto sale.',
+            columns: '3',
+            default_currency: 'Bs.',
+            items: [
+                {
+                    title: 'Corte de cabello',
+                    description:
+                        'Lavado, corte y peinado según tu tipo de rostro.',
+                    image_media_id: '__MEDIA:gallery-streaming-setup__',
+                    duration_minutes: 45,
+                    price_from: '80',
+                    category: 'Cabello',
+                    cta_label: 'Reservar',
+                    cta_href: '#contact',
+                    highlighted: false,
+                },
+                {
+                    title: 'Coloración',
+                    description:
+                        'Color completo, mechas, balayage o californianas.',
+                    image_media_id: '__MEDIA:gallery-streaming-highlights__',
+                    duration_minutes: 120,
+                    price_from: '350',
+                    category: 'Color',
+                    cta_label: 'Reservar',
+                    cta_href: '#contact',
+                    highlighted: true,
+                },
+                {
+                    title: 'Barba & Perfilado',
+                    description:
+                        'Diseño de barba con navaja, perfilado y cuidado de la piel.',
+                    image_media_id: '__MEDIA:gallery-streaming-charla__',
+                    duration_minutes: 30,
+                    price_from: '60',
+                    category: 'Barba',
+                    cta_label: 'Reservar',
+                    cta_href: '#contact',
+                    highlighted: false,
+                },
+            ],
+        },
+        schema: [
+            { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
+            {
+                key: 'columns',
+                label: 'Columnas',
+                type: 'radio',
+                options: [
+                    { label: '2', value: '2' },
+                    { label: '3', value: '3' },
+                    { label: '4', value: '4' },
+                ],
+            },
+            {
+                key: 'default_currency',
+                label: 'Moneda',
+                type: 'text',
+                helper: 'Sufijo que se muestra junto al precio (ej: Bs., $, ARS).',
+            },
+            {
+                key: 'items',
+                label: 'Servicios',
+                type: 'list',
+                itemLabel: 'Servicio',
+                itemSchema: [
+                    { key: 'title', label: 'Título', type: 'text' },
+                    {
+                        key: 'description',
+                        label: 'Descripción',
+                        type: 'textarea',
+                    },
+                    {
+                        key: 'image_media_id',
+                        label: 'Imagen',
+                        type: 'image',
+                    },
+                    {
+                        key: 'duration_minutes',
+                        label: 'Duración (minutos)',
+                        type: 'text',
+                        helper: 'Entero en minutos. Ej: 45, 90, 120.',
+                    },
+                    {
+                        key: 'price_from',
+                        label: 'Precio desde',
+                        type: 'text',
+                        helper: 'Solo el número (sin moneda).',
+                    },
+                    { key: 'category', label: 'Categoría', type: 'text' },
+                    {
+                        key: 'highlighted',
+                        label: 'Destacado',
+                        type: 'boolean',
+                    },
+                    {
+                        key: 'cta_label',
+                        label: 'Texto del botón',
+                        type: 'text',
+                    },
+                    {
+                        key: 'cta_href',
+                        label: 'URL del botón',
+                        type: 'text',
+                    },
+                ],
+            },
+        ],
+        isEmpty: (content) => {
+            const items = Array.isArray(content.items) ? content.items : [];
+
+            return items.length === 0 && !content.title;
+        },
+    },
     location: {
         id: 'location',
         label: 'Ubicación',
@@ -589,6 +838,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             const items = Array.isArray(content.contact_info)
                 ? content.contact_info
                 : [];
+
             return !content.title && items.length === 0;
         },
     },

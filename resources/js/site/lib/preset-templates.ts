@@ -1,5 +1,3 @@
-import { Scissors } from 'lucide-react';
-
 export type PresetSection = {
     id: string;
     visible: boolean;
@@ -46,7 +44,7 @@ const peluqueriaSections: PresetSection[] = [
             cta_href: 'https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno',
             secondary_label: 'Ver servicios',
             secondary_href: '#servicios',
-            image_media_id: null,
+            image_media_id: 30,
         },
     },
     {
@@ -97,37 +95,86 @@ const peluqueriaSections: PresetSection[] = [
         },
     },
     {
+        id: 'team',
+        visible: true,
+        content: {
+            eyebrow: 'Equipo',
+            title: 'Las manos detrás de cada look',
+            subtitle:
+                'Especialistas con años de experiencia, capacitadas en las últimas tendencias.',
+            columns: '3',
+            variant: 'card',
+            items: [
+                {
+                    name: 'Camila M.',
+                    role: 'Directora & Colorista',
+                    specialties: [
+                        { specialty: 'Balayage' },
+                        { specialty: 'Color' },
+                        { specialty: 'Novias' },
+                    ],
+                    photo_media_id: 27,
+                    schedule: 'Lun a Vie',
+                    instagram_handle: 'estudio.camila',
+                },
+                {
+                    name: 'Lucía R.',
+                    role: 'Estilista',
+                    specialties: [
+                        { specialty: 'Corte' },
+                        { specialty: 'Peinado' },
+                    ],
+                    photo_media_id: 29,
+                    schedule: 'Mar a Sáb',
+                    instagram_handle: '',
+                },
+                {
+                    name: 'Diego S.',
+                    role: 'Barber',
+                    specialties: [
+                        { specialty: 'Fade' },
+                        { specialty: 'Barba' },
+                        { specialty: 'Diseño de cejas' },
+                    ],
+                    photo_media_id: 28,
+                    schedule: 'Lun a Sáb',
+                    instagram_handle: '',
+                },
+            ],
+        },
+    },
+    {
         id: 'gallery',
         visible: true,
         content: {
             items: [
                 {
-                    image_media_id: null,
+                    image_media_id: 33,
                     alt: 'Corte bob moderno',
                     caption: 'Corte bob',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: 31,
                     alt: 'Balayage caramel',
                     caption: 'Balayage',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: 36,
                     alt: 'Peinado de novia',
                     caption: 'Novia',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: 34,
                     alt: 'Corte masculino fade',
                     caption: 'Fade',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: 32,
                     alt: 'Color fantasía',
                     caption: 'Color',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: 35,
                     alt: 'Tratamiento keratina',
                     caption: 'Keratina',
                 },
@@ -139,48 +186,87 @@ const peluqueriaSections: PresetSection[] = [
         },
     },
     {
-        id: 'pricing',
+        id: 'services-grid',
         visible: true,
         content: {
-            title: 'Nuestros precios',
+            eyebrow: 'Servicios',
+            title: 'Nuestros servicios',
             subtitle:
-                'Transparentes. Sin sorpresas. Pagá en efectivo, transferencia o QR.',
+                'Conocé qué incluye cada uno, cuánto tarda y desde cuánto sale.',
+            columns: '3',
+            default_currency: 'Bs.',
             items: [
                 {
-                    name: 'Básico',
-                    description: 'Corte + Lavado + Secado. Para el día a día.',
-                    price: 'Bs. 80',
-                    features: [{ feature: 'Lavado incluido' }],
-                    highlighted: false,
+                    title: 'Corte de cabello',
+                    description:
+                        'Lavado, corte y peinado según tu tipo de rostro.',
+                    image_media_id: 23,
+                    duration_minutes: 45,
+                    price_from: '80',
+                    category: 'Cabello',
                     cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Corte',
+                    highlighted: false,
                 },
                 {
-                    name: 'Color',
+                    title: 'Coloración',
                     description:
-                        'Coloración completa + Secado profesional. Para renovarte.',
-                    price: 'Bs. 350',
-                    features: [
-                        { feature: 'Marcas premium' },
-                        { feature: 'Asesoramiento de tono' },
-                    ],
+                        'Color completo, mechas, balayage o californianas con marcas premium.',
+                    image_media_id: 22,
+                    duration_minutes: 120,
+                    price_from: '350',
+                    category: 'Color',
+                    cta_label: 'Reservar',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Color',
                     highlighted: true,
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000',
                 },
                 {
-                    name: 'Novia',
+                    title: 'Barba & Perfilado',
                     description:
-                        'Paquete completo: prueba + día de boda + retoque.',
-                    price: 'Bs. 1500',
-                    features: [
-                        { feature: 'Prueba previa' },
-                        { feature: 'Día de la boda' },
-                        { feature: 'Retoque a los 15 días' },
-                    ],
-                    highlighted: false,
+                        'Diseño de barba con navaja, perfilado y cuidado de la piel.',
+                    image_media_id: 21,
+                    duration_minutes: 30,
+                    price_from: '60',
+                    category: 'Barba',
                     cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Barba',
+                    highlighted: false,
+                },
+                {
+                    title: 'Peinado & Eventos',
+                    description:
+                        'Recogidos, ondas y semisueltos para novias, quinceañeras y eventos.',
+                    image_media_id: 25,
+                    duration_minutes: 90,
+                    price_from: '200',
+                    category: 'Eventos',
+                    cta_label: 'Reservar',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Peinado',
+                    highlighted: false,
+                },
+                {
+                    title: 'Tratamientos',
+                    description:
+                        'Keratina, alisado brasileño, nutrición profunda y Botox capilar.',
+                    image_media_id: 26,
+                    duration_minutes: 150,
+                    price_from: '450',
+                    category: 'Tratamiento',
+                    cta_label: 'Reservar',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Tratamiento',
+                    highlighted: false,
+                },
+                {
+                    title: 'Novias',
+                    description:
+                        'Paquete completo: prueba, día de boda y retoque incluido.',
+                    image_media_id: 24,
+                    duration_minutes: 240,
+                    price_from: '1500',
+                    category: 'Novias',
+                    cta_label: 'Reservar',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Novia',
+                    highlighted: false,
                 },
             ],
         },
@@ -219,6 +305,87 @@ const peluqueriaSections: PresetSection[] = [
                     author_role: 'Clienta hace 6 meses',
                     author_image_media_id: null,
                     rating: 5,
+                },
+            ],
+        },
+    },
+    {
+        id: 'faq',
+        visible: true,
+        content: {
+            title: 'Preguntas frecuentes',
+            subtitle:
+                'Respuestas a las dudas más comunes antes de tu primera visita.',
+            items: [
+                {
+                    question: '¿Necesito turno o puedo llegar sin reservar?',
+                    answer: '<p>Recomendamos reservar para garantizar tu lugar, especialmente fines de semana. Si venís sin turno, te atendemos según disponibilidad.</p>',
+                },
+                {
+                    question: '¿Aceptan tarjeta o transferencia?',
+                    answer: '<p>Sí. Aceptamos efectivo, transferencia bancaria, QR y todas las tarjetas de débito y crédito.</p>',
+                },
+                {
+                    question: '¿Cuánto dura un corte típico?',
+                    answer: '<p>Un corte de cabello toma entre 30 y 45 minutos. Si sumás lavado y peinado, unos 60 minutos. Coloración: 2 horas. Te avisamos al reservar.</p>',
+                },
+                {
+                    question: '¿Tienen servicio a domicilio para novias?',
+                    answer: '<p>Sí, dentro de La Paz y El Alto. El servicio a domicilio para novias incluye prueba previa y día del evento. Consultá presupuesto.</p>',
+                },
+                {
+                    question: '¿Puedo traer mi propio producto?',
+                    answer: '<p>Para tu seguridad usamos productos profesionales hipoalergénicos. Si tenés alguna alergia específica, avisanos antes de la cita.</p>',
+                },
+            ],
+        },
+    },
+    {
+        id: 'pricing',
+        visible: true,
+        content: {
+            title: 'Planes y paquetes',
+            subtitle: 'Ahorrá con nuestros paquetes de servicios combinados.',
+            items: [
+                {
+                    name: 'Visita express',
+                    description: 'Para el día a día. Corte + lavado rápido.',
+                    price: 'Bs. 80',
+                    features: [
+                        { feature: 'Corte + lavado' },
+                        { feature: 'Sin turno previo' },
+                    ],
+                    highlighted: false,
+                    cta_label: 'Reservar',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Express',
+                },
+                {
+                    name: 'Combo completo',
+                    description: 'Corte + color + tratamiento en una sola visita.',
+                    price: 'Bs. 500',
+                    features: [
+                        { feature: 'Corte personalizado' },
+                        { feature: 'Coloración premium' },
+                        { feature: 'Tratamiento hidratante' },
+                        { feature: 'Peinado final' },
+                    ],
+                    highlighted: true,
+                    cta_label: 'Reservar combo',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Combo',
+                },
+                {
+                    name: 'Membresía mensual',
+                    description: '2 visitas al mes con beneficios exclusivos.',
+                    price: 'Bs. 350/mes',
+                    features: [
+                        { feature: '2 cortes al mes' },
+                        { feature: '15% off en color' },
+                        { feature: 'Prioridad en agenda' },
+                        { feature: 'Bebida de cortesía' },
+                    ],
+                    highlighted: false,
+                    cta_label: 'Inscribirme',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20la%20Membres%C3%ADa',
                 },
             ],
         },
@@ -329,6 +496,27 @@ const peluqueriaBlocks: PresetBlock[] = [
         },
     },
     {
+        type: 'image',
+        visible: true,
+        content: {
+            image_media_id: 27,
+            alt: 'Camila trabajando en el estudio',
+            aspect: 'wide',
+            rounded: true,
+        },
+    },
+    {
+        type: 'button',
+        visible: true,
+        content: {
+            label: 'Conocé a nuestro equipo',
+            href: '#team',
+            variant: 'outline',
+            size: 'md',
+            align: 'center',
+        },
+    },
+    {
         type: 'divider',
         visible: true,
         content: { style: 'solid' },
@@ -364,6 +552,112 @@ const peluqueriaBlocks: PresetBlock[] = [
         },
     },
     {
+        type: 'gallery',
+        visible: true,
+        content: {
+            items: [
+                {
+                    image_media_id: 33,
+                    alt: 'Corte bob moderno',
+                    caption: 'Corte bob',
+                },
+                {
+                    image_media_id: 31,
+                    alt: 'Balayage caramel',
+                    caption: 'Balayage',
+                },
+                {
+                    image_media_id: 34,
+                    alt: 'Corte masculino fade',
+                    caption: 'Fade',
+                },
+                {
+                    image_media_id: 35,
+                    alt: 'Tratamiento keratina',
+                    caption: 'Keratina',
+                },
+            ],
+            columns: '4',
+            aspect: 'square',
+            gap: 'md',
+            radius: 'md',
+        },
+    },
+    {
+        type: 'countdown',
+        visible: true,
+        content: {
+            target_date: '2026-06-30T23:59:59',
+            title: '20% OFF nuevos clientes',
+            expired_text: 'Promo terminada. ¡Seguinos en redes para la próxima!',
+            variant: 'boxes',
+            size: 'md',
+            accent: 'destructive',
+        },
+    },
+    {
+        type: 'divider',
+        visible: true,
+        content: { style: 'solid' },
+    },
+    {
+        type: 'spacer',
+        visible: true,
+        content: { height: 'h-8' },
+    },
+    {
+        type: 'heading',
+        visible: true,
+        content: {
+            text: 'Antes y después',
+            level: 'h2',
+            align: 'center',
+        },
+    },
+    {
+        type: 'before-after',
+        visible: true,
+        content: {
+            title: 'Transformaciones reales',
+            subtitle:
+                'Deslizá para ver el antes y el después de cada clienta.',
+            columns: '1',
+            aspect: 'video',
+            columns_mobile_stack: true,
+            items: [
+                {
+                    before_media_id: 18,
+                    after_media_id: 17,
+                    caption: 'Balayage + Corte',
+                    before_label: 'Antes',
+                    after_label: 'Después',
+                },
+                {
+                    before_media_id: 20,
+                    after_media_id: 19,
+                    caption: 'Color fantasía',
+                    before_label: 'Antes',
+                    after_label: 'Después',
+                },
+            ],
+        },
+    },
+    {
+        type: 'map',
+        visible: true,
+        content: {
+            address: 'Av. Ballivián, La Paz',
+            lat: -16.5228,
+            lng: -68.0843,
+            zoom: 15,
+            marker: true,
+            scroll_wheel_zoom: false,
+            height: 'md',
+            radius: 'xl',
+            caption: 'Estudio Camila · Av. Ballivián, La Paz',
+        },
+    },
+    {
         type: 'divider',
         visible: true,
         content: { style: 'solid' },
@@ -380,15 +674,15 @@ const streamingSections: PresetSection[] = [
         id: 'hero',
         visible: true,
         content: {
-            eyebrow: 'En vivo · Todos los días 20:00 hs',
-            headline: 'Tu próximo stream empieza en',
+            eyebrow: '🔴 En vivo · Lun a Vie 20:00 hs',
+            headline: 'Stream, comunidad y buena energía',
             subheadline:
                 'Gaming competitivo, IRL y charas con la comunidad. Sumate a Twitch o YouTube para no perderte nada.',
             cta_label: 'Ver en Twitch',
             cta_href: 'https://twitch.tv/',
-            secondary_label: 'Suscribirme',
+            secondary_label: 'Apoyar el canal',
             secondary_href: '#pricing',
-            image_media_id: null,
+            image_media_id: '__MEDIA:hero-streaming__',
         },
     },
     {
@@ -442,34 +736,36 @@ const streamingSections: PresetSection[] = [
         id: 'gallery',
         visible: true,
         content: {
+            title: 'Highlights recientes',
+            subtitle: 'Los mejores momentos del último mes.',
             items: [
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-setup__',
                     alt: 'Setup del stream',
                     caption: 'Mi setup',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-win-epico__',
                     alt: 'Clip destacado · Win épico',
                     caption: 'Win épico',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-irl-calle__',
                     alt: 'IRL en la calle',
                     caption: 'IRL stream',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-torneo__',
                     alt: 'Torneo con la comunidad',
                     caption: 'Torneo',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-charla__',
                     alt: 'Charla con viewer',
                     caption: 'Charla',
                 },
                 {
-                    image_media_id: null,
+                    image_media_id: '__MEDIA:gallery-streaming-highlights__',
                     alt: 'Highlights del mes',
                     caption: 'Highlights',
                 },
@@ -548,7 +844,7 @@ const streamingSections: PresetSection[] = [
                         'El stream de todos los días se volvió mi rutina favorita. La comunidad es lo mejor.',
                     author_name: 'Carlos M.',
                     author_role: 'Sub hace 8 meses',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-carlos__',
                     rating: 5,
                 },
                 {
@@ -556,7 +852,7 @@ const streamingSections: PresetSection[] = [
                         'La calidad del stream y el carisma del streamer son únicos. Vale cada peso.',
                     author_name: 'Lucía R.',
                     author_role: 'Patreon VIP',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-lucia__',
                     rating: 5,
                 },
                 {
@@ -564,7 +860,7 @@ const streamingSections: PresetSection[] = [
                         'Encontré una comunidad increíble. El Discord es lo mejor que me pasó este año.',
                     author_name: 'Diego S.',
                     author_role: 'Viewer hace 1 año',
-                    author_image_media_id: null,
+                    author_image_media_id: '__MEDIA:avatar-streaming-diego__',
                     rating: 5,
                 },
             ],
@@ -586,6 +882,44 @@ const streamingSections: PresetSection[] = [
 ];
 
 const streamingBlocks: PresetBlock[] = [
+    {
+        type: 'stats',
+        visible: true,
+        content: {
+            eyebrow: 'En números',
+            title: 'Lo que conseguimos juntos',
+            subtitle:
+                'Gracias a la comunidad por hacer posible cada stream.',
+            accent: 'violet',
+            items: [
+                { icon: 'Users', value: 12500, suffix: '+', label: 'Suscriptores' },
+                { icon: 'Eye', value: 850000, suffix: '', label: 'Vistas totales' },
+                { icon: 'Clock', value: 2400, suffix: ' h', label: 'Horas en vivo' },
+                { icon: 'Heart', value: 4800, suffix: '+', label: 'Miembros' },
+            ],
+        },
+    },
+    {
+        type: 'schedule',
+        visible: true,
+        content: {
+            eyebrow: 'Agenda semanal',
+            title: 'Cuándo estoy en vivo',
+            subtitle: 'Mismos horarios cada semana.',
+            timezone: 'BO (UTC-4)',
+            accent: 'violet',
+            show_today: true,
+            slots: [
+                { day: 'Lunes', time: '20:00', title: 'Gaming · Ranked', active: true },
+                { day: 'Martes', time: '20:00', title: 'IRL · Paseo', active: true },
+                { day: 'Miércoles', time: '21:00', title: 'Just Chatting', active: true },
+                { day: 'Jueves', time: '20:00', title: 'Gaming · Coop', active: true },
+                { day: 'Viernes', time: '22:00', title: 'Torneo comunidad', active: true },
+                { day: 'Sábado', time: '18:00', title: 'Maratón', active: false },
+                { day: 'Domingo', time: '—', title: 'Descanso', active: false },
+            ],
+        },
+    },
     {
         type: 'spacer',
         visible: true,
@@ -613,6 +947,7 @@ const streamingBlocks: PresetBlock[] = [
             )}-${pad(inTwoDays.getDate())}T${pad(inTwoDays.getHours())}:${pad(
                 inTwoDays.getMinutes(),
             )}`;
+
             return {
                 target_date: target,
                 title: 'El show arranca en',
@@ -647,7 +982,7 @@ const streamingBlocks: PresetBlock[] = [
         visible: true,
         content: {
             source: 'url',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            url: '',
             media_id: null,
             title: 'Trailer oficial',
             autoplay: false,
@@ -673,9 +1008,9 @@ const streamingBlocks: PresetBlock[] = [
 export const PRESET_TEMPLATES: PresetTemplate[] = [
     {
         id: 'peluqueria',
-        name: 'Peluquería',
+        name: 'Peluquería & Barbería',
         description:
-            'Para peluquerías, barberías y salones de belleza. Con servicios, galería, precios, testimonios y ubicación.',
+            'Para peluquerías, barberías y salones de belleza. Con equipo, catálogo de servicios con precios y duraciones, galería, antes/después, testimonios y ubicación.',
         icon: 'Scissors',
         accent: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
         defaultName: 'Estudio Camila',
@@ -685,9 +1020,9 @@ export const PRESET_TEMPLATES: PresetTemplate[] = [
         blocks: peluqueriaBlocks,
         menu_items: [
             { label: 'Inicio', href: '#hero', icon: 'Home' },
-            { label: 'Servicios', href: '#features', icon: 'Sparkles' },
+            { label: 'Servicios', href: '#services-grid', icon: 'Sparkles' },
+            { label: 'Equipo', href: '#team', icon: 'Users' },
             { label: 'Galería', href: '#gallery', icon: 'Image' },
-            { label: 'Precios', href: '#pricing', icon: 'Tag' },
             { label: 'Testimonios', href: '#testimonials', icon: 'Star' },
             { label: 'Ubicación', href: '#location', icon: 'MapPin' },
             { label: 'Reservar', href: 'https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno', icon: 'Phone' },
