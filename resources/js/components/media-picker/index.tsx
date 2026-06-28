@@ -1,9 +1,12 @@
 import { router } from '@inertiajs/react';
 import {
     Check,
+    File,
+    FileText,
     FileVideo,
     Image as ImageIcon,
     Loader2,
+    Music,
     Search,
     Upload,
     Video as VideoIcon,
@@ -33,7 +36,7 @@ type MediaItem = {
     thumb_url: string;
 };
 
-type MediaKind = 'image' | 'video';
+type MediaKind = 'image' | 'video' | 'document';
 
 type Props = {
     value: number | null;
@@ -43,12 +46,18 @@ type Props = {
     label?: string;
     /**
      * Which kind of media to show in the picker:
-     *   - 'image' → loads image/* mime types, opens a square grid
-     *   - 'video' → loads video/* mime types, shows a video element on hover
+     *   - 'image'    → loads image/* mime types, opens a square grid
+     *   - 'video'    → loads video/* mime types, shows a video element on hover
+     *   - 'document' → loads ALL file types (PDF, DOC, ZIP, images, etc.) and
+     *                  shows them as a list with mime-type-aware icons
      * Defaults to 'image'.
      */
     mediaKind?: MediaKind;
     hideUpload?: boolean;
+    /** Force the upload accept attribute (overrides the kind default). */
+    accept?: string;
+    /** Cap the number of selected items when multi-select is enabled. */
+    max?: number;
 };
 
 const COPY: Record<
@@ -89,6 +98,18 @@ const COPY: Record<
             'Elegí un video existente de la biblioteca o subí uno nuevo.',
         accept: 'video/*',
     },
+    document: {
+        title: 'Biblioteca de archivos',
+        description: 'Elegí un archivo de la biblioteca o subí uno nuevo.',
+        chooseButton: 'Elegir archivo',
+        uploadButton: 'Subir archivo',
+        emptyMessage: 'No hay archivos en la biblioteca.',
+        firstUploadButton: 'Subir primer archivo',
+        searchPlaceholder: 'Buscar archivo...',
+        helperText:
+            'Elegí un archivo existente de la biblioteca o subí uno nuevo.',
+        accept: '*/*',
+    },
 };
 
 function formatBytes(bytes: number): string {
@@ -107,8 +128,11 @@ export function MediaPicker({
     label = 'Archivo',
     mediaKind = 'image',
     hideUpload = false,
+    accept,
+    max = 1,
 }: Props) {
     const copy = COPY[mediaKind];
+    const acceptAttr = accept ?? copy.accept;
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -123,7 +147,9 @@ export function MediaPicker({
         try {
             const url = mediaList.url({
                 query: {
-                    type: mediaKind,
+                    // 'document' omits the type filter so the picker shows
+                    // every kind (images, videos, PDFs, zips, ...).
+                    type: mediaKind === 'document' ? '' : mediaKind,
                     search: term,
                     page: targetPage,
                 },

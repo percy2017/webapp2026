@@ -1,6 +1,6 @@
 # WebApp v0.2
 
-![WebApp banner](banner-webapp.png)
+![WebApp banner](public/img/banner-webapp.png)
 
 Plataforma **todo-en-uno** para que tu negocio tenga presencia online con **reservas** y **tarjeta de presentación digital**. Construido con **Laravel 13 + Inertia 3 + React 19**.
 

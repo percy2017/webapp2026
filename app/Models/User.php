@@ -45,7 +45,11 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
     use HasRoles;
     use InteractsWithMedia;
 
-    protected $appends = ['avatar_url'];
+    protected $appends = [
+        'avatar_url',
+        'is_admin',
+        'roles_list',
+    ];
 
     protected function casts(): array
     {
@@ -75,6 +79,29 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
         }
 
         return $this->getFirstMedia('avatar')?->getUrl();
+    }
+
+    /**
+     * Convenience flag so the frontend can check `auth.user.is_admin`
+     * without having to read the `roles_list` array. Avoids loading
+     * the Spatie roles relation just to render a sidebar.
+     */
+    public function getIsAdminAttribute(): bool
+    {
+        // The relation may not be loaded yet (eager-loaded via
+        // loadMissing) — the HasRoles trait caches it.
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Plain string array of role names, safe to serialize to JSON.
+     * The frontend uses it for sidebar visibility checks.
+     *
+     * @return array<int, string>
+     */
+    public function getRolesListAttribute(): array
+    {
+        return $this->roles->pluck('name')->all();
     }
 
     public function chat(): HasOne

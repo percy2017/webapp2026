@@ -14,9 +14,21 @@ class SendChatMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['nullable', 'string', 'max:5000', 'required_without:attachments'],
-            'attachments' => ['nullable', 'array', 'max:5', 'required_without:content'],
+            'content' => ['nullable', 'string', 'max:5000', 'required_without_all:attachments,media_ids'],
+            'attachments' => ['nullable', 'array', 'max:5'],
             'attachments.*' => ['file', 'max:10240'],
+            // Existing media IDs from the Media library (chosen via the
+            // MediaAttachmentsPicker). Copied onto the message's
+            // `attachments` collection by the controller.
+            'media_ids' => ['nullable', 'array', 'max:5'],
+            'media_ids.*' => ['integer', 'exists:media,id'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'content.required_without_all' => 'Escribí un mensaje o adjuntá un archivo.',
         ];
     }
 }

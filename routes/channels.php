@@ -17,3 +17,9 @@ Broadcast::channel('chat.{chatId}', function ($user, int $chatId) {
     return (int) $chat->user_id === (int) $user->id
         || $user->hasRole('admin');
 });
+
+// Admin-only public channel — fired when a new chat is created from the
+// public widget so every connected admin can pop a desktop notification.
+Broadcast::channel('admin.chats', function ($user) {
+    return $user->hasRole('admin');
+});

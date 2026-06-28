@@ -239,7 +239,7 @@ export default function AgendaIndex(_: Props) {
                 start: fetchInfo.startStr,
                 end: fetchInfo.endStr,
             },
-        });
+        }).url;
 
         fetch(url, {
             headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },

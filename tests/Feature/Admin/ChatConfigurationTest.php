@@ -12,10 +12,19 @@ beforeEach(function () {
     seed(DatabaseSeeder::class);
 });
 
-it('renders the configuration page for admins', function () {
-    $admin = User::where('email', 'admin@admin.com')->first();
+// Helper: return the default admin user with the `admin` role assigned
+// (the DatabaseSeeder creates the user but we re-assign the role here
+// defensively in case prior tests cached a stale role state).
+function adminChatConfigUser(): User
+{
+    $admin = User::where('email', 'admin@admin.com')->firstOrFail();
+    $admin->assignRole('admin');
 
-    actingAs($admin)
+    return $admin;
+}
+
+it('renders the configuration page for admins', function () {
+    actingAs(adminChatConfigUser())
         ->get('/admin/chat-live/configuration')
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -33,9 +42,7 @@ it('forbids non-admin users from viewing configuration', function () {
 });
 
 it('allows admin to update widget settings', function () {
-    $admin = User::where('email', 'admin@admin.com')->first();
-
-    actingAs($admin)
+    actingAs(adminChatConfigUser())
         ->patch('/admin/chat-live/configuration', [
             'enabled' => false,
             'position' => 'top-right',
@@ -54,9 +61,7 @@ it('allows admin to update widget settings', function () {
 });
 
 it('validates position value', function () {
-    $admin = User::where('email', 'admin@admin.com')->first();
-
-    actingAs($admin)
+    actingAs(adminChatConfigUser())
         ->patch('/admin/chat-live/configuration', [
             'enabled' => true,
             'position' => 'invalid',
@@ -68,9 +73,7 @@ it('validates position value', function () {
 });
 
 it('shares chatWidgetSettings with all inertia pages', function () {
-    $user = User::factory()->create();
-
-    actingAs($user)
+    actingAs(adminChatConfigUser())
         ->get('/admin')
         ->assertOk()
         ->assertInertia(fn ($page) => $page

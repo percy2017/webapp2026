@@ -3,7 +3,7 @@
  *
  * Bumping the cache version invalidates everything on next page load.
  */
-const VERSION = 'v1.0.1';
+const VERSION = 'v1.2.0';
 const STATIC_CACHE = `webapp-static-${VERSION}`;
 const RUNTIME_CACHE = `webapp-runtime-${VERSION}`;
 
@@ -133,5 +133,79 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('message', (event) => {
     if (event.data?.type === 'SKIP_WAITING') {
         self.skipWaiting();
+        return;
     }
+
+    // The chat widget posts this when a new message arrives and the
+    // widget panel is closed. We surface it as a native OS notification
+    // so the visitor doesn't miss it like Messenger / WhatsApp Web.
+    if (event.data?.type === 'chat:notify') {
+        const { title, body, tag, icon, url } = event.data.payload ?? {};
+        if (typeof self.registration.showNotification === 'function') {
+            self.registration.showNotification(title ?? 'Nuevo mensaje', {
+                body: body ?? '',
+                tag: tag ?? 'chat-message',
+                icon: icon ?? '/pwa-icons/icon-192.png',
+                badge: '/pwa-icons/icon-192.png',
+                data: { url: url ?? '/' },
+                renotify: true,
+                requireInteraction: false,
+            });
+        }
+    }
+});
+
+// Web Push — fired by the browser push service when the backend sends a
+// push to one of our subscriptions, EVEN WHEN THE PWA IS CLOSED. This is
+// the path that delivers notifications when the user has swiped the app
+// away on mobile.
+self.addEventListener('push', (event) => {
+    if (!event.data) return;
+
+    let payload = {};
+    try {
+        payload = event.data.json();
+    } catch (_) {
+        payload = { title: 'Nuevo chat', body: event.data.text() };
+    }
+
+    const title = payload.title ?? 'Nuevo chat';
+    const options = {
+        body: payload.body ?? '',
+        tag: payload.tag ?? 'admin-chat',
+        icon: payload.icon ?? '/pwa-icons/icon-192.png',
+        badge: payload.badge ?? '/pwa-icons/icon-192.png',
+        data: { url: payload.url ?? '/admin/chat-live/chats' },
+        renotify: true,
+        requireInteraction: false,
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(title, options).catch(() => null),
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const targetUrl = event.notification.data?.url ?? '/';
+    event.waitUntil(
+        self.clients
+            .matchAll({ type: 'window', includeUncontrolled: true })
+            .then((windowClients) => {
+                // Focus an existing tab if one is open on this site
+                for (const client of windowClients) {
+                    if ('focus' in client) {
+                        client.focus();
+                        if ('navigate' in client && client.url !== targetUrl) {
+                            client.navigate(targetUrl);
+                        }
+                        return;
+                    }
+                }
+                // Otherwise open a fresh tab
+                if (self.clients.openWindow) {
+                    return self.clients.openWindow(targetUrl);
+                }
+            }),
+    );
 });

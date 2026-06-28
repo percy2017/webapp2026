@@ -8,6 +8,8 @@ use App\Http\Requests\Admin\SendChatMessageRequest;
 use App\Http\Requests\Admin\UpdateChatStatusRequest;
 use App\Models\Chat;
 use App\Models\ChatMessage;
+use App\Models\MediaHolder;
+use App\Support\ChatAttachmentFormatter;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,8 +27,13 @@ class ChatController extends Controller
             ->paginate(20);
 
         $chats->getCollection()->transform(function (Chat $chat) {
-            $user = $chat->user;
-            $chat->user_avatar_url = $user?->getFirstMedia('avatar')?->getUrl();
+            // The User accessor already falls back from
+            // `avatar_media_id` (direct FK set by the user create/edit
+            // form) to the Spatie `avatar` collection. Using the
+            // accessor avoids the bug where users saved through the
+            // user form had an avatar but the chat list showed their
+            // initials because we only checked the Spatie collection.
+            $chat->user_avatar_url = $chat->user?->avatar_url;
             $chat->preview = $chat->latestMessage?->content
                 ?? ($chat->latestMessage?->getMedia('attachments')->count()
                     ? '📎 Archivo adjunto'
@@ -47,8 +54,8 @@ class ChatController extends Controller
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
-        $chat->load(['user:id,name,email', 'messages.sender.media', 'messages.media']);
-        $chat->user_avatar_url = $chat->user?->getFirstMedia('avatar')?->getUrl();
+        $chat->load(['user:id,name,email', 'messages.sender.media']);
+        $chat->user_avatar_url = $chat->user?->avatar_url;
 
         $messages = $chat->messages->map(function (ChatMessage $message) {
             return [
@@ -59,14 +66,7 @@ class ChatController extends Controller
                 'sender_avatar_url' => $message->sender?->getFirstMedia('avatar')?->getUrl(),
                 'content' => $message->content,
                 'created_at' => $message->created_at?->toIso8601String(),
-                'attachments' => $message->getMedia('attachments')->map(fn ($media) => [
-                    'id' => $media->id,
-                    'name' => $media->name,
-                    'file_name' => $media->file_name,
-                    'mime_type' => $media->mime_type,
-                    'size' => $media->size,
-                    'url' => $media->getUrl(),
-                ])->all(),
+                'attachments' => ChatAttachmentFormatter::forMessage($message),
             ];
         });
 
@@ -94,7 +94,7 @@ class ChatController extends Controller
 
     public function poll(Chat $chat)
     {
-        $chat->load(['messages' => fn ($q) => $q->orderBy('id')]);
+        $chat->load(['messages' => fn ($q) => $q->orderBy('id'), 'messages.sender.media']);
 
         $messages = $chat->messages->map(function (ChatMessage $message) {
             return [
@@ -105,14 +105,7 @@ class ChatController extends Controller
                 'sender_avatar_url' => $message->sender?->getFirstMedia('avatar')?->getUrl(),
                 'content' => $message->content,
                 'created_at' => $message->created_at?->toIso8601String(),
-                'attachments' => $message->getMedia('attachments')->map(fn ($media) => [
-                    'id' => $media->id,
-                    'name' => $media->name,
-                    'file_name' => $media->file_name,
-                    'mime_type' => $media->mime_type,
-                    'size' => $media->size,
-                    'url' => $media->getUrl(),
-                ])->all(),
+                'attachments' => ChatAttachmentFormatter::forMessage($message),
             ];
         });
 
@@ -126,25 +119,43 @@ class ChatController extends Controller
 
     public function sendMessage(SendChatMessageRequest $request, Chat $chat)
     {
+        $uploadedMediaIds = [];
+
+        // Raw uploads (still supported as a fallback): each upload creates
+        // one Media row in the default MediaHolder collection, then we
+        // remember its id so the message keeps a reference (no copy).
+        if ($request->hasFile('attachments')) {
+            $holder = MediaHolder::firstOrCreate(['name' => 'default']);
+            foreach ($request->file('attachments') as $file) {
+                $media = $holder->addMediaFromRequest('attachments')->toMediaCollection();
+                $uploadedMediaIds[] = $media->id;
+            }
+        }
+
+        // Media picked from the library OR just uploaded — keep only the
+        // id list on the message so the Media library stays the single
+        // source of truth. We no longer copy files into the message's
+        // own collection, which means:
+        //   - no duplicate rows on every send
+        //   - deleting a Media library item cleanly removes it from chat
+        //   - the FlatPathGenerator collisions from earlier are gone
+        $pickedIds = $request->input('media_ids', []);
+        $mediaIds = array_values(array_unique(array_merge($uploadedMediaIds, $pickedIds)));
+
         $message = ChatMessage::create([
             'chat_id' => $chat->id,
             'sender_id' => $request->user()->id,
             'sender_type' => 'agent',
             'content' => $request->input('content'),
+            'media_ids' => $mediaIds,
         ]);
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $message->addMedia($file)->toMediaCollection('attachments');
-            }
-        }
 
         $chat->update([
             'last_message_at' => $message->created_at,
             'status' => 'open',
         ]);
 
-        ChatMessageSent::dispatch($message->loadMissing('sender.media', 'media'));
+        ChatMessageSent::dispatch($message->loadMissing('sender.media'));
 
         return back();
     }
@@ -159,6 +170,16 @@ class ChatController extends Controller
     public function destroy(Chat $chat): RedirectResponse
     {
         $this->authorize('delete', $chat);
+
+        // Delete messages explicitly (instead of relying on DB-level
+        // cascadeOnDelete) so Spatie's media-cleanup hooks fire and the
+        // attachment files on disk are removed too. If we just called
+        // $chat->delete(), SQLite/MySQL would wipe the chat_messages rows
+        // directly and skip Eloquent events — leaving orphaned media rows
+        // and orphaned files in storage/app/public/.
+        $chat->messages()->each(function (ChatMessage $message): void {
+            $message->delete();
+        });
 
         $chat->delete();
 

@@ -12,11 +12,22 @@ beforeEach(function () {
     seed(DatabaseSeeder::class);
 });
 
-it('renders the chats page for authenticated users', function () {
-    $user = User::factory()->create();
-    Chat::factory()->for($user)->create();
+// Helper: create a User that already has the `admin` role so it can
+// reach /admin/* routes (the admin gate is `role:admin`).
+function makeAdmin(array $attrs = []): User
+{
+    $user = User::factory()->create($attrs);
+    $user->assignRole('admin');
 
-    actingAs($user)
+    return $user;
+}
+
+it('renders the chats page for authenticated users', function () {
+    $admin = makeAdmin();
+    $visitor = User::factory()->create();
+    Chat::factory()->for($visitor)->create();
+
+    actingAs($admin)
         ->get('/admin/chat-live/chats')
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -28,11 +39,21 @@ it('redirects guests to login', function () {
     get('/admin/chat-live/chats')->assertRedirect('/login');
 });
 
-it('shows chat detail with messages', function () {
+it('forbids non-admin users from reaching admin pages', function () {
     $user = User::factory()->create();
-    $chat = Chat::factory()->for($user)->create();
+    Chat::factory()->for($user)->create();
 
     actingAs($user)
+        ->get('/admin/chat-live/chats')
+        ->assertForbidden();
+});
+
+it('shows chat detail with messages', function () {
+    $admin = makeAdmin();
+    $visitor = User::factory()->create();
+    $chat = Chat::factory()->for($visitor)->create();
+
+    actingAs($admin)
         ->get("/admin/chat-live/chats/{$chat->id}")
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -42,24 +63,25 @@ it('shows chat detail with messages', function () {
 });
 
 it('marks visitor messages as read on view', function () {
-    $user = User::factory()->create();
-    $chat = Chat::factory()->for($user)->create();
+    $admin = makeAdmin();
+    $visitor = User::factory()->create();
+    $chat = Chat::factory()->for($visitor)->create();
     $visitorMsg = $chat->messages()->create([
-        'sender_id' => $user->id,
+        'sender_id' => $visitor->id,
         'sender_type' => 'visitor',
         'content' => 'Hola',
     ]);
     expect($visitorMsg->fresh()->read_at)->toBeNull();
 
-    actingAs($user)->get("/admin/chat-live/chats/{$chat->id}");
+    actingAs($admin)->get("/admin/chat-live/chats/{$chat->id}");
 
     expect($visitorMsg->fresh()->read_at)->not->toBeNull();
 });
 
-it('allows any authenticated user to send messages to a chat', function () {
-    $owner = User::factory()->create();
-    $agent = User::factory()->create();
-    $chat = Chat::factory()->for($owner)->create();
+it('allows any admin to send messages to a chat', function () {
+    $visitor = User::factory()->create();
+    $agent = makeAdmin();
+    $chat = Chat::factory()->for($visitor)->create();
 
     actingAs($agent)
         ->post("/admin/chat-live/chats/{$chat->id}/messages", [
@@ -74,9 +96,9 @@ it('allows any authenticated user to send messages to a chat', function () {
 });
 
 it('updates chat last_message_at when sending a message', function () {
-    $owner = User::factory()->create();
-    $agent = User::factory()->create();
-    $chat = Chat::factory()->for($owner)->create(['last_message_at' => null]);
+    $visitor = User::factory()->create();
+    $agent = makeAdmin();
+    $chat = Chat::factory()->for($visitor)->create(['last_message_at' => null]);
 
     actingAs($agent)
         ->post("/admin/chat-live/chats/{$chat->id}/messages", [

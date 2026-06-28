@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\ChatWidgetSettingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\PushSubscriptionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteMenuController;
 use App\Http\Controllers\Admin\SiteSettingController;
@@ -23,8 +24,20 @@ Route::get('qr.svg', [QrController::class, 'svg'])->name('qr.svg');
 Route::get('qr.png', [QrController::class, 'png'])->name('qr.png');
 Route::get('qr/download', [QrController::class, 'download'])->name('qr.download');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+// Admin panel — only users with the `admin` role can reach any /admin/*
+// route. We attach `role:admin` to the outer group so individual sub-routes
+// don't need to repeat it. Sub-groups inside still add permission gates for
+// specific resources (manage-users, manage-roles, …) on top.
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('admin', [DashboardController::class, 'index'])->name('admin');
+
+    // Web Push subscription management. Only admins can subscribe to the
+    // admin-chats push channel, so the subscription endpoints live under
+    // the admin role gate too.
+    Route::post('admin/push-subscriptions', [PushSubscriptionController::class, 'store'])
+        ->name('push-subscriptions.store');
+    Route::delete('admin/push-subscriptions', [PushSubscriptionController::class, 'destroy'])
+        ->name('push-subscriptions.destroy');
 
     Route::get('admin/agenda', [EventController::class, 'index'])->name('agenda.index');
     Route::get('admin/agenda/events', [EventController::class, 'eventsJson'])->name('agenda.events');
