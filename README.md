@@ -1,4 +1,4 @@
-# WebApp v0.1
+# WebApp v0.2
 
 Plataforma **todo-en-uno** para que tu negocio tenga presencia online con **reservas** y **tarjeta de presentación digital**. Construido con **Laravel 13 + Inertia 3 + React 19**.
 
@@ -39,18 +39,20 @@ Pensado para peluquerías, streamers, restaurantes, profesionales independientes
 ### 📄 Páginas dinámicas (tarjeta de presentación digital)
 Editor visual drag-and-drop con **Puck**. Las páginas se construyen con dos tipos de elementos:
 
-- **10 bloques básicos**: Título, Párrafo, Imagen, Botón, Espaciador, Divisor, Galería, Video, Mapa, Cronómetro
-- **7 secciones prediseñadas**: Hero, Características, Galería, Planes/Precios, Testimonios, Ubicación, Llamado a la acción
+- **13 bloques básicos**: Título, Párrafo, Imagen, Botón, Espaciador, Divisor, Galería, Video, Mapa, Antes/Después, Cronómetro, Estadísticas, Agenda Semanal
+- **9 secciones prediseñadas**: Hero, Características, Galería, Planes/Precios, FAQ, Testimonios, Equipo, Servicios, Ubicación, Llamado a la acción
 
 Los datos se persisten en `site_templates.sections` (JSON) y `site_template_blocks` (tabla relacional).
 
 ### 🎨 Plantillas prediseñadas
 Elegí entre plantillas listas para usar según tu rubro:
 
-- **Peluquería** — Para peluquerías y barberías. Hero, 6 servicios, galería, 3 tiers de precios, testimonios, ubicación con mapa y CTA de reserva.
-- **Streaming** — Para streamers y creadores de contenido. Hero "En vivo", 6 plataformas, VODs, 3 tiers (Viewer/Sub/Patreon), comunidad, links a Twitch.
+- **Peluquería** — Para peluquerías y barberías. Hero, 6 servicios, galería con 6 trabajos reales, 3 tiers de precios, equipo con 3 fotos, 4 pares antes/después, testimonios, ubicación con mapa y CTA de reserva. Ships con 20 SVGs ilustrados (hero, equipo, galería, servicios, before/after).
+- **Streaming** — Para streamers y creadores de contenido. Hero "En vivo" con waveform, 6 plataformas, galería con 6 highlights (setup, win, IRL, torneo, charla, highlights), 3 tiers (Viewer/Sub/Patreon), 3 testimonios con avatar, comunidad, links a Twitch. Ships con 15 SVGs ilustrados + 5 SVGs "sample" para defaults de bloques/secciones.
 
-Al elegir una plantilla, se crea automáticamente con contenido de ejemplo, secciones, bloques y menú pre-armados.
+Ambas plantillas se crean automáticamente con contenido, secciones, bloques, menú pre-armado e imágenes de muestra ya registradas en MediaLibrary.
+
+> **Pipeline de medios**: los presets referencian sus assets como placeholders `__MEDIA:<key>__`. Los seeders (`PeluqueriaTemplateSeeder`, `StreamingTemplateSeeder`) — que comparten el trait `Database\Seeders\Concerns\RegistersCanvasMedia` — registran los SVGs en `MediaHolder` (`peluqueria-canvas` / `streaming-canvas`) y resuelven los placeholders a IDs numéricos. `App\Support\TemplateMediaUrl::enrichSections` también resuelve los placeholders en render-time para que los bloques/secciones recién arrastrados al canvas muestren la imagen de muestra sin re-seed.
 
 ### 💬 Chat en Vivo
 WebSockets con **Laravel Reverb** (protocolo Pusher). El visitante ve un botón flotante en tu sitio, se loguea con email + teléfono (sin contraseña, registro rápido), y te escribe. Vos respondés desde el panel.
@@ -109,78 +111,6 @@ Configuración global: nombre, eslogan, SEO (título + descripción), logo, favi
 - SEO básico (title, description, favicon)
 - Soporte para dominio personalizado + SSL (Let's Encrypt vía Hestia)
 
-## Módulos del panel
-
-| Path | Descripción |
-|---|---|
-| `/admin` | Dashboard con métricas y estado del socket |
-| `/admin/agenda` | Calendario de eventos |
-| `/admin/media` | Biblioteca de medios |
-| `/admin/users` | Gestión de usuarios |
-| `/admin/roles` | Gestión de roles y permisos |
-| `/admin/site-templates` | Lista de páginas |
-| `/admin/site-templates/{id}/edit` | Editor visual Puck |
-| `/admin/site-menu` | Menú de navegación |
-| `/admin/site-settings` | Configuración del sitio |
-| `/admin/chat-live/chats` | Conversaciones del chat |
-| `/admin/chat-live/configuration` | Configuración del chat flotante |
-| `/` | Landing pública (usa la página activa) |
-
-## Roles y permisos
-
-| Rol | Permisos |
-|---|---|
-| `admin` | Todos los permisos automáticamente |
-| `user` | Sin permisos administrativos (puede usar el panel con acceso limitado) |
-
-| Permiso | Descripción |
-|---|---|
-| `manage-users` | CRUD de usuarios |
-| `manage-roles` | CRUD de roles |
-| `manage-media` | Subir / eliminar medios |
-| `manage-templates` | CRUD de páginas |
-| `manage-settings` | Configuración del sitio + menú |
-
-## Stack técnico
-
-### Frontend
-- **Inertia 3** con SSR opcional
-- **Wayfinder** genera rutas TypeScript tipadas (`@/routes/...`)
-- **shadcn/ui** basado en Radix UI
-- **Tailwind v4** con CSS variables para theming
-- **Puck Editor** para drag-and-drop visual con auto-save
-- **Reverb + Echo** para chat en vivo sin polling
-- **Leaflet** para mapas interactivos
-
-### Backend
-- **Policies** por modelo (Template, Setting, Menu, Media, Chat, etc.)
-- **Form Requests** con validación tipada
-- **API Resources** cuando aplica
-- **Spatie MediaLibrary** con conversiones (`thumb`)
-- **Inertia middleware** comparte estado global (auth, theme, settings, menu, chat widget, site template)
-- **Real-time events** con `ShouldBroadcastNow` (Reverb)
-
-### Base de datos
-SQLite por default (cambiable a MySQL/PostgreSQL). Migraciones independientes por tabla.
-
-Tablas principales (25+):
-- `users` + extras (avatar, phone, 2FA, passkey)
-- `roles`, `permissions`, `model_has_*`, `role_has_permissions` (Spatie)
-- `media`, `media_holders` (Spatie MediaLibrary)
-- `events` (agenda)
-- `chats`, `chat_messages`, `chat_widget_settings`
-- `site_templates`, `site_template_blocks`, `site_settings`, `site_menu_items`
-- `passkeys`, `sessions`, `cache`, `jobs`
-
-### Internacionalización
-- Español por defecto (`APP_LOCALE=es`)
-- Timezone configurable (default `America/La_Paz` para Bolivia)
-
-### Testing
-- **Pest 4** con tests Feature y Unit
-- **RefreshDatabase** en suites de DB
-- Cobertura de políticas, controllers y flujos críticos
-
 ## Documentación del cliente
 
 La documentación para el usuario final (en español) está en **`resources/docs/0.1/`** usando **LaRecipe 2.2**.
@@ -192,7 +122,7 @@ Disponible en **`/docs/0.1/overview`** con:
 - Biblioteca de medios, Menú de navegación, Configuración del sitio
 - FAQ
 
-## Credenciales por defecto (después de `migrate:fresh --seed`)
+## Credenciales por defecto
 
 - **Email**: `admin@admin.com`
 - **Password**: `Admin2026$`
@@ -209,29 +139,21 @@ php artisan migrate:fresh --seed
 php artisan storage:link
 npm run build
 
-# Desarrollo
-php artisan serve
-npm run dev
-php artisan reverb:start
-
-# Calidad
-vendor/bin/pint --dirty
-php artisan test --compact
-npm run build
+# Regenerar JSON de un preset después de editar preset-templates.ts
+node scripts/export-preset-for-seeder.mjs        # streaming
+node scripts/export-preset-for-seeder.mjs        # peluquería (mismo script)
 
 # Producción (con pm2)
-pm2 start "php artisan reverb:start --host=0.0.0.0 --port=3001" --name webapp-reverb
+pm2 start ecosystem.config.cjs
 pm2 save
 ```
 
-## Roadmap
+## Assets de marca
 
-- Reservas online para clientes (agendar desde el sitio público)
-- Notificaciones automáticas (email/SMS) antes de cada evento
-- Integración con Google Calendar y Outlook
-- Sincronización chat ↔ reservas
-- App móvil nativa
-- Multi-idioma (inglés además de español)
+- `public/canvas/peluqueria/` — 20 SVGs ilustrados del preset Peluquería
+- `public/canvas/streaming/` — 15 SVGs ilustrados del preset Streaming + 5 sample defaults
+- `canvas-tarjeta-digital.{svg,png,pdf}` — artefacto canvas del brief de marca
+- `canvas-philosophy.md` — filosofía de diseño **Embossed Voltage** que rige los SVGs
 
 ## Licencia
 
