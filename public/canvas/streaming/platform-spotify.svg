@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Plataforma — Spotify">
+    <defs>
+        <linearGradient id="bgSp" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0814"/><stop offset="100%" stop-color="#050308"/></linearGradient>
+        <radialGradient id="haloSp" cx="0.5" cy="0.45" r="0.55"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.22"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></radialGradient>
+        <linearGradient id="goldSp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff5d8"/><stop offset="100%" stop-color="#8a5a18"/></linearGradient>
+        <filter id="grainSp" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="54"/><feColorMatrix values="0 0 0 0 0.83  0 0 0 0 0.61  0 0 0 0 0.23  0 0 0 0.18 0"/></filter>
+    </defs>
+    <rect width="600" height="600" fill="url(#bgSp)"/><rect width="600" height="600" fill="url(#haloSp)"/>
+    <g transform="translate(300, 280)" opacity="0.95">
+        <circle cx="0" cy="0" r="130" fill="none" stroke="url(#goldSp)" stroke-width="14"/>
+        <circle cx="0" cy="0" r="92" fill="none" stroke="url(#goldSp)" stroke-width="10"/>
+        <circle cx="0" cy="0" r="58" fill="none" stroke="url(#goldSp)" stroke-width="8"/>
+        <path d="M -60 -36 Q -10 -56 50 -50" stroke="url(#goldSp)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M -54 -8 Q -10 -28 44 -22" stroke="url(#goldSp)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M -48 20 Q -8 4 38 8" stroke="url(#goldSp)" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </g>
+    <text x="30" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">PLATFORM · SPOTIFY</text>
+    <text x="570" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.7" text-anchor="end">Spotify</text>
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
+    <rect x="30" y="30" width="540" height="540" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.2"/>
+    <rect width="600" height="600" filter="url(#grainSp)" opacity="0.5"/>
+</svg>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Hero — StreamerHub, streaming y comunidad">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Hero — Tienda de streaming, catálogo de plataformas">
     <defs>
         <linearGradient id="bgHeroS" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#0a0814"/>
@@ -6,30 +6,26 @@
             <stop offset="100%" stop-color="#050308"/>
         </linearGradient>
         <radialGradient id="haloHeroS" cx="0.5" cy="0.45" r="0.55">
-            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.45"/>
-            <stop offset="60%" stop-color="#a78bfa" stop-opacity="0.1"/>
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.4"/>
+            <stop offset="60%" stop-color="#a78bfa" stop-opacity="0.08"/>
             <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="goldHaloHeroS" cx="0.7" cy="0.3" r="0.4">
+        <radialGradient id="goldHaloHeroS" cx="0.78" cy="0.28" r="0.42">
             <stop offset="0%" stop-color="#d49b3a" stop-opacity="0.32"/>
             <stop offset="100%" stop-color="#d49b3a" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="coralHaloS" cx="0.25" cy="0.75" r="0.35">
-            <stop offset="0%" stop-color="#e8784a" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#e8784a" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="goldPlayS" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="goldTvS" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#fff5d8"/>
             <stop offset="50%" stop-color="#f4d870"/>
             <stop offset="100%" stop-color="#8a5a18"/>
         </linearGradient>
-        <linearGradient id="playRingS" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#a78bfa"/>
-            <stop offset="100%" stop-color="#5b21b6"/>
+        <linearGradient id="screenGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a1424"/>
+            <stop offset="100%" stop-color="#0a0814"/>
         </linearGradient>
-        <linearGradient id="waveS" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stop-color="#8a5a18"/>
-            <stop offset="100%" stop-color="#f4d870"/>
+        <linearGradient id="logoGoldA" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff5d8"/>
+            <stop offset="100%" stop-color="#8a5a18"/>
         </linearGradient>
         <filter id="grainHeroS" x="0" y="0" width="100%" height="100%">
             <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11"/>
@@ -40,45 +36,60 @@
     <rect width="1200" height="900" fill="url(#bgHeroS)"/>
     <rect width="1200" height="900" fill="url(#haloHeroS)"/>
     <rect width="1200" height="900" fill="url(#goldHaloHeroS)"/>
-    <rect width="1200" height="900" fill="url(#coralHaloS)"/>
 
-    <g opacity="0.9">
-        <circle cx="600" cy="450" r="190" fill="none" stroke="url(#playRingS)" stroke-width="3" opacity="0.65"/>
-        <circle cx="600" cy="450" r="155" fill="#0a0814" stroke="url(#goldPlayS)" stroke-width="2"/>
-        <path d="M 555 380 L 555 520 L 670 450 Z" fill="url(#goldPlayS)" opacity="0.95"/>
+    <g transform="translate(600, 440)" opacity="0.95">
+        <rect x="-300" y="-180" width="600" height="360" rx="14" fill="url(#screenGrad)" stroke="url(#goldTvS)" stroke-width="3"/>
+        <rect x="-280" y="-160" width="560" height="320" rx="6" fill="#0a0814"/>
+        <rect x="-262" y="-142" width="524" height="284" rx="2" fill="url(#screenGrad)"/>
+
+        <g opacity="0.95">
+            <rect x="-238" y="-118" width="100" height="120" rx="6" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1.5"/>
+            <path d="M -210 -78 L -210 -38 L -178 -58 Z" fill="url(#logoGoldA)"/>
+            <text x="-188" y="20" font-family="JetBrains Mono, monospace" font-size="9" fill="#d49b3a" letter-spacing="2">NETFLIX</text>
+
+            <rect x="-122" y="-118" width="100" height="120" rx="6" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1.5"/>
+            <path d="M -86 -78 L -52 -78 L -52 -68 L -78 -68 L -78 -54 L -52 -54 L -52 -44 L -78 -44 L -78 -28 L -52 -28 L -52 -18 L -86 -18 Z" fill="url(#logoGoldA)"/>
+            <text x="-72" y="20" font-family="JetBrains Mono, monospace" font-size="9" fill="#d49b3a" letter-spacing="2">HBO MAX</text>
+
+            <rect x="-6" y="-118" width="100" height="120" rx="6" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1.5"/>
+            <path d="M 30 -68 Q 50 -90 70 -68 L 70 -38 Q 50 -22 30 -38 Z" fill="url(#logoGoldA)"/>
+            <text x="44" y="20" font-family="JetBrains Mono, monospace" font-size="9" fill="#d49b3a" letter-spacing="2">DISNEY+</text>
+
+            <rect x="110" y="-118" width="100" height="120" rx="6" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1.5"/>
+            <circle cx="146" cy="-48" r="6" fill="url(#logoGoldA)"/>
+            <rect x="155" y="-58" width="3" height="20" rx="1.5" fill="url(#logoGoldA)"/>
+            <rect x="162" y="-65" width="3" height="34" rx="1.5" fill="url(#logoGoldA)"/>
+            <rect x="169" y="-50" width="3" height="14" rx="1.5" fill="url(#logoGoldA)"/>
+            <rect x="176" y="-62" width="3" height="28" rx="1.5" fill="url(#logoGoldA)"/>
+            <rect x="183" y="-55" width="3" height="20" rx="1.5" fill="url(#logoGoldA)"/>
+            <text x="160" y="20" font-family="JetBrains Mono, monospace" font-size="9" fill="#d49b3a" letter-spacing="2">SPOTIFY</text>
+        </g>
+
+        <g transform="translate(0, 70)">
+            <rect x="-262" y="-26" width="524" height="50" rx="6" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1"/>
+            <text x="-240" y="-2" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.7">Acceso inmediato</text>
+            <text x="-240" y="16" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" letter-spacing="3">PAGO LOCAL · SOPORTE 24/7</text>
+            <line x1="80" y1="-22" x2="80" y2="22" stroke="url(#goldTvS)" stroke-width="0.6" opacity="0.5"/>
+            <text x="100" y="-2" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.7">+200 clientes</text>
+            <text x="100" y="16" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" letter-spacing="3">PLATAFORMAS HD/4K</text>
+        </g>
+
+        <rect x="-340" y="-200" width="680" height="400" rx="20" fill="none" stroke="url(#goldTvS)" stroke-width="0.6" opacity="0.4"/>
+        <rect x="-30" y="180" width="60" height="14" rx="2" fill="url(#goldTvS)" opacity="0.7"/>
+        <rect x="-90" y="194" width="180" height="6" rx="3" fill="#14101f" stroke="url(#goldTvS)" stroke-width="1" opacity="0.6"/>
     </g>
 
-    <g opacity="0.85">
-        <rect x="320" y="380" width="14" height="140" rx="7" fill="url(#waveS)"/>
-        <rect x="346" y="340" width="14" height="220" rx="7" fill="url(#waveS)"/>
-        <rect x="372" y="300" width="14" height="300" rx="7" fill="url(#waveS)"/>
-        <rect x="398" y="360" width="14" height="180" rx="7" fill="url(#waveS)"/>
-        <rect x="424" y="320" width="14" height="260" rx="7" fill="url(#waveS)"/>
-        <rect x="450" y="400" width="14" height="100" rx="7" fill="url(#waveS)"/>
-        <rect x="736" y="400" width="14" height="100" rx="7" fill="url(#waveS)"/>
-        <rect x="762" y="320" width="14" height="260" rx="7" fill="url(#waveS)"/>
-        <rect x="788" y="360" width="14" height="180" rx="7" fill="url(#waveS)"/>
-        <rect x="814" y="300" width="14" height="300" rx="7" fill="url(#waveS)"/>
-        <rect x="840" y="340" width="14" height="220" rx="7" fill="url(#waveS)"/>
-        <rect x="866" y="380" width="14" height="140" rx="7" fill="url(#waveS)"/>
+    <g transform="translate(990, 100)" opacity="0.92">
+        <circle cx="0" cy="0" r="6" fill="#22c55e"/>
+        <circle cx="0" cy="0" r="12" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.55"/>
+        <text x="20" y="5" font-family="JetBrains Mono, monospace" font-size="12" fill="#d4d4d8" letter-spacing="3">EN STOCK</text>
     </g>
 
-    <g transform="translate(990, 80)" opacity="0.92">
-        <circle cx="0" cy="0" r="8" fill="#ef4444"/>
-        <circle cx="0" cy="0" r="14" fill="none" stroke="#ef4444" stroke-width="1" opacity="0.5"/>
-        <text x="24" y="6" font-family="JetBrains Mono, monospace" font-size="14" fill="#f4d870" letter-spacing="3">ON AIR</text>
-    </g>
-
-    <g transform="translate(600, 760)">
-        <text x="0" y="0" font-family="Playfair Display, serif" font-style="italic" font-size="34" fill="#e8d8c4" text-anchor="middle">Stream, comunidad y buena energía</text>
-        <text x="0" y="38" font-family="JetBrains Mono, monospace" font-size="11" fill="#d49b3a" text-anchor="middle" letter-spacing="3">PL. S — STREAMING · STREAMERHUB</text>
-    </g>
-
-    <text x="40" y="40" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.55">PL. S</text>
+    <text x="40" y="40" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.55">PL. W</text>
     <text x="1160" y="40" font-family="JetBrains Mono, monospace" font-size="11" fill="#d49b3a" text-anchor="end" opacity="0.7">Nº 001 — MMXXVI</text>
 
     <rect x="15" y="15" width="1170" height="870" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
     <rect x="30" y="30" width="1140" height="840" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.25"/>
 
-    <rect x="0" y="0" width="1200" height="900" filter="url(#grainHeroS)" opacity="0.55"/>
+    <rect width="1200" height="900" filter="url(#grainHeroS)" opacity="0.55"/>
 </svg>

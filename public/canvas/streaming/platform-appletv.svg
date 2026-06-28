@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Plataforma — Apple TV+">
+    <defs>
+        <linearGradient id="bgAt" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0814"/><stop offset="100%" stop-color="#050308"/></linearGradient>
+        <radialGradient id="haloAt" cx="0.5" cy="0.45" r="0.55"><stop offset="0%" stop-color="#d4d4d8" stop-opacity="0.22"/><stop offset="100%" stop-color="#d4d4d8" stop-opacity="0"/></radialGradient>
+        <linearGradient id="goldAt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff5d8"/><stop offset="100%" stop-color="#8a5a18"/></linearGradient>
+        <filter id="grainAt" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="57"/><feColorMatrix values="0 0 0 0 0.83  0 0 0 0 0.61  0 0 0 0 0.23  0 0 0 0.18 0"/></filter>
+    </defs>
+    <rect width="600" height="600" fill="url(#bgAt)"/><rect width="600" height="600" fill="url(#haloAt)"/>
+    <g transform="translate(300, 280)" opacity="0.95">
+        <path d="M 0 -120 C -36 -120 -68 -94 -68 -56 C -68 -22 -42 4 0 4 C 42 4 68 -22 68 -56 C 68 -94 36 -120 0 -120 Z" fill="url(#goldAt)"/>
+        <path d="M -50 30 C -56 50 -56 80 -28 110 Q -42 100 -54 80 Q -64 56 -56 30 Z" fill="url(#goldAt)"/>
+        <path d="M 50 30 C 56 50 56 80 28 110 Q 42 100 54 80 Q 64 56 56 30 Z" fill="url(#goldAt)"/>
+        <path d="M -36 -52 C -36 -68 -16 -84 0 -84 C 16 -84 36 -68 36 -52 C 36 -42 24 -36 12 -42" stroke="#0a0814" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+    </g>
+    <text x="30" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">PLATFORM · APPLE TV+</text>
+    <text x="570" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.7" text-anchor="end">Apple TV+</text>
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
+    <rect x="30" y="30" width="540" height="540" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.2"/>
+    <rect width="600" height="600" filter="url(#grainAt)" opacity="0.5"/>
+</svg>
