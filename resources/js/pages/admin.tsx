@@ -2,7 +2,9 @@ import { Head } from '@inertiajs/react';
 import {
     Activity,
     CheckCircle2,
+    ExternalLink,
     MessageSquare,
+    Share2,
     Users,
     Inbox,
     Clock,
@@ -10,6 +12,7 @@ import {
     Wifi,
     WifiOff,
 } from 'lucide-react';
+import { QrShareButton } from '@site/components/qr-share-button';
 
 type Socket = {
     status: 'connected' | 'disconnected';
@@ -33,15 +36,22 @@ type HourlyPoint = {
     count: number;
 };
 
+type SiteCard = {
+    url: string;
+    template: string | null;
+    site_name: string;
+};
+
 type Props = {
     socket: Socket;
     metrics: Metrics;
     hourly: HourlyPoint[];
+    site_card: SiteCard;
 };
 
 const breadcrumbs = [{ title: 'Admin', href: '/admin' }];
 
-export default function AdminDashboard({ socket, metrics, hourly }: Props) {
+export default function AdminDashboard({ socket, metrics, hourly, site_card }: Props) {
     const connected = socket.status === 'connected';
     const maxHour = Math.max(1, ...hourly.map((h) => h.count));
     const total = metrics.total_messages;
@@ -141,21 +151,63 @@ export default function AdminDashboard({ socket, metrics, hourly }: Props) {
                     />
                 </div>
 
-                <div className="rounded-2xl border bg-card p-6 shadow-sm">
-                    <div className="mb-6 flex items-center justify-between">
-                        <div>
-                            <h2 className="text-lg font-semibold tracking-tight">
-                                Mensajes por hora
-                            </h2>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Actividad de las últimas 24 horas · {total} en total
-                            </p>
+                <div className="grid gap-4 lg:grid-cols-3">
+                    <div className="rounded-2xl border bg-card p-6 shadow-sm lg:col-span-1">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div>
+                                <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
+                                    <Share2 className="h-4 w-4 text-primary" />
+                                    Tu tarjeta digital
+                                </h2>
+                                <p className="mt-1 text-sm text-muted-foreground">
+                                    Compartí este sitio con clientes vía QR.
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Clock className="h-4 w-4" />
-                            <span>ahora</span>
+
+                        <div className="space-y-3">
+                            <a
+                                href={site_card.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-2 rounded-md border bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted"
+                            >
+                                <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                                <span className="truncate">{site_card.url}</span>
+                            </a>
+
+                            <div className="flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2 text-xs">
+                                <span className="text-muted-foreground">Plantilla activa</span>
+                                <span className="font-mono font-medium">
+                                    {site_card.template ?? '—'}
+                                </span>
+                            </div>
+
+                            <div className="w-full">
+                                <QrShareButton
+                                    url={site_card.url}
+                                    variant="inline"
+                                    label="Ver QR y descargar"
+                                />
+                            </div>
                         </div>
                     </div>
+
+                    <div className="rounded-2xl border bg-card p-6 shadow-sm lg:col-span-2">
+                        <div className="mb-6 flex items-center justify-between">
+                            <div>
+                                <h2 className="text-lg font-semibold tracking-tight">
+                                    Mensajes por hora
+                                </h2>
+                                <p className="mt-1 text-sm text-muted-foreground">
+                                    Actividad de las últimas 24 horas · {total} en total
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Clock className="h-4 w-4" />
+                                <span>ahora</span>
+                            </div>
+                        </div>
 
                     <div className="relative">
                         <div className="absolute inset-x-0 top-0 h-px bg-border" />
@@ -196,6 +248,7 @@ export default function AdminDashboard({ socket, metrics, hourly }: Props) {
                                 );
                             })}
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

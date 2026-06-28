@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\ChatMessage;
+use App\Models\SiteSetting;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,7 +58,27 @@ class DashboardController extends Controller
                 'peak_hour_count' => $peakHour['count'] ?? 0,
             ],
             'hourly' => $hourly,
+            'site_card' => $this->siteCard(),
         ]);
+    }
+
+    /**
+     * Snapshot of the public site used by the "Tu tarjeta digital" card on
+     * the dashboard: the canonical URL to share, the active template name,
+     * and the configured site name. Defaults to the app URL if no settings
+     * row exists yet.
+     *
+     * @return array{url: string, template: string|null, site_name: string}
+     */
+    private function siteCard(): array
+    {
+        $settings = SiteSetting::instance();
+
+        return [
+            'url' => URL::to('/'),
+            'template' => $settings->active_template_slug,
+            'site_name' => (string) ($settings->site_name ?: config('app.name', 'WebApp')),
+        ];
     }
 
     private function reverbIsRunning(): bool
