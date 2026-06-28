@@ -23,10 +23,25 @@ class HandleInertiaRequests extends Middleware
     {
         $settings = SiteSetting::instance();
 
+        // Resolve the active template id from two sources, in order:
+        //   1. SiteSetting::active_template_slug (set when the user activates
+        //      a template from the admin).
+        //   2. The SiteTemplate row with is_active = 1, if any. This covers
+        //      templates that were flipped on before the slug was written
+        //      to SiteSetting (legacy data, or templates the user just
+        //      activated without SiteSetting being updated).
         $activeTemplateId = null;
+
         if ($settings->active_template_slug) {
             $activeTemplateId = SiteTemplate::query()
                 ->where('slug', $settings->active_template_slug)
+                ->value('id');
+        }
+
+        if (! $activeTemplateId) {
+            $activeTemplateId = SiteTemplate::query()
+                ->where('is_active', true)
+                ->orderByDesc('updated_at')
                 ->value('id');
         }
 

@@ -22,9 +22,11 @@ export function ParagraphBlock({ content }: BlockProps) {
         : '<p class="italic text-muted-foreground">Escribí el contenido en el panel derecho.</p>';
 
     return (
-        <div
-            className={`prose prose-sm dark:prose-invert max-w-none text-muted-foreground prose-headings:text-foreground prose-a:text-primary ${cls}`}
-            dangerouslySetInnerHTML={{ __html: finalHtml }}
-        />
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <div
+                className={`prose prose-sm dark:prose-invert max-w-none text-muted-foreground prose-headings:text-foreground prose-a:text-primary ${cls}`}
+                dangerouslySetInnerHTML={{ __html: finalHtml }}
+            />
+        </div>
     );
 }

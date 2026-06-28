@@ -31,6 +31,17 @@ export type PresetTemplate = {
     menu_items: PresetMenuItem[];
 };
 
+import { PIZZERIA_PRESET } from './preset-pizzeria';
+
+// Image source pattern used by all sections that show a picture:
+//   source: 'url'    →  use image_url directly (a /blocks/*.svg default)
+//   source: 'media'  →  use image_media_id (set later by the user from Media library)
+// `source: 'url'` is the safe default at template-creation time so the page
+// already renders the picture even when the Media library is still empty.
+
+const url = (path: string) => ({ source: 'url' as const, image_url: path, image_url_thumb: path, image_media_id: null });
+const photoUrl = (path: string) => ({ source: 'url' as const, photo_url: path, photo_media_id: null });
+
 const peluqueriaSections: PresetSection[] = [
     {
         id: 'hero',
@@ -42,56 +53,9 @@ const peluqueriaSections: PresetSection[] = [
                 'Peluquería y estética en La Paz. Cortes modernos, coloración, peinados y tratamientos para que te veas y sientas increíble.',
             cta_label: 'Reservá tu turno',
             cta_href: 'https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno',
-            secondary_label: 'Ver servicios',
-            secondary_href: '#servicios',
-            image_media_id: 30,
-        },
-    },
-    {
-        id: 'features',
-        visible: true,
-        content: {
-            title: 'Nuestros servicios',
-            subtitle:
-                'Todo lo que necesitás para verte y sentirte bien, en un solo lugar.',
-            items: [
-                {
-                    icon: 'Scissors',
-                    title: 'Corte de cabello',
-                    description:
-                        'Cortes clásicos, modernos, desfilados. Asesoramiento personalizado según tu tipo de rostro.',
-                },
-                {
-                    icon: 'Palette',
-                    title: 'Coloración',
-                    description:
-                        'Tinte, mechas, balayage, californianas. Trabajamos con las mejores marcas del mercado.',
-                },
-                {
-                    icon: 'Sparkles',
-                    title: 'Peinado',
-                    description:
-                        'Peinados para eventos, novias, quinceañeras. Recogidos, ondas, semisueltos.',
-                },
-                {
-                    icon: 'User',
-                    title: 'Barbería',
-                    description:
-                        'Cortes masculinos, perfilado de barba, diseño de cejas. Servicio completo.',
-                },
-                {
-                    icon: 'Wand2',
-                    title: 'Tratamientos',
-                    description:
-                        'Keratina, alisado brasileño, nutrición profunda, Botox capilar.',
-                },
-                {
-                    icon: 'Heart',
-                    title: 'Novias',
-                    description:
-                        'Paquetes completos para tu día especial. Prueba, día de boda y retoque incluido.',
-                },
-            ],
+            secondary_label: 'Ver equipo',
+            secondary_href: '#team',
+            ...url('/blocks/hero-peluqueria.svg'),
         },
     },
     {
@@ -113,7 +77,7 @@ const peluqueriaSections: PresetSection[] = [
                         { specialty: 'Color' },
                         { specialty: 'Novias' },
                     ],
-                    photo_media_id: 27,
+                    ...photoUrl('/blocks/team-camila.svg'),
                     schedule: 'Lun a Vie',
                     instagram_handle: 'estudio.camila',
                 },
@@ -124,7 +88,7 @@ const peluqueriaSections: PresetSection[] = [
                         { specialty: 'Corte' },
                         { specialty: 'Peinado' },
                     ],
-                    photo_media_id: 29,
+                    ...photoUrl('/blocks/team-lucia.svg'),
                     schedule: 'Mar a Sáb',
                     instagram_handle: '',
                 },
@@ -136,7 +100,7 @@ const peluqueriaSections: PresetSection[] = [
                         { specialty: 'Barba' },
                         { specialty: 'Diseño de cejas' },
                     ],
-                    photo_media_id: 28,
+                    ...photoUrl('/blocks/team-diego.svg'),
                     schedule: 'Lun a Sáb',
                     instagram_handle: '',
                 },
@@ -147,34 +111,37 @@ const peluqueriaSections: PresetSection[] = [
         id: 'gallery',
         visible: true,
         content: {
+            eyebrow: 'Trabajos',
+            title: 'Algunos de nuestros looks',
+            subtitle: 'Tocá o pasá el cursor para ver los detalles.',
             items: [
                 {
-                    image_media_id: 33,
+                    ...url('/blocks/gallery-corte-bob.svg'),
                     alt: 'Corte bob moderno',
                     caption: 'Corte bob',
                 },
                 {
-                    image_media_id: 31,
+                    ...url('/blocks/gallery-balayage.svg'),
                     alt: 'Balayage caramel',
                     caption: 'Balayage',
                 },
                 {
-                    image_media_id: 36,
+                    ...url('/blocks/gallery-novia.svg'),
                     alt: 'Peinado de novia',
                     caption: 'Novia',
                 },
                 {
-                    image_media_id: 34,
+                    ...url('/blocks/gallery-fade.svg'),
                     alt: 'Corte masculino fade',
                     caption: 'Fade',
                 },
                 {
-                    image_media_id: 32,
+                    ...url('/blocks/gallery-color-fantasia.svg'),
                     alt: 'Color fantasía',
                     caption: 'Color',
                 },
                 {
-                    image_media_id: 35,
+                    ...url('/blocks/gallery-keratina.svg'),
                     alt: 'Tratamiento keratina',
                     caption: 'Keratina',
                 },
@@ -182,304 +149,25 @@ const peluqueriaSections: PresetSection[] = [
             columns: '3',
             aspect: 'square',
             gap: 'md',
-            radius: 'md',
+            radius: 'xl',
+            show_captions: true,
         },
     },
     {
-        id: 'services-grid',
+        id: 'cta',
         visible: true,
         content: {
-            eyebrow: 'Servicios',
-            title: 'Nuestros servicios',
-            subtitle:
-                'Conocé qué incluye cada uno, cuánto tarda y desde cuánto sale.',
-            columns: '3',
-            default_currency: 'Bs.',
-            items: [
-                {
-                    title: 'Corte de cabello',
-                    description:
-                        'Lavado, corte y peinado según tu tipo de rostro.',
-                    image_media_id: 23,
-                    duration_minutes: 45,
-                    price_from: '80',
-                    category: 'Cabello',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Corte',
-                    highlighted: false,
-                },
-                {
-                    title: 'Coloración',
-                    description:
-                        'Color completo, mechas, balayage o californianas con marcas premium.',
-                    image_media_id: 22,
-                    duration_minutes: 120,
-                    price_from: '350',
-                    category: 'Color',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Color',
-                    highlighted: true,
-                },
-                {
-                    title: 'Barba & Perfilado',
-                    description:
-                        'Diseño de barba con navaja, perfilado y cuidado de la piel.',
-                    image_media_id: 21,
-                    duration_minutes: 30,
-                    price_from: '60',
-                    category: 'Barba',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Barba',
-                    highlighted: false,
-                },
-                {
-                    title: 'Peinado & Eventos',
-                    description:
-                        'Recogidos, ondas y semisueltos para novias, quinceañeras y eventos.',
-                    image_media_id: 25,
-                    duration_minutes: 90,
-                    price_from: '200',
-                    category: 'Eventos',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Peinado',
-                    highlighted: false,
-                },
-                {
-                    title: 'Tratamientos',
-                    description:
-                        'Keratina, alisado brasileño, nutrición profunda y Botox capilar.',
-                    image_media_id: 26,
-                    duration_minutes: 150,
-                    price_from: '450',
-                    category: 'Tratamiento',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Tratamiento',
-                    highlighted: false,
-                },
-                {
-                    title: 'Novias',
-                    description:
-                        'Paquete completo: prueba, día de boda y retoque incluido.',
-                    image_media_id: 24,
-                    duration_minutes: 240,
-                    price_from: '1500',
-                    category: 'Novias',
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Novia',
-                    highlighted: false,
-                },
-            ],
-        },
-    },
-    {
-        id: 'testimonials',
-        visible: true,
-        content: {
-            eyebrow: 'Testimonios',
-            title: 'Lo que dicen nuestras clientas',
-            description: 'Confianza real de personas reales.',
-            columns: '3',
-            variant: 'card',
-            show_rating: true,
-            items: [
-                {
-                    quote:
-                        'El mejor corte que me han hecho. Camila es una genia, escucha lo que querés y te asesora.',
-                    author_name: 'Lucía M.',
-                    author_role: 'Clienta hace 2 años',
-                    author_image_media_id: null,
-                    rating: 5,
-                },
-                {
-                    quote:
-                        'Mi color quedó increíble. El balayage quedó super natural. Ya soy clienta fija.',
-                    author_name: 'Andrea P.',
-                    author_role: 'Clienta hace 1 año',
-                    author_image_media_id: null,
-                    rating: 5,
-                },
-                {
-                    quote:
-                        'La atención es buenísima y el lugar es precioso. Me sentí como en casa.',
-                    author_name: 'Valeria C.',
-                    author_role: 'Clienta hace 6 meses',
-                    author_image_media_id: null,
-                    rating: 5,
-                },
-            ],
-        },
-    },
-    {
-        id: 'faq',
-        visible: true,
-        content: {
-            title: 'Preguntas frecuentes',
-            subtitle:
-                'Respuestas a las dudas más comunes antes de tu primera visita.',
-            items: [
-                {
-                    question: '¿Necesito turno o puedo llegar sin reservar?',
-                    answer: '<p>Recomendamos reservar para garantizar tu lugar, especialmente fines de semana. Si venís sin turno, te atendemos según disponibilidad.</p>',
-                },
-                {
-                    question: '¿Aceptan tarjeta o transferencia?',
-                    answer: '<p>Sí. Aceptamos efectivo, transferencia bancaria, QR y todas las tarjetas de débito y crédito.</p>',
-                },
-                {
-                    question: '¿Cuánto dura un corte típico?',
-                    answer: '<p>Un corte de cabello toma entre 30 y 45 minutos. Si sumás lavado y peinado, unos 60 minutos. Coloración: 2 horas. Te avisamos al reservar.</p>',
-                },
-                {
-                    question: '¿Tienen servicio a domicilio para novias?',
-                    answer: '<p>Sí, dentro de La Paz y El Alto. El servicio a domicilio para novias incluye prueba previa y día del evento. Consultá presupuesto.</p>',
-                },
-                {
-                    question: '¿Puedo traer mi propio producto?',
-                    answer: '<p>Para tu seguridad usamos productos profesionales hipoalergénicos. Si tenés alguna alergia específica, avisanos antes de la cita.</p>',
-                },
-            ],
-        },
-    },
-    {
-        id: 'pricing',
-        visible: true,
-        content: {
-            title: 'Planes y paquetes',
-            subtitle: 'Ahorrá con nuestros paquetes de servicios combinados.',
-            items: [
-                {
-                    name: 'Visita express',
-                    description: 'Para el día a día. Corte + lavado rápido.',
-                    price: 'Bs. 80',
-                    features: [
-                        { feature: 'Corte + lavado' },
-                        { feature: 'Sin turno previo' },
-                    ],
-                    highlighted: false,
-                    cta_label: 'Reservar',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Express',
-                },
-                {
-                    name: 'Combo completo',
-                    description: 'Corte + color + tratamiento en una sola visita.',
-                    price: 'Bs. 500',
-                    features: [
-                        { feature: 'Corte personalizado' },
-                        { feature: 'Coloración premium' },
-                        { feature: 'Tratamiento hidratante' },
-                        { feature: 'Peinado final' },
-                    ],
-                    highlighted: true,
-                    cta_label: 'Reservar combo',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20reservar%20Combo',
-                },
-                {
-                    name: 'Membresía mensual',
-                    description: '2 visitas al mes con beneficios exclusivos.',
-                    price: 'Bs. 350/mes',
-                    features: [
-                        { feature: '2 cortes al mes' },
-                        { feature: '15% off en color' },
-                        { feature: 'Prioridad en agenda' },
-                        { feature: 'Bebida de cortesía' },
-                    ],
-                    highlighted: false,
-                    cta_label: 'Inscribirme',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20la%20Membres%C3%ADa',
-                },
-            ],
+            title: '¿Lista para tu próximo look?',
+            subtitle: 'Reservá tu turno en menos de 1 minuto. Te confirmamos por WhatsApp.',
+            button_label: 'Reservar por WhatsApp',
+            button_href: 'https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno',
+            secondary_label: 'Ver equipo',
+            secondary_href: '#team',
         },
     },
 ];
 
-const peluqueriaBlocks: PresetBlock[] = [
-    {
-        type: 'gallery',
-        visible: true,
-        content: {
-            items: [
-                {
-                    image_media_id: 33,
-                    alt: 'Corte bob moderno',
-                    caption: 'Corte bob',
-                },
-                {
-                    image_media_id: 31,
-                    alt: 'Balayage caramel',
-                    caption: 'Balayage',
-                },
-                {
-                    image_media_id: 34,
-                    alt: 'Corte masculino fade',
-                    caption: 'Fade',
-                },
-                {
-                    image_media_id: 35,
-                    alt: 'Tratamiento keratina',
-                    caption: 'Keratina',
-                },
-            ],
-            columns: '4',
-            aspect: 'square',
-            gap: 'md',
-            radius: 'md',
-        },
-    },
-    {
-        type: 'countdown',
-        visible: true,
-        content: {
-            target_date: '2026-06-30T23:59:59',
-            title: '20% OFF nuevos clientes',
-            expired_text: 'Promo terminada. ¡Seguinos en redes para la próxima!',
-            variant: 'boxes',
-            size: 'md',
-            accent: 'destructive',
-        },
-    },
-    {
-        type: 'heading',
-        visible: true,
-        content: {
-            text: 'Antes y después',
-            level: 'h2',
-            align: 'center',
-        },
-    },
-    {
-        type: 'before-after',
-        visible: true,
-        content: {
-            title: 'Transformaciones reales',
-            subtitle:
-                'Deslizá para ver el antes y el después de cada clienta.',
-            columns: '1',
-            aspect: 'video',
-            columns_mobile_stack: true,
-            items: [
-                {
-                    before_media_id: 18,
-                    after_media_id: 17,
-                    caption: 'Balayage + Corte',
-                    before_label: 'Antes',
-                    after_label: 'Después',
-                },
-                {
-                    before_media_id: 20,
-                    after_media_id: 19,
-                    caption: 'Color fantasía',
-                    before_label: 'Antes',
-                    after_label: 'Después',
-                },
-            ],
-        },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-12' },
-    },
-];
+const peluqueriaBlocks: PresetBlock[] = [];
 
 const streamingSections: PresetSection[] = [
     {
@@ -491,45 +179,10 @@ const streamingSections: PresetSection[] = [
             subheadline:
                 'Netflix, HBO Max, Disney+, Spotify, Prime Video y más. Acceso inmediato, soporte 24/7 y métodos de pago locales.',
             cta_label: 'Ver planes',
-            cta_href: '#services',
-            secondary_label: 'Cómo funciona',
-            secondary_href: '#features',
-            image_media_id: '__MEDIA:hero-streaming__',
-        },
-    },
-    {
-        id: 'features',
-        visible: true,
-        content: {
-            title: 'Cómo funciona',
-            subtitle:
-                'En menos de cinco minutos tenés el acceso en tu correo. Sin enredos.',
-            items: [
-                {
-                    icon: 'MousePointerClick',
-                    title: '1. Elegí plataforma',
-                    description:
-                        'Mirá el catálogo y elegí la plataforma y el plan que querés.',
-                },
-                {
-                    icon: 'Wallet',
-                    title: '2. Pagás',
-                    description:
-                        'Transferencia, Yape, Plin, Nequi, USDT o tarjeta. Confirmamos al instante.',
-                },
-                {
-                    icon: 'Mail',
-                    title: '3. Recibís el acceso',
-                    description:
-                        'Te llega usuario, contraseña y pasos de configuración por WhatsApp o correo.',
-                },
-                {
-                    icon: 'MessageCircle',
-                    title: '4. Soporte 24/7',
-                    description:
-                        'Cualquier duda te la resolvemos por WhatsApp en minutos. Sin contestar con bots.',
-                },
-            ],
+            cta_href: '#services-grid',
+            secondary_label: 'Ver equipo',
+            secondary_href: '#team',
+            ...url('/blocks/hero-streaming.svg'),
         },
     },
     {
@@ -537,38 +190,26 @@ const streamingSections: PresetSection[] = [
         visible: true,
         content: {
             eyebrow: 'Plataformas',
-            title: 'Catálogo de planes',
-            subtitle:
-                'Cuentas individuales o combos. Calidad 4K, HDR y perfiles simultáneos según plataforma.',
+            title: 'Nuestros planes',
+            subtitle: 'Suscripciones individuales y combos. Activación inmediata tras el pago.',
             columns: '3',
-            default_currency: '$',
+            default_currency: 'Bs.',
             items: [
                 {
-                    title: 'Netflix Estándar',
-                    description: '1 pantalla en HD. Catálogo completo de series y películas.',
-                    image_media_id: '__MEDIA:platform-netflix__',
-                    duration_minutes: 30,
-                    price_from: '45',
-                    category: 'Video',
-                    cta_label: 'Pedir por WhatsApp',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Netflix%20Est%C3%A1ndar',
-                    highlighted: false,
-                },
-                {
                     title: 'Netflix Premium',
-                    description: '4 pantallas en 4K + HDR. Ideal para compartir en familia.',
-                    image_media_id: '__MEDIA:platform-netflix__',
+                    description: '4 pantallas en 4K + HDR. Catálogo completo de series y películas.',
+                    ...url('/blocks/platform-netflix.svg'),
                     duration_minutes: 30,
                     price_from: '75',
                     category: 'Video',
                     cta_label: 'Pedir por WhatsApp',
                     cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Netflix%20Premium',
-                    highlighted: true,
+                    highlighted: false,
                 },
                 {
-                    title: 'HBO Max Estándar',
-                    description: 'Series originales, Warner, DC y películas de catálogo HBO.',
-                    image_media_id: '__MEDIA:platform-hbo__',
+                    title: 'HBO Max',
+                    description: 'Series originales Warner, DC y películas del catálogo HBO.',
+                    ...url('/blocks/platform-hbo.svg'),
                     duration_minutes: 30,
                     price_from: '50',
                     category: 'Video',
@@ -578,19 +219,19 @@ const streamingSections: PresetSection[] = [
                 },
                 {
                     title: 'Disney+ Premium',
-                    description: 'Disney, Marvel, Star Wars, National Geographic. 4K y 4 perfiles.',
-                    image_media_id: '__MEDIA:platform-disney__',
+                    description: 'Marvel, Star Wars, Pixar y National Geographic. 4K en hasta 4 pantallas.',
+                    ...url('/blocks/platform-disney.svg'),
                     duration_minutes: 30,
-                    price_from: '55',
+                    price_from: '65',
                     category: 'Video',
                     cta_label: 'Pedir por WhatsApp',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Disney%2B',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Disney%2B%20Premium',
                     highlighted: false,
                 },
                 {
                     title: 'Spotify Duo',
                     description: 'Dos cuentas Premium en una dirección. Música sin anuncios y descargas.',
-                    image_media_id: '__MEDIA:platform-spotify__',
+                    ...url('/blocks/platform-spotify.svg'),
                     duration_minutes: 30,
                     price_from: '40',
                     category: 'Música',
@@ -599,31 +240,31 @@ const streamingSections: PresetSection[] = [
                     highlighted: false,
                 },
                 {
-                    title: 'Prime Video',
-                    description: 'Películas y series Amazon Originals. 3 perfiles simultáneos.',
-                    image_media_id: '__MEDIA:platform-prime__',
-                    duration_minutes: 30,
-                    price_from: '38',
-                    category: 'Video',
-                    cta_label: 'Pedir por WhatsApp',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Prime%20Video',
-                    highlighted: false,
-                },
-                {
                     title: 'YouTube Premium',
-                    description: 'Sin anuncios, descargas y YouTube Music incluido.',
-                    image_media_id: '__MEDIA:platform-youtube__',
+                    description: 'Sin anuncios, descargas y reproducción en segundo plano. Música incluida.',
+                    ...url('/blocks/platform-youtube.svg'),
                     duration_minutes: 30,
-                    price_from: '42',
+                    price_from: '55',
                     category: 'Video',
                     cta_label: 'Pedir por WhatsApp',
                     cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20YouTube%20Premium',
                     highlighted: false,
                 },
                 {
+                    title: 'Prime Video',
+                    description: 'Series y películas originales Amazon. 4K HDR y audio Dolby Atmos.',
+                    ...url('/blocks/platform-prime.svg'),
+                    duration_minutes: 30,
+                    price_from: '50',
+                    category: 'Video',
+                    cta_label: 'Pedir por WhatsApp',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Prime%20Video',
+                    highlighted: false,
+                },
+                {
                     title: 'Apple TV+',
                     description: 'Series y películas Apple Originals. Calidad 4K HDR y Dolby Atmos.',
-                    image_media_id: '__MEDIA:platform-appletv__',
+                    ...url('/blocks/platform-appletv.svg'),
                     duration_minutes: 30,
                     price_from: '45',
                     category: 'Video',
@@ -634,7 +275,7 @@ const streamingSections: PresetSection[] = [
                 {
                     title: 'Paramount+',
                     description: 'Star Trek, Yellowstone, MTV y catálogo Nickelodeon para toda la familia.',
-                    image_media_id: '__MEDIA:platform-paramount__',
+                    ...url('/blocks/platform-paramount.svg'),
                     duration_minutes: 30,
                     price_from: '40',
                     category: 'Video',
@@ -642,266 +283,99 @@ const streamingSections: PresetSection[] = [
                     cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Paramount%2B',
                     highlighted: false,
                 },
-            ],
-        },
-    },
-    {
-        id: 'pricing',
-        visible: true,
-        content: {
-            title: 'Combos con descuento',
-            subtitle:
-                'Si querés más de una plataforma, los combos te ahorran hasta un 30%.',
-            items: [
                 {
-                    name: 'Combo Básico',
-                    description: 'Una plataforma a elección. Ideal si querés probar.',
-                    price: 'desde $38',
-                    features: [
-                        { feature: 'Una plataforma a elección' },
-                        { feature: 'Acceso inmediato' },
-                        { feature: 'Soporte por WhatsApp' },
-                    ],
-                    highlighted: false,
-                    cta_label: 'Elegir plataforma',
-                    cta_href: '#services',
-                },
-                {
-                    name: 'Combo Duo',
-                    description:
-                        'Dos plataformas con 15% de descuento. Lo más pedido.',
-                    price: 'desde $70',
-                    features: [
-                        { feature: 'Dos plataformas a elección' },
-                        { feature: '15% off sobre la lista' },
-                        { feature: 'Acceso inmediato' },
-                        { feature: 'Soporte prioritario' },
-                    ],
+                    title: 'Combo Duo',
+                    description: 'Dos plataformas a elección con 15% de descuento. Lo más pedido.',
+                    ...url('/blocks/platform-appletv.svg'),
+                    duration_minutes: 30,
+                    price_from: '70',
+                    category: 'Combo',
+                    cta_label: 'Pedir por WhatsApp',
+                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20un%20Combo%20Duo',
                     highlighted: true,
-                    cta_label: 'Pedir Duo',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Combo%20Duo',
-                },
-                {
-                    name: 'Combo Total',
-                    description:
-                        'Tres o más plataformas. El combo familiar con 30% off.',
-                    price: 'desde $120',
-                    features: [
-                        { feature: '3+ plataformas a elección' },
-                        { feature: '30% off sobre la lista' },
-                        { feature: 'Renovación automática' },
-                        { feature: 'Soporte VIP 24/7' },
-                        { feature: 'Reemplazo gratuito ante baja' },
-                    ],
-                    highlighted: false,
-                    cta_label: 'Pedir Total',
-                    cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20Combo%20Total',
                 },
             ],
         },
     },
     {
-        id: 'faq',
+        id: 'team',
         visible: true,
         content: {
-            title: 'Preguntas frecuentes',
-            subtitle:
-                'Si te queda alguna duda, escribinos por WhatsApp y te respondemos al toque.',
-            items: [
-                {
-                    question: '¿Cómo recibo el acceso después de pagar?',
-                    answer:
-                        'Te llega por WhatsApp en menos de 5 minutos. Si pagaste por transferencia, apenas confirmamos el pago.',
-                },
-                {
-                    question: '¿Qué métodos de pago aceptan?',
-                    answer:
-                        'Transferencia bancaria, Yape, Plin, Nequi, Binance Pay (USDT), PayPal y tarjeta de crédito.',
-                },
-                {
-                    question: '¿Cuántos perfiles puedo usar al mismo tiempo?',
-                    answer:
-                        'Depende del plan. Netflix Premium son 4 perfiles en 4K, Disney+ Premium son 4 perfiles, HBO Max son 3 perfiles en HD.',
-                },
-                {
-                    question: '¿Y si una cuenta deja de funcionar?',
-                    answer:
-                        'Te la reemplazamos sin costo dentro de las 24 horas. La garantía está incluida en todos los planes.',
-                },
-                {
-                    question: '¿Puedo renovar antes de que venza?',
-                    answer:
-                        'Sí. Te avisamos 3 días antes del vencimiento y renovás al mismo precio que pagaste originalmente.',
-                },
-                {
-                    question: '¿Hacen factura?',
-                    answer:
-                        'Emitimos nota de venta o factura digital si la necesitás para tu empresa.',
-                },
-            ],
-        },
-    },
-    {
-        id: 'testimonials',
-        visible: true,
-        content: {
-            eyebrow: 'Clientes',
-            title: 'Lo que dicen nuestros clientes',
-            description: 'Comentarios reales de gente que ya está usando el servicio.',
+            eyebrow: 'Equipo',
+            title: 'Atención personalizada',
+            subtitle: 'Las personas detrás de cada activación y soporte.',
             columns: '3',
             variant: 'card',
-            show_rating: true,
             items: [
                 {
-                    quote:
-                        'Llevo 8 meses con el Combo Duo y nunca tuve problemas. Cuando una cuenta cayó, me la cambiaron en el día.',
-                    author_name: 'Carlos M.',
-                    author_role: 'Cliente hace 8 meses',
-                    author_image_media_id: '__MEDIA:avatar-streaming-carlos__',
-                    rating: 5,
+                    name: 'Carlos M.',
+                    role: 'Soporte & Activaciones',
+                    specialties: [
+                        { specialty: 'Activación' },
+                        { specialty: 'Pagos' },
+                        { specialty: 'Cambios de plan' },
+                    ],
+                    ...photoUrl('/blocks/avatar-streaming-carlos.svg'),
+                    schedule: 'Lun a Sáb',
+                    instagram_handle: '',
                 },
                 {
-                    quote:
-                        'Atención rapidísima por WhatsApp. Pago por Yape y en 3 minutos ya estaba viendo Netflix Premium en 4K.',
-                    author_name: 'Lucía R.',
-                    author_role: 'Cliente VIP',
-                    author_image_media_id: '__MEDIA:avatar-streaming-lucia__',
-                    rating: 5,
+                    name: 'Lucía R.',
+                    role: 'Atención al cliente',
+                    specialties: [
+                        { specialty: 'WhatsApp' },
+                        { specialty: 'Resolución' },
+                    ],
+                    ...photoUrl('/blocks/avatar-streaming-lucia.svg'),
+                    schedule: 'Mar a Dom',
+                    instagram_handle: '',
                 },
                 {
-                    quote:
-                        'Probé con varios y este es el más serio. Llevo un año sin caídas y siempre cumplen con la garantía.',
-                    author_name: 'Diego S.',
-                    author_role: 'Cliente hace 1 año',
-                    author_image_media_id: '__MEDIA:avatar-streaming-diego__',
-                    rating: 5,
+                    name: 'Diego S.',
+                    role: 'Catálogo & Stock',
+                    specialties: [
+                        { specialty: 'Plataformas' },
+                        { specialty: 'Combos' },
+                        { specialty: 'Promos' },
+                    ],
+                    ...photoUrl('/blocks/avatar-streaming-diego.svg'),
+                    schedule: 'Lun a Vie',
+                    instagram_handle: '',
                 },
             ],
         },
     },
     {
-        id: 'cta',
+        id: 'schedule',
         visible: true,
         content: {
-            title: '¿Listo para empezar?',
-            subtitle:
-                'Escribinos por WhatsApp con la plataforma que querés y te pasamos el precio al instante.',
-            button_label: 'Pedir por WhatsApp',
-            button_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20un%20plan',
-            secondary_label: 'Ver planes',
-            secondary_href: '#services',
+            eyebrow: 'Disponibilidad',
+            title: 'Cuándo respondemos',
+            subtitle: 'Atención humana por WhatsApp. Soporte 24/7 para clientes activos.',
+            timezone: 'America/La_Paz',
+            accent: 'primary',
+            show_today: true,
+            slots: [
+                { day: 'Lunes', time: '09–22', title: 'Atención WhatsApp', active: true },
+                { day: 'Martes', time: '09–22', title: 'Atención WhatsApp', active: true },
+                { day: 'Miércoles', time: '09–22', title: 'Atención WhatsApp', active: true },
+                { day: 'Jueves', time: '09–22', title: 'Atención WhatsApp', active: true },
+                { day: 'Viernes', time: '09–22', title: 'Atención WhatsApp', active: true },
+                { day: 'Sábado', time: '10–18', title: 'Mañana y tarde', active: true },
+                { day: 'Domingo', time: '—', title: 'Solo clientes activos', active: false },
+            ],
         },
     },
 ];
 
-const streamingBlocks: PresetBlock[] = [
-    {
-        type: 'stats',
-        visible: true,
-        content: {
-            eyebrow: 'En números',
-            title: 'Lo que conseguimos juntos',
-            subtitle:
-                'Clientes que confían, plataformas que entregamos y tiempo en el rubro.',
-            accent: 'violet',
-            items: [
-                { icon: 'Users', value: 320, suffix: '+', label: 'Clientes activos' },
-                { icon: 'Tv', value: 9, suffix: '', label: 'Plataformas' },
-                { icon: 'Clock', value: 4, suffix: ' años', label: 'En el rubro' },
-                { icon: 'Heart', value: 1200, suffix: '+', label: 'Suscripciones vendidas' },
-            ],
-        },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-8' },
-    },
-    {
-        type: 'heading',
-        visible: true,
-        content: {
-            text: 'Garantía total',
-            level: 'h2',
-            align: 'center',
-        },
-    },
-    {
-        type: 'image',
-        visible: true,
-        content: {
-            image_media_id: '__MEDIA:gallery-streaming-highlights__',
-            alt: 'Garantía total · reemplazo sin costo',
-            aspect: 'video',
-            rounded: true,
-        },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-4' },
-    },
-    {
-        type: 'heading',
-        visible: true,
-        content: {
-            text: 'Acceso inmediato HD/4K',
-            level: 'h2',
-            align: 'center',
-        },
-    },
-    {
-        type: 'image',
-        visible: true,
-        content: {
-            image_media_id: '__MEDIA:gallery-streaming-setup__',
-            alt: 'Calidad HD/4K · perfiles simultáneos',
-            aspect: 'video',
-            rounded: true,
-        },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-4' },
-    },
-    {
-        type: 'heading',
-        visible: true,
-        content: {
-            text: 'Soporte 24/7 por WhatsApp',
-            level: 'h2',
-            align: 'center',
-        },
-    },
-    {
-        type: 'image',
-        visible: true,
-        content: {
-            image_media_id: '__MEDIA:gallery-streaming-charla__',
-            alt: 'Soporte por WhatsApp las 24 horas',
-            aspect: 'video',
-            rounded: true,
-        },
-    },
-    {
-        type: 'divider',
-        visible: true,
-        content: { style: 'solid' },
-    },
-    {
-        type: 'spacer',
-        visible: true,
-        content: { height: 'h-8' },
-    },
-];
+const streamingBlocks: PresetBlock[] = [];
 
 export const PRESET_TEMPLATES: PresetTemplate[] = [
     {
         id: 'peluqueria',
         name: 'Peluquería & Barbería',
         description:
-            'Para peluquerías, barberías y salones de belleza. Con equipo, catálogo de servicios con precios y duraciones, galería, antes/después, testimonios y ubicación.',
+            'Para peluquerías, barberías y salones de belleza. Con hero, equipo, galería de trabajos y CTA de reserva.',
         icon: 'Scissors',
         accent: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
         defaultName: 'Estudio Camila',
@@ -911,10 +385,8 @@ export const PRESET_TEMPLATES: PresetTemplate[] = [
         blocks: peluqueriaBlocks,
         menu_items: [
             { label: 'Inicio', href: '#hero', icon: 'Home' },
-            { label: 'Servicios', href: '#services-grid', icon: 'Sparkles' },
             { label: 'Equipo', href: '#team', icon: 'Users' },
-            { label: 'Galería', href: '#gallery', icon: 'Image' },
-            { label: 'Testimonios', href: '#testimonials', icon: 'Star' },
+            { label: 'Trabajos', href: '#gallery', icon: 'Image' },
             { label: 'Reservar', href: 'https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno', icon: 'Phone' },
         ],
     },
@@ -922,25 +394,25 @@ export const PRESET_TEMPLATES: PresetTemplate[] = [
         id: 'streaming',
         name: 'Tienda de Streaming',
         description:
-            'Para venta de cuentas de Netflix, HBO Max, Disney+, Spotify y más. Con catálogo, combos con descuento, FAQ y pedidos por WhatsApp.',
+            'Para venta de cuentas de Netflix, HBO Max, Disney+, Spotify y más. Con catálogo de plataformas, equipo y agenda.',
         icon: 'Tv',
-        accent:
-            'bg-violet-500/15 text-violet-700 dark:text-violet-300',
+        accent: 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
         defaultName: 'Streaming Store',
         defaultSlug: 'streaming-store',
-        defaultDescription:
-            'Todas tus plataformas en un solo lugar. Acceso inmediato y soporte 24/7.',
+        defaultDescription: 'Todas tus plataformas en un solo lugar. Acceso inmediato y soporte 24/7.',
         sections: streamingSections,
         blocks: streamingBlocks,
         menu_items: [
             { label: 'Inicio', href: '#hero', icon: 'Home' },
-            { label: 'Cómo funciona', href: '#features', icon: 'Sparkles' },
-            { label: 'Catálogo', href: '#services', icon: 'Tv' },
-            { label: 'Combos', href: '#pricing', icon: 'Tag' },
-            { label: 'FAQ', href: '#faq', icon: 'HelpCircle' },
-            { label: 'Contacto', href: 'https://wa.me/59170000000', icon: 'MessageCircle' },
+            { label: 'Plataformas', href: '#services-grid', icon: 'Sparkles' },
+            { label: 'Equipo', href: '#team', icon: 'Users' },
+            { label: 'Disponibilidad', href: '#schedule', icon: 'Calendar' },
         ],
     },
+    // Pizzería preset lives in its own module to keep preset-templates.ts small.
+    // The data URLs for hero / slider items / avatars are embedded inline so
+    // the preset renders without any /blocks/*.svg files.
+    PIZZERIA_PRESET,
 ];
 
 export function getPresetTemplate(id: string): PresetTemplate | null {

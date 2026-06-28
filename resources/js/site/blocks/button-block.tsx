@@ -46,24 +46,26 @@ export function ButtonBlock({ content, theme }: BlockProps) {
     const isSolid = variant === 'solid';
 
     return (
-        <div
-            className={`flex ${ALIGN_CONTAINER[align] ?? 'justify-start'} ${ALIGN_CLASS[align] ?? ''}`}
-        >
-            <Button
-                asChild
-                variant={VARIANT_MAP[variant] ?? 'default'}
-                size={SIZE_MAP[size] ?? 'default'}
-                style={
-                    isSolid && primaryColor
-                        ? {
-                              backgroundColor: primaryColor,
-                              borderColor: primaryColor,
-                          }
-                        : undefined
-                }
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <div
+                className={`flex ${ALIGN_CONTAINER[align] ?? 'justify-start'} ${ALIGN_CLASS[align] ?? ''}`}
             >
-                <a href={href}>{label}</a>
-            </Button>
+                <Button
+                    asChild
+                    variant={VARIANT_MAP[variant] ?? 'default'}
+                    size={SIZE_MAP[size] ?? 'default'}
+                    style={
+                        isSolid && primaryColor
+                            ? {
+                                  backgroundColor: primaryColor,
+                                  borderColor: primaryColor,
+                              }
+                            : undefined
+                    }
+                >
+                    <a href={href}>{label}</a>
+                </Button>
+            </div>
         </div>
     );
 }

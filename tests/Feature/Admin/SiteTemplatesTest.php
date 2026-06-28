@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SiteMenuItem;
 use App\Models\SiteSetting;
 use App\Models\SiteTemplate;
 use App\Models\User;
@@ -44,6 +45,24 @@ it('creates a site template', function () {
         'name' => 'Tienda',
         'slug' => 'tienda',
     ]);
+});
+
+it('creates an empty site template without a preset', function () {
+    // The frontend lets users skip the preset step and start from a blank
+    // canvas — this test pins that the backend accepts that and stores
+    // a template with no sections / blocks / menu items.
+    $response = $this->post(route('site-templates.store'), [
+        'name' => 'Página en blanco',
+        'slug' => 'pagina-en-blanco',
+    ]);
+
+    $template = SiteTemplate::query()->where('slug', 'pagina-en-blanco')->firstOrFail();
+    $response->assertRedirect(route('site-templates.edit', $template));
+
+    expect($template->name)->toBe('Página en blanco');
+    expect($template->sections)->toBeNull();
+    expect($template->blocks()->count())->toBe(0);
+    expect(SiteMenuItem::query()->where('site_template_id', $template->id)->count())->toBe(0);
 });
 
 it('validates slug uniqueness on create', function () {

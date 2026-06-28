@@ -1,0 +1,54 @@
+{
+    "name": "WebApp · Tarjeta Digital",
+    "short_name": "WebApp",
+    "description": "Tarjeta de presentación digital y sitio público editable.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "lang": "es",
+    "dir": "ltr",
+    "categories": ["business", "productivity", "social"],
+    "icons": [
+        {
+            "src": "/pwa-icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa-icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa-icons/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Admin",
+            "short_name": "Admin",
+            "description": "Abrir el panel de administración",
+            "url": "/admin",
+            "icons": [
+                {
+                    "src": "/pwa-icons/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
+}

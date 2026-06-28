@@ -52,6 +52,47 @@ type Props = {
     settings: SiteSettings;
 };
 
+/**
+ * Merge registry defaults with the section's persisted content so any
+ * missing field (especially image_url / photo_url / image_url_thumb) still
+ * renders the sample asset when the persisted content is incomplete.
+ *
+ * Rules:
+ *   - Keys absent from `persisted` fall back to the default.
+ *   - Keys present in `persisted` (including `null`) win.
+ *   - Object values are merged recursively so an items[] array on the
+ *     persisted side replaces the default array element-by-element.
+ */
+function mergeSectionContent(
+    defaults: SectionContent | undefined,
+    persisted: Record<string, unknown>,
+): Record<string, unknown> {
+    if (!defaults) return persisted;
+
+    const out: Record<string, unknown> = { ...(defaults as Record<string, unknown>) };
+
+    for (const [key, value] of Object.entries(persisted)) {
+        const existing = out[key];
+        if (
+            value !== null &&
+            typeof value === 'object' &&
+            !Array.isArray(value) &&
+            existing &&
+            typeof existing === 'object' &&
+            !Array.isArray(existing)
+        ) {
+            out[key] = mergeSectionContent(
+                existing as SectionContent,
+                value as Record<string, unknown>,
+            );
+        } else {
+            out[key] = value;
+        }
+    }
+
+    return out;
+}
+
 export default function SiteLanding({ template, settings }: Props) {
     const { props } = usePage<{
         template: ActiveTemplate;
@@ -100,8 +141,13 @@ export default function SiteLanding({ template, settings }: Props) {
                     {sections.map((section) => {
                         const definition = SECTION_REGISTRY[section.id];
                         if (!definition) return null;
-                        const content = (section.content ??
-                            {}) as SectionContent;
+                        // Merge defaults from registry into the section content
+                        // so any missing field (e.g. image_url when a preset
+                        // didn't persist it) still renders the sample asset.
+                        const content = mergeSectionContent(
+                            definition.defaultContent,
+                            section.content ?? {},
+                        ) as SectionContent;
                         if (definition.isEmpty?.(content)) return null;
                         const Component = definition.component;
                         return (
@@ -116,6 +162,10 @@ export default function SiteLanding({ template, settings }: Props) {
                     {visibleBlocks.map((block, idx) => {
                         const definition = BASIC_BLOCKS_REGISTRY[block.type];
                         if (!definition) return null;
+                        const content = mergeSectionContent(
+                            definition.defaultContent,
+                            block.content ?? {},
+                        );
                         const Component = definition.component;
                         return (
                             <div
@@ -123,9 +173,7 @@ export default function SiteLanding({ template, settings }: Props) {
                                 className="py-3"
                             >
                                 <Component
-                                    content={
-                                        block.content as SectionContent
-                                    }
+                                    content={content as SectionContent}
                                     theme={tmpl?.theme ?? {}}
                                 />
                             </div>

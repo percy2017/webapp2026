@@ -27,6 +27,15 @@ export default function SiteTemplateCreate() {
     const [processing, setProcessing] = useState(false);
 
     function pickPreset(p: PresetTemplate) {
+        // Toggle: clicking the same preset again clears the selection so
+        // the user can switch to "no preset" without restarting the form.
+        if (selected?.id === p.id) {
+            setSelected(null);
+            setErrors({});
+
+            return;
+        }
+
         setSelected(p);
         setName(p.defaultName);
         setSlug(p.defaultSlug);
@@ -38,37 +47,37 @@ export default function SiteTemplateCreate() {
         return value
             .toLowerCase()
             .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[̀-ͯ]/g, '')
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-+|-+$/g, '');
     }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!selected) {
-            setErrors({ preset: 'Elegí una plantilla antes de crear la página.' });
-            return;
-        }
         setErrors({});
         setProcessing(true);
 
-        router.post(
-            storeRoute().url,
-            {
-                name,
-                slug,
-                description,
-                icon: selected.icon,
-                sections: selected.sections,
-                blocks: selected.blocks,
-                menu_items: selected.menu_items,
-            },
-            {
-                preserveScroll: true,
-                onError: (errs) => setErrors(errs as Record<string, string>),
-                onFinish: () => setProcessing(false),
-            },
-        );
+        // Preset is optional — when none is picked the template is created
+        // empty (no sections, no blocks, no menu items) and the user fills
+        // it in from the editor.
+        const payload: Record<string, unknown> = {
+            name,
+            slug,
+            description,
+        };
+
+        if (selected) {
+            payload.icon = selected.icon;
+            payload.sections = selected.sections;
+            payload.blocks = selected.blocks;
+            payload.menu_items = selected.menu_items;
+        }
+
+        router.post(storeRoute().url, payload, {
+            preserveScroll: true,
+            onError: (errs) => setErrors(errs as Record<string, string>),
+            onFinish: () => setProcessing(false),
+        });
     }
 
     return (
@@ -133,93 +142,89 @@ export default function SiteTemplateCreate() {
                                     )}
                                 </div>
 
-<div className="space-y-2">
-                            <Label htmlFor="description">
-                                Descripción
-                            </Label>
-                            <Textarea
-                                id="description"
-                                value={description}
-                                onChange={(e) =>
-                                    setDescription(e.target.value)
-                                }
-                                placeholder="Ideal para restaurantes, bares y cafeterías."
-                                rows={3}
-                            />
-                            {errors.description && (
-                                <p className="text-xs text-destructive">
-                                    {errors.description}
-                                </p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
+                                <div className="space-y-2">
+                                    <Label htmlFor="description">
+                                        Descripción
+                                    </Label>
+                                    <Textarea
+                                        id="description"
+                                        value={description}
+                                        onChange={(e) =>
+                                            setDescription(e.target.value)
+                                        }
+                                        placeholder="Ideal para restaurantes, bares y cafeterías."
+                                        rows={3}
+                                    />
+                                    {errors.description && (
+                                        <p className="text-xs text-destructive">
+                                            {errors.description}
+                                        </p>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
 
-                <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                        <Label className="text-sm font-semibold">
-                            Plantilla
-                        </Label>
-                        <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-destructive">
-                            Obligatorio
-                        </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                        Elegí una plantilla para pre-rellenar las secciones y
-                        bloques.
-                    </p>
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {presets.map((p) => {
-                            const isActive = selected?.id === p.id;
-                            return (
-                                <button
-                                    key={p.id}
-                                    type="button"
-                                    onClick={() => pickPreset(p)}
-                                    className={`group relative flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition-all ${
-                                        isActive
-                                            ? 'border-primary bg-primary/5 ring-2 ring-primary/30'
-                                            : 'border-border bg-card hover:border-primary/50'
-                                    }`}
-                                >
-                                    <div className="flex w-full items-center gap-3">
-                                        <div
-                                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${p.accent}`}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2">
+                                <Label className="text-sm font-semibold">
+                                    Plantilla inicial
+                                </Label>
+                                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground">
+                                    Opcional
+                                </span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Elegí una plantilla para pre-rellenar las
+                                secciones y bloques. Si no elegís ninguna, la
+                                página se crea vacía y la armás desde el editor.
+                            </p>
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                {presets.map((p) => {
+                                    const isActive = selected?.id === p.id;
+                                    return (
+                                        <button
+                                            key={p.id}
+                                            type="button"
+                                            onClick={() => pickPreset(p)}
+                                            className={`group relative flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition-all ${
+                                                isActive
+                                                    ? 'border-primary bg-primary/5 ring-2 ring-primary/30'
+                                                    : 'border-border bg-card hover:border-primary/50'
+                                            }`}
                                         >
-                                            <Sparkles className="h-5 w-5" />
-                                        </div>
-                                        <div className="min-w-0 flex-1">
-                                            <p className="truncate font-semibold">
-                                                {p.name}
-                                            </p>
-                                            <p className="line-clamp-2 text-xs text-muted-foreground">
-                                                {p.description}
-                                            </p>
-                                        </div>
-                                        {isActive && (
-                                            <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
-                                                Elegida
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
-                                        <span>
-                                            {p.sections.length}{' '}
-                                            secciones
-                                            {p.blocks.length > 0 &&
-                                                ` · ${p.blocks.length} bloques`}
-                                        </span>
-                                    </div>
-                                </button>
-                            );
-                        })}
-                    </div>
-                    {!selected && (
-                        <p className="text-xs text-destructive">
-                            Elegí una plantilla antes de crear la página.
-                        </p>
-                    )}
-                </div>
+                                            <div className="flex w-full items-center gap-3">
+                                                <div
+                                                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${p.accent}`}
+                                                >
+                                                    <Sparkles className="h-5 w-5" />
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="truncate font-semibold">
+                                                        {p.name}
+                                                    </p>
+                                                    <p className="line-clamp-2 text-xs text-muted-foreground">
+                                                        {p.description}
+                                                    </p>
+                                                </div>
+                                                {isActive && (
+                                                    <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
+                                                        Elegida
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
+                                                <span>
+                                                    {p.sections.length}{' '}
+                                                    secciones
+                                                    {p.blocks.length > 0 &&
+                                                        ` · ${p.blocks.length} bloques`}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
 
                         {Object.keys(errors).length > 0 && (
                             <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
@@ -231,14 +236,13 @@ export default function SiteTemplateCreate() {
                             <Button asChild variant="outline">
                                 <Link href={indexRoute().url}>Cancelar</Link>
                             </Button>
-                            <Button
-                                type="submit"
-                                disabled={processing || !selected}
-                            >
+                            <Button type="submit" disabled={processing}>
                                 {processing && (
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 )}
-                                Crear página
+                                {selected
+                                    ? 'Crear con plantilla'
+                                    : 'Crear página vacía'}
                             </Button>
                         </div>
                     </form>

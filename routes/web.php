@@ -10,12 +10,18 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SiteTemplateController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\QrController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Widget\AuthController as WidgetAuthController;
 use App\Http\Controllers\Widget\ChatController as WidgetChatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+// QR generator for public pages. No auth — anyone can render a QR.
+Route::get('qr.svg', [QrController::class, 'svg'])->name('qr.svg');
+Route::get('qr.png', [QrController::class, 'png'])->name('qr.png');
+Route::get('qr/download', [QrController::class, 'download'])->name('qr.download');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin', [DashboardController::class, 'index'])->name('admin');
@@ -108,3 +114,19 @@ Route::prefix('widget')->name('widget.')->middleware('throttle:30,1')->group(fun
 });
 
 require __DIR__.'/settings.php';
+
+Route::get('/canvas', function () {
+    return response()
+        ->view('canvas')
+        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
+});
+
+Route::get('/canvas/peluqueria-view', function () {
+    return response()
+        ->view('canvas-peluqueria')
+        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
+});

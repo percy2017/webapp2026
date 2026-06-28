@@ -1,5 +1,14 @@
 import { router } from '@inertiajs/react';
-import { Check, Image as ImageIcon, Loader2, Search, Upload, X } from 'lucide-react';
+import {
+    Check,
+    FileVideo,
+    Image as ImageIcon,
+    Loader2,
+    Search,
+    Upload,
+    Video as VideoIcon,
+    X,
+} from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -24,25 +33,83 @@ type MediaItem = {
     thumb_url: string;
 };
 
+type MediaKind = 'image' | 'video';
+
 type Props = {
     value: number | null;
     preview: string | null;
     fallbackInitials?: string;
     onChange: (mediaId: number | null, url?: string) => void;
     label?: string;
+    /**
+     * Which kind of media to show in the picker:
+     *   - 'image' → loads image/* mime types, opens a square grid
+     *   - 'video' → loads video/* mime types, shows a video element on hover
+     * Defaults to 'image'.
+     */
+    mediaKind?: MediaKind;
     hideUpload?: boolean;
 };
+
+const COPY: Record<
+    MediaKind,
+    {
+        title: string;
+        description: string;
+        chooseButton: string;
+        uploadButton: string;
+        emptyMessage: string;
+        firstUploadButton: string;
+        searchPlaceholder: string;
+        helperText: string;
+        accept: string;
+    }
+> = {
+    image: {
+        title: 'Biblioteca de imágenes',
+        description: 'Seleccioná una imagen de la biblioteca.',
+        chooseButton: 'Elegir imagen',
+        uploadButton: 'Subir imagen',
+        emptyMessage: 'No hay imágenes en la biblioteca.',
+        firstUploadButton: 'Subir primera imagen',
+        searchPlaceholder: 'Buscar imagen...',
+        helperText:
+            'Elegí una imagen existente de la biblioteca o subí una nueva.',
+        accept: 'image/*',
+    },
+    video: {
+        title: 'Biblioteca de videos',
+        description: 'Seleccioná un video de la biblioteca.',
+        chooseButton: 'Elegir video',
+        uploadButton: 'Subir video',
+        emptyMessage: 'No hay videos en la biblioteca.',
+        firstUploadButton: 'Subir primer video',
+        searchPlaceholder: 'Buscar video...',
+        helperText:
+            'Elegí un video existente de la biblioteca o subí uno nuevo.',
+        accept: 'video/*',
+    },
+};
+
+function formatBytes(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+
+    return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
+}
 
 export function MediaPicker({
     value,
     preview,
     fallbackInitials,
     onChange,
-    label = 'Avatar',
+    label = 'Archivo',
+    mediaKind = 'image',
     hideUpload = false,
 }: Props) {
+    const copy = COPY[mediaKind];
     const [open, setOpen] = useState(false);
-    const [search, setSearch] = useState('');
     const [items, setItems] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -56,7 +123,7 @@ export function MediaPicker({
         try {
             const url = mediaList.url({
                 query: {
-                    type: 'image',
+                    type: mediaKind,
                     search: term,
                     page: targetPage,
                 },
@@ -102,8 +169,8 @@ export function MediaPicker({
     }
 
     useEffect(() => {
-        if (open) load(1, search);
-    }, [open]);
+        if (open) load(1, '');
+    }, [open, mediaKind]);
 
     useEffect(() => {
         if (!open) return;
@@ -158,20 +225,37 @@ export function MediaPicker({
             });
     }
 
+    const TriggerIcon = mediaKind === 'video' ? VideoIcon : ImageIcon;
+
     return (
         <div className="space-y-2">
             <Label>{label}</Label>
-            <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20">
-                    {preview ? (
-                        <AvatarImage src={preview} alt="avatar" />
-                    ) : null}
-                    <AvatarFallback>
-                        {fallbackInitials || <ImageIcon className="h-6 w-6" />}
-                    </AvatarFallback>
-                </Avatar>
+            <div className="flex items-start gap-4">
+                {preview ? (
+                    mediaKind === 'video' ? (
+                        <video
+                            src={preview}
+                            muted
+                            playsInline
+                            className="h-20 w-20 rounded-lg border bg-black object-cover"
+                        />
+                    ) : (
+                        <Avatar className="h-20 w-20">
+                            <AvatarImage src={preview} alt={label} />
+                            <AvatarFallback>
+                                {fallbackInitials || (
+                                    <ImageIcon className="h-6 w-6" />
+                                )}
+                            </AvatarFallback>
+                        </Avatar>
+                    )
+                ) : (
+                    <div className="flex h-20 w-20 items-center justify-center rounded-lg border border-dashed bg-muted/40 text-muted-foreground">
+                        <TriggerIcon className="h-6 w-6" />
+                    </div>
+                )}
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-1 flex-col gap-2">
                     <div className="flex flex-wrap gap-2">
                         <Button
                             type="button"
@@ -179,8 +263,8 @@ export function MediaPicker({
                             size="sm"
                             onClick={() => setOpen(true)}
                         >
-                            <ImageIcon className="mr-2 h-4 w-4" />
-                            Elegir de medios
+                            <TriggerIcon className="mr-2 h-4 w-4" />
+                            {copy.chooseButton}
                         </Button>
                         {!hideUpload && (
                             <Button
@@ -190,7 +274,7 @@ export function MediaPicker({
                                 onClick={handleUploadClick}
                             >
                                 <Upload className="mr-2 h-4 w-4" />
-                                Subir nueva
+                                {copy.uploadButton}
                             </Button>
                         )}
                         {value !== null && (
@@ -207,30 +291,26 @@ export function MediaPicker({
                     </div>
                     <p className="text-xs text-muted-foreground">
                         {hideUpload
-                            ? 'Elegí una imagen existente de la biblioteca.'
-                            : 'Elegí una imagen existente de la biblioteca o subí una nueva.'}
+                            ? copy.helperText.replace(' o subí una nueva', '').replace(' o subí uno nuevo', '')
+                            : copy.helperText}
                     </p>
                 </div>
 
                 <input
                     ref={fileInput}
                     type="file"
-                    accept="image/*"
+                    accept={copy.accept}
                     className="hidden"
                     onChange={handleFileChosen}
                 />
-
-                {value !== null && (
-                    <input type="hidden" name="media_id" value={value} />
-                )}
             </div>
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="max-w-3xl">
                     <DialogHeader>
-                        <DialogTitle>Biblioteca de medios</DialogTitle>
+                        <DialogTitle>{copy.title}</DialogTitle>
                         <DialogDescription>
-                            Seleccioná una imagen para usar como avatar.
+                            {copy.description}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -239,7 +319,7 @@ export function MediaPicker({
                         <Input
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
-                            placeholder="Buscar imagen..."
+                            placeholder={copy.searchPlaceholder}
                             className="pl-9"
                         />
                     </div>
@@ -251,8 +331,8 @@ export function MediaPicker({
                             </div>
                         ) : items.length === 0 ? (
                             <div className="flex h-40 flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-                                <ImageIcon className="h-8 w-8 opacity-40" />
-                                <p>No hay imágenes en la biblioteca.</p>
+                                <TriggerIcon className="h-8 w-8 opacity-40" />
+                                <p>{copy.emptyMessage}</p>
                                 {!hideUpload && (
                                     <Button
                                         type="button"
@@ -261,28 +341,51 @@ export function MediaPicker({
                                         onClick={handleUploadClick}
                                     >
                                         <Upload className="mr-2 h-4 w-4" />
-                                        Subir primera imagen
+                                        {copy.firstUploadButton}
                                     </Button>
                                 )}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                                 {items.map((item) => (
                                     <button
                                         key={item.id}
                                         type="button"
                                         onClick={() => selectItem(item)}
-                                        className={`group relative aspect-square overflow-hidden rounded-lg border-2 transition ${
+                                        className={`group relative flex aspect-video flex-col items-stretch overflow-hidden rounded-lg border-2 transition ${
                                             value === item.id
                                                 ? 'border-primary ring-2 ring-primary ring-offset-2 ring-offset-background'
                                                 : 'border-transparent hover:border-primary/50'
                                         }`}
                                     >
-                                        <img
-                                            src={item.thumb_url}
-                                            alt={item.name}
-                                            className="h-full w-full object-cover"
-                                        />
+                                        {mediaKind === 'video' ? (
+                                            <video
+                                                src={item.url}
+                                                muted
+                                                playsInline
+                                                preload="metadata"
+                                                className="h-full w-full bg-black object-cover"
+                                            />
+                                        ) : (
+                                            <img
+                                                src={item.thumb_url}
+                                                alt={item.name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        )}
+                                        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/80 to-transparent px-2 py-1.5 text-[11px] text-white">
+                                            <span className="truncate font-medium">
+                                                {item.name}
+                                            </span>
+                                            <span className="shrink-0 tabular-nums opacity-70">
+                                                {formatBytes(item.size)}
+                                            </span>
+                                        </div>
+                                        {mediaKind === 'video' && (
+                                            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white opacity-0 transition group-hover:opacity-100">
+                                                <FileVideo className="h-4 w-4" />
+                                            </div>
+                                        )}
                                         {value === item.id && (
                                             <div className="absolute inset-0 flex items-center justify-center bg-primary/20">
                                                 <Check className="h-6 w-6 text-primary-foreground drop-shadow" />

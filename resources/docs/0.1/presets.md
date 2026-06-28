@@ -4,17 +4,18 @@ Las plantillas son **diseños pre-armados** que te permiten crear una página pr
 
 ## Plantillas disponibles
 
-### Peluquería
+### Peluquería & Barbería
 Ideal para peluquerías, barberías y salones de belleza. Incluye:
 
 - **Hero** con llamado a la acción para reservar turno.
-- **6 características** (Corte, Coloración, Peinado, Barbería, Tratamientos, Novias).
+- **6 servicios** (Características) con íconos.
+- **Equipo**: 3 cards de staff con foto, rol, especialidades y horario.
 - **Galería** para mostrar trabajos.
-- **3 tiers de precios** (Básico, Color, Novia).
+- **Catálogo de servicios** con imagen, duración, precio desde y CTA por servicio (6 servicios: Corte, Color, Barba, Peinado, Tratamientos, Novias).
 - **3 testimonios** de clientas.
 - **Ubicación** con mapa de OpenStreetMap y datos de contacto.
 - **CTA** final para reservar.
-- Bloques decorativos: "Sobre el estudio" y video showcase.
+- Bloques decorativos: "Sobre el estudio", video showcase y slider **Antes / Después** interactivo.
 
 **Datos de ejemplo**: Estudio Camila en La Paz, Bolivia. Reservas por WhatsApp.
 

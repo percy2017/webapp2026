@@ -1,13 +1,19 @@
 {
     "agents": [
-        "opencode"
+        "opencode",
+        "claude_code"
     ],
-    "cloud": false,
+    "cloud": true,
     "guidelines": true,
     "mcp": true,
     "nightwatch": false,
+    "packages": [
+        "spatie/laravel-medialibrary",
+        "spatie/laravel-permission"
+    ],
     "sail": false,
     "skills": [
+        "ai-sdk-development",
         "fortify-development",
         "laravel-best-practices",
         "wayfinder-development",
@@ -15,6 +21,9 @@
         "inertia-react-development",
         "tailwindcss-development",
         "echo-react-development",
-        "echo-development"
+        "echo-development",
+        "medialibrary-development",
+        "laravel-permission-development",
+        "deploying-laravel-cloud"
     ]
 }

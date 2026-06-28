@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { Config, Fields } from '@puckeditor/core';
 import {
     SECTION_REGISTRY,
@@ -8,7 +9,6 @@ import {
 import {
     BASIC_BLOCKS_REGISTRY,
     type BlockContent,
-    type BlockProps,
 } from '@site/lib/basic-blocks-registry';
 import { imageField } from '@site/lib/puck-fields/image-field';
 import { iconField } from '@site/lib/puck-fields/icon-field';
@@ -87,6 +87,7 @@ function itemSchemaToArrayFields(
             fields[f.key] = { type: 'text', label: f.label };
         }
     });
+
     return fields;
 }
 
@@ -97,6 +98,7 @@ function defaultItemProps(itemSchema?: ContentField[]): Record<string, unknown> 
         else if (f.type === 'list') obj[f.key] = [];
         else obj[f.key] = '';
     });
+
     return obj;
 }
 
@@ -107,6 +109,7 @@ function getItemSummary(item: unknown, index: number): string {
         (record.title as string) ||
         (record.name as string) ||
         (record.label as string);
+
     return candidate || `Item #${index + 1}`;
 }
 
@@ -126,6 +129,10 @@ function schemaToFields(schema: ContentField[]): Fields {
                 type: 'custom',
                 label: f.label,
                 render: imageField.render,
+                config: {
+                    mediaKind: f.mediaKind ?? 'image',
+                    label: f.label,
+                },
             };
         } else if (f.type === 'icon') {
             fields[f.key] = {
@@ -160,17 +167,25 @@ function schemaToFields(schema: ContentField[]): Fields {
             fields[f.key] = { type: 'text', label: f.label };
         }
     }
+
     return fields;
 }
 
+// Build the Puck Config.
+//
+// Two groups, in this exact order:
+//   1. "Bloques prediseñados"  → every entry from SECTION_REGISTRY
+//   2. "Bloques básicos"        → every entry from BASIC_BLOCKS_REGISTRY
+//
+// IDs are unique and disjoint between the two registries — the audit script
+// (scripts/audit-puck-blocks.mjs) verifies this on every build.
 export function buildPuckConfig({ theme }: Props): Config {
     const components: Config['components'] = {};
-    const sectionIds: string[] = [];
-    const basicBlockIds: string[] = [];
 
-    for (const [id, def] of Object.entries(SECTION_REGISTRY)) {
-        sectionIds.push(id);
-
+    // --- Group 1: pre-designed sections ---------------------------------
+    const preDesignedIds = Object.keys(SECTION_REGISTRY);
+    for (const id of preDesignedIds) {
+        const def = SECTION_REGISTRY[id];
         components[id] = {
             label: def.label,
             fields: schemaToFields(def.schema),
@@ -209,18 +224,33 @@ export function buildPuckConfig({ theme }: Props): Config {
         };
     }
 
-    for (const [id, def] of Object.entries(BASIC_BLOCKS_REGISTRY)) {
-        basicBlockIds.push(id);
-
+    // --- Group 2: basic blocks ------------------------------------------
+    const basicIds = Object.keys(BASIC_BLOCKS_REGISTRY);
+    for (const id of basicIds) {
+        const def = BASIC_BLOCKS_REGISTRY[id];
+        const isContainer = id === 'container';
         components[id] = {
             label: def.label,
-            fields: schemaToFields(def.schema),
+            fields: isContainer
+                ? {
+                      ...schemaToFields(def.schema),
+                      children: {
+                          type: 'slot',
+                      },
+                  }
+                : schemaToFields(def.schema),
             defaultProps: { ...def.defaultContent },
             render: (renderProps) => {
                 const Component = def.component;
-                const { hidden, id: puckId, ...rest } = renderProps as {
+                const {
+                    hidden,
+                    id: puckId,
+                    children: puckChildren,
+                    ...rest
+                } = renderProps as {
                     hidden?: boolean;
                     id?: string;
+                    children?: React.ReactNode;
                 } & Record<string, unknown>;
 
                 if (hidden) {
@@ -240,6 +270,18 @@ export function buildPuckConfig({ theme }: Props): Config {
 
                 const normalized = normalizeImageContent(rest);
 
+                if (isContainer) {
+                    return (
+                        <Component
+                            id={puckId}
+                            content={normalized as BlockContent}
+                            theme={theme}
+                        >
+                            {puckChildren as React.ReactNode}
+                        </Component>
+                    );
+                }
+
                 return (
                     <Component
                         id={puckId}
@@ -251,18 +293,29 @@ export function buildPuckConfig({ theme }: Props): Config {
         };
     }
 
+    // Make sure no key from the section registry leaked into the basic list
+    // and vice versa — defensive check, but cheap.
+    for (const id of preDesignedIds) {
+        if (basicIds.includes(id)) {
+            // eslint-disable-next-line no-console
+            console.warn(
+                `[puck-config] id "${id}" appears in both SECTION_REGISTRY and BASIC_BLOCKS_REGISTRY`,
+            );
+        }
+    }
+
     return {
         components,
         categories: {
-            'pre-designed': {
-                title: 'Secciones prediseñadas',
-                components: sectionIds,
-                defaultExpanded: false,
+            'bloques-predisenados': {
+                title: 'Bloques prediseñados',
+                components: preDesignedIds,
+                defaultExpanded: true,
             },
-            basics: {
+            'bloques-basicos': {
                 title: 'Bloques básicos',
-                components: basicBlockIds,
-                defaultExpanded: false,
+                components: basicIds,
+                defaultExpanded: true,
             },
         },
     };

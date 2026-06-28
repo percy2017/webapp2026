@@ -41,20 +41,21 @@ Pensado para peluquerías, streamers, restaurantes, profesionales independientes
 ### 📄 Páginas dinámicas (tarjeta de presentación digital)
 Editor visual drag-and-drop con **Puck**. Las páginas se construyen con dos tipos de elementos:
 
-- **13 bloques básicos**: Título, Párrafo, Imagen, Botón, Espaciador, Divisor, Galería, Video, Mapa, Antes/Después, Cronómetro, Estadísticas, Agenda Semanal
-- **9 secciones prediseñadas**: Hero, Características, Galería, Planes/Precios, FAQ, Testimonios, Equipo, Servicios, Ubicación, Llamado a la acción
+- **Bloques básicos** (`resources/js/site/blocks/`): Título, Párrafo, Imagen, Botón, Espaciador, Divisor, Contenedor (con DropZone anidado), Galería, Video, Mapa, Antes/Después, Cronómetro, Estadísticas, Agenda Semanal
+- **Secciones prediseñadas** (`resources/js/site/sections/`): Hero, Características, Servicios (grid), Galería, Planes/Precios, FAQ, Testimonios, Equipo, Slider/Carousel, Ubicación, Llamado a la acción
 
-Los datos se persisten en `site_templates.sections` (JSON) y `site_template_blocks` (tabla relacional).
+Cada sección expone campos para **elegir imagen desde URL externa o desde la Biblioteca de Medios** (radio `source: 'url' | 'media'` + fallback a `/blocks/*.svg`). Los datos se persisten en `site_templates.sections` (JSON).
 
-### 🎨 Plantillas prediseñadas
-Elegí entre plantillas listas para usar según tu rubro:
+### 🎨 Páginas (tarjeta de presentación)
+Las páginas se construyen desde cero con el editor Puck, sección por sección. `/admin/site-templates` arranca vacío: el usuario crea su propia página eligiendo nombre, slug, icono y armando las secciones en el orden que quiera. No hay plantillas predefinidas que se autoinstalen.
 
-- **Peluquería** — Para peluquerías y barberías. Hero, 6 servicios, galería con 6 trabajos reales, 3 tiers de precios, equipo con 3 fotos, 4 pares antes/después, testimonios, ubicación con mapa y CTA de reserva. Ships con 20 SVGs ilustrados (hero, equipo, galería, servicios, before/after).
-- **Streaming** — Para streamers y creadores de contenido. Hero "En vivo" con waveform, 6 plataformas, galería con 6 highlights (setup, win, IRL, torneo, charla, highlights), 3 tiers (Viewer/Sub/Patreon), 3 testimonios con avatar, comunidad, links a Twitch. Ships con 15 SVGs ilustrados + 5 SVGs "sample" para defaults de bloques/secciones.
+El sistema distingue tres cosas:
 
-Ambas plantillas se crean automáticamente con contenido, secciones, bloques, menú pre-armado e imágenes de muestra ya registradas en MediaLibrary.
+- **Bloques básicos**: piezas genéricas reutilizables (título, párrafo, imagen, botón, galería, video, mapa, etc.). Una vez definidos en `resources/js/site/blocks/` quedan disponibles en cualquier página.
+- **Secciones prediseñadas**: composiciones prearmadas (Hero, Equipo, Servicios, Galería, CTA, etc.) que el usuario arrastra al canvas de su página y edita con campos amigables.
+- **Páginas** (`site_templates`): la unidad publicable. Una página tiene secciones, menú y slug propio. Se publica una a la vez; `/` siempre muestra la activa.
 
-> **Pipeline de medios**: los presets referencian sus assets como placeholders `__MEDIA:<key>__`. Los seeders (`PeluqueriaTemplateSeeder`, `StreamingTemplateSeeder`) — que comparten el trait `Database\Seeders\Concerns\RegistersCanvasMedia` — registran los SVGs en `MediaHolder` (`peluqueria-canvas` / `streaming-canvas`) y resuelven los placeholders a IDs numéricos. `App\Support\TemplateMediaUrl::enrichSections` también resuelve los placeholders en render-time para que los bloques/secciones recién arrastrados al canvas muestren la imagen de muestra sin re-seed.
+> **Media library**: cada sección que admite imagen expone un radio **URL externa / Biblioteca de Medios**. Los assets se suben desde `/admin/media` y se eligen desde el picker.
 
 ### 💬 Chat en Vivo
 WebSockets con **Laravel Reverb** (protocolo Pusher). El visitante ve un botón flotante en tu sitio, se loguea con email + teléfono (sin contraseña, registro rápido), y te escribe. Vos respondés desde el panel.
@@ -80,6 +81,7 @@ WebSockets con **Laravel Reverb** (protocolo Pusher). El visitante ve un botón 
 - **Panel lateral de detalle** con preview según tipo (imagen/video/audio/PDF)
 - URL pública copiable, dimensiones de imagen, descargar
 - Conversión `thumb` automática para imágenes
+- Picker visual reutilizable desde el editor Puck
 
 ### 🧭 Menú de navegación (`/admin/site-menu`)
 - Items del header público con **sub-menús** (parent_id recursivo)
@@ -97,6 +99,11 @@ Configuración global: nombre, eslogan, SEO (título + descripción), logo, favi
 - Gráfico de **mensajes por hora** de las últimas 24 horas
 - Auto-actualización vía WebSocket cuando llegan mensajes nuevos
 
+### 📲 PWA (Progressive Web App)
+- `manifest.webmanifest` con theme-color, íconos Apple Touch y maskable
+- Service Worker (`/sw.js`) con scope `/` (header `Service-Worker-Allowed` configurado)
+- Captura global de `beforeinstallprompt` + helper `window.installPWA()`
+
 ### 🛡️ Seguridad
 - **Laravel Fortify** (login, registro, recuperación de contraseña)
 - **Two-factor authentication** (TOTP) y **passkeys** (WebAuthn)
@@ -112,6 +119,7 @@ Configuración global: nombre, eslogan, SEO (título + descripción), logo, favi
 - Geolocalización con **OpenStreetMap + Leaflet** (sin API key, gratis)
 - SEO básico (title, description, favicon)
 - Soporte para dominio personalizado + SSL (Let's Encrypt vía Hestia)
+- **QR por plantilla** en `/admin/site-templates`: se muestra solo si la plantilla está activa y la URL apunta a `/`
 
 ## Documentación del cliente
 
@@ -141,21 +149,40 @@ php artisan migrate:fresh --seed
 php artisan storage:link
 npm run build
 
-# Regenerar JSON de un preset después de editar preset-templates.ts
-node scripts/export-preset-for-seeder.mjs        # streaming
-node scripts/export-preset-for-seeder.mjs        # peluquería (mismo script)
-
 # Producción (con pm2)
 pm2 start ecosystem.config.cjs
 pm2 save
 ```
 
-## Assets de marca
+## Estructura clave
 
-- `public/canvas/peluqueria/` — 20 SVGs ilustrados del preset Peluquería
-- `public/canvas/streaming/` — 15 SVGs ilustrados del preset Streaming + 5 sample defaults
-- `canvas-tarjeta-digital.{svg,png,pdf}` — artefacto canvas del brief de marca
-- `canvas-philosophy.md` — filosofía de diseño **Embossed Voltage** que rige los SVGs
+```
+app/
+├── Http/Controllers/
+│   ├── Admin/             panel admin (Dashboard, SiteTemplate, SiteMenu, etc.)
+│   ├── Site/HomeController.php   resuelve plantilla activa → render Inertia
+│   └── Widget/            endpoints públicos del chat flotante
+├── Models/                User, SiteTemplate, SiteSetting, Event, Chat, etc.
+├── Support/TemplateMediaUrl.php   reescribe IDs de media a URLs públicas
+└── Console/Commands/      RegisterLogoConceptsCommand, etc.
+
+database/seeders/
+├── DatabaseSeeder.php     orquesta RoleSeeder + admin user
+└── RoleSeeder.php         5 permisos + roles admin/user
+
+resources/js/site/
+├── blocks/                bloques básicos (heading, paragraph, image, etc.)
+├── sections/              secciones prediseñadas (hero, team, gallery, etc.)
+├── lib/
+│   ├── basic-blocks-registry.ts   schema Puck de los bloques básicos
+│   ├── template-registry.ts       schema Puck de las secciones prediseñadas
+│   ├── puck-config.tsx            configuración del editor visual
+│   └── template-icons.tsx         íconos Lucide por plantilla
+└── landing.tsx            página Inertia que renderiza el sitio público
+
+public/blocks/             SVGs por defecto para hero, equipo, galería, plataformas, etc.
+public/canvas/             archivos legacy del brief de marca
+```
 
 ## Licencia
 

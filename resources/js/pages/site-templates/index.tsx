@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Loader2, Pencil, Plus, Settings, Trash2 } from 'lucide-react';
+import { ExternalLink, Loader2, Pencil, Plus, ScanQrCode, Settings, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { QrShareButton } from '@site/components/qr-share-button';
 import {
     activate as activateRoute,
     destroy as destroyRoute,
@@ -55,6 +56,24 @@ export default function SiteTemplatesIndex({ templates }: Props) {
     const [deleting, setDeleting] = useState<SiteTemplate | null>(null);
     const [activatingId, setActivatingId] = useState<number | null>(null);
     const [editing, setEditing] = useState<SiteTemplate | null>(null);
+
+    /**
+     * Public URL for a template.
+     *
+     * - If the template is the active one, the public site resolves it at
+     *   the root `/` (HomeController falls back to `SiteSetting::active_template_slug`).
+     * - Otherwise (inactive), we point at the explicit preview URL
+     *   `/?template=<slug>` so admins can still open that specific page.
+     *
+     * Built from the current origin so the QR works regardless of where
+     * the admin runs.
+     */
+    function publicUrlFor(slug: string, isActive: boolean): string {
+        const path = isActive ? '/' : `/?template=${encodeURIComponent(slug)}`;
+        if (typeof window === 'undefined') return path;
+        const { origin } = window.location;
+        return `${origin}${path}`;
+    }
 
     function handleActivate(template: SiteTemplate) {
         setActivatingId(template.id);
@@ -126,6 +145,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                         Contenido
                                     </th>
                                     <th className="px-4 py-3">Estado</th>
+                                    <th className="px-4 py-3">QR público</th>
                                     <th className="px-4 py-3 text-right">
                                         Acciones
                                     </th>
@@ -189,6 +209,47 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                                                        Inactiva
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {template.is_active ? (
+                                                    <div className="flex items-center gap-1">
+                                                        <QrShareButton
+                                                            url={publicUrlFor(
+                                                                template.slug,
+                                                                true,
+                                                            )}
+                                                            variant="inline"
+                                                            label="Ver QR"
+                                                        />
+                                                        <Button
+                                                            asChild
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            title="Abrir página pública"
+                                                            aria-label="Abrir página pública"
+                                                        >
+                                                            <a
+                                                                href={publicUrlFor(
+                                                                    template.slug,
+                                                                    true,
+                                                                )}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="inline-flex h-8 w-8 items-center justify-center"
+                                                            >
+                                                                <ExternalLink className="h-3.5 w-3.5" />
+                                                            </a>
+                                                        </Button>
+                                                    </div>
+                                                ) : (
+                                                    <span
+                                                        className="inline-flex items-center gap-1.5 rounded-full border border-dashed bg-muted/40 px-2.5 py-1 text-xs italic text-muted-foreground"
+                                                        title="Activá esta página para generar su QR"
+                                                    >
+                                                        <ScanQrCode className="h-3 w-3" />
                                                         Inactiva
                                                     </span>
                                                 )}

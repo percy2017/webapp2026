@@ -10,7 +10,7 @@ module.exports = {
             instances: 1,
             autorestart: true,
             watch: false,
-            max_memory_restart: '256M',
+            max_memory_restart: '512M',
             env: {
                 APP_ENV: 'production',
             },

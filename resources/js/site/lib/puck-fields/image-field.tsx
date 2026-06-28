@@ -25,8 +25,24 @@ function normalize(value: unknown): ImageFieldValue {
     return { id: null, url: null };
 }
 
-function ImageFieldRender({ value, onChange }: ImageFieldRenderProps) {
+/**
+ * Puck custom field for picking from the Media library.
+ *
+ * By default it filters `image/*` mime types. Pass `mediaKind="video"` in
+ * `field.config` to use it for the Video block's `media_id` field — that
+ * way the picker, upload accept filter, and grid previews all switch to
+ * video.
+ */
+function ImageFieldRender({
+    value,
+    onChange,
+    config,
+}: ImageFieldRenderProps & {
+    config?: { mediaKind?: 'image' | 'video'; label?: string };
+}) {
     const normalized = normalize(value);
+    const mediaKind = config?.mediaKind ?? 'image';
+    const label = config?.label ?? 'Imagen';
 
     return (
         <div className="space-y-2">
@@ -36,11 +52,13 @@ function ImageFieldRender({ value, onChange }: ImageFieldRenderProps) {
                 onChange={(id, url) => {
                     onChange({ id, url: url ?? null });
                 }}
+                label={label}
+                mediaKind={mediaKind}
                 hideUpload
             />
             {normalized.id !== null && (
                 <p className="text-xs text-muted-foreground">
-                    Media ID: {normalized.id}
+                    ID: {normalized.id}
                 </p>
             )}
         </div>
@@ -53,6 +71,9 @@ export const imageField: CustomField<ImageFieldValue> = {
         <ImageFieldRender
             value={props.value}
             onChange={(v) => props.onChange(v)}
+            config={props.field?.config as
+                | { mediaKind?: 'image' | 'video'; label?: string }
+                | undefined}
         />
     ),
 };

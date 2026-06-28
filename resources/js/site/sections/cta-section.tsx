@@ -19,27 +19,26 @@ export function CtaSection({ content, theme }: SectionProps) {
     return (
         <section
             id="cta"
-            className="relative overflow-hidden border-y bg-foreground py-12 sm:py-16 lg:py-20"
+            className="relative overflow-hidden border-y bg-muted py-12 sm:py-16 lg:py-20"
         >
             <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
                 style={{
-                    backgroundImage:
-                        primaryColor
-                            ? `radial-gradient(circle at 30% 50%, ${primaryColor}33, transparent 55%), radial-gradient(circle at 70% 50%, ${primaryColor}26, transparent 55%)`
-                            : 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.06), transparent 55%), radial-gradient(circle at 70% 50%, rgba(255,255,255,0.04), transparent 55%)',
+                    backgroundImage: primaryColor
+                        ? `radial-gradient(circle at 30% 50%, ${primaryColor}26, transparent 55%), radial-gradient(circle at 70% 50%, ${primaryColor}1a, transparent 55%)`
+                        : undefined,
                 }}
             />
 
             <div className="relative mx-auto w-full max-w-4xl px-4 text-center sm:px-6 lg:px-8">
                 {title && (
-                    <h2 className="text-3xl font-bold tracking-tight text-background sm:text-4xl lg:text-5xl">
+                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
                         {title}
                     </h2>
                 )}
                 {subtitle && (
-                    <p className="mx-auto mt-3 max-w-2xl text-base text-background/80 sm:mt-4 sm:text-lg">
+                    <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground sm:mt-4 sm:text-lg">
                         {subtitle}
                     </p>
                 )}
@@ -50,7 +49,7 @@ export function CtaSection({ content, theme }: SectionProps) {
                             <Button
                                 asChild
                                 size="lg"
-                                className="w-full text-foreground hover:text-background sm:w-auto"
+                                className="w-full sm:w-auto"
                                 style={
                                     primaryColor
                                         ? {
@@ -72,7 +71,7 @@ export function CtaSection({ content, theme }: SectionProps) {
                                 asChild
                                 size="lg"
                                 variant="outline"
-                                className="w-full border-background/30 bg-transparent text-background hover:border-background/60 hover:bg-background/10 hover:text-background sm:w-auto"
+                                className="w-full sm:w-auto"
                             >
                                 <a href={secondary_href || '#features'}>
                                     {secondary_label}

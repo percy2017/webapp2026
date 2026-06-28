@@ -122,17 +122,19 @@ export function VideoBlock({ content }: BlockProps) {
 
     if (video.type === 'file' && video.fileUrl) {
         return (
-            <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
-                <video
-                    src={video.fileUrl}
-                    title={title || undefined}
-                    autoPlay={autoplay}
-                    controls={controls}
-                    loop={loop}
-                    muted={autoplay || muted}
-                    playsInline
-                    className="h-full w-full"
-                />
+            <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+                <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
+                    <video
+                        src={video.fileUrl}
+                        title={title || undefined}
+                        autoPlay={autoplay}
+                        controls={controls}
+                        loop={loop}
+                        muted={autoplay || muted}
+                        playsInline
+                        className="h-full w-full"
+                    />
+                </div>
             </div>
         );
     }
@@ -149,14 +151,16 @@ export function VideoBlock({ content }: BlockProps) {
     const finalSrc = query ? `${embedSrc}?${query}` : embedSrc;
 
     return (
-        <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
-            <iframe
-                src={finalSrc}
-                title={title || 'Video'}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-            />
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
+                <iframe
+                    src={finalSrc}
+                    title={title || 'Video'}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full"
+                />
+            </div>
         </div>
     );
 }

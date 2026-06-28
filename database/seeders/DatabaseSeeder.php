@@ -14,9 +14,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(RoleSeeder::class);
-        $this->call(PeluqueriaTemplateSeeder::class);
-        // StreamingTemplateSeeder runs last so its template is the active one.
-        $this->call(StreamingTemplateSeeder::class);
 
         $admin = User::updateOrCreate(
             ['email' => 'admin@admin.com'],

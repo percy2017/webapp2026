@@ -38,7 +38,7 @@ export function HeroSection({ content, theme }: SectionProps) {
                 <div className="absolute right-1/4 top-1/2 hidden h-72 w-72 rounded-full bg-blue-500/10 blur-3xl sm:block" />
             </div>
 
-            <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-4 sm:px-6 sm:py-6 md:gap-8 lg:grid-cols-2 lg:items-center lg:gap-12 lg:py-8 lg:px-8">
+            <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-12 sm:px-6 sm:py-16 md:gap-8 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:py-20">
                 <div className="flex flex-col justify-center text-center sm:text-left">
                     {eyebrow && (
                         <span className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground sm:mx-0">
