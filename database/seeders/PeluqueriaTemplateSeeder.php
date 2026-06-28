@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SiteMenuItem;
 use App\Models\SiteSetting;
 use App\Models\SiteTemplate;
 use App\Models\SiteTemplateBlock;
@@ -71,6 +72,20 @@ class PeluqueriaTemplateSeeder extends Seeder
                     'visible' => $block['visible'] ?? true,
                     'position' => $index,
                 ]);
+            }
+
+            // Seed the navigation menu scoped to this template so the public
+            // header has items to render. Each SiteMenuItem gets the freshly
+            // created template's id, so menus stay isolated per template.
+            if (! empty($resolved['menu_items'])) {
+                foreach ($resolved['menu_items'] as $item) {
+                    SiteMenuItem::create([
+                        'site_template_id' => $template->id,
+                        'label' => $item['label'],
+                        'href' => $item['href'],
+                        'icon' => $item['icon'] ?? null,
+                    ]);
+                }
             }
 
             // Deactivate any other template and point SiteSetting at this one.

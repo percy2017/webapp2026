@@ -588,6 +588,38 @@
             }
         }
     ],
+    "menu_items": [
+        {
+            "label": "Inicio",
+            "href": "#hero",
+            "icon": "Home"
+        },
+        {
+            "label": "Servicios",
+            "href": "#services-grid",
+            "icon": "Sparkles"
+        },
+        {
+            "label": "Equipo",
+            "href": "#team",
+            "icon": "Users"
+        },
+        {
+            "label": "Galería",
+            "href": "#gallery",
+            "icon": "Image"
+        },
+        {
+            "label": "Testimonios",
+            "href": "#testimonials",
+            "icon": "Star"
+        },
+        {
+            "label": "Reservar",
+            "href": "https://wa.me/59170000000?text=Hola%20Camila%2C%20quiero%20reservar%20un%20turno",
+            "icon": "Phone"
+        }
+    ],
     "expected_media_keys": [
         "ba-balayage-after",
         "ba-balayage-before",
