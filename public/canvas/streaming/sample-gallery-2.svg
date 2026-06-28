@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Sample gallery 2">
+    <defs>
+        <linearGradient id="bgG2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a0814"/>
+            <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <radialGradient id="haloG2" cx="0.5" cy="0.45" r="0.55">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="goldG2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff5d8"/>
+            <stop offset="100%" stop-color="#8a5a18"/>
+        </linearGradient>
+        <linearGradient id="violetG2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#5b21b6"/>
+        </linearGradient>
+        <filter id="grainG2" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="34"/>
+            <feColorMatrix values="0 0 0 0 0.83  0 0 0 0 0.61  0 0 0 0 0.23  0 0 0 0.18 0"/>
+        </filter>
+    </defs>
+
+    <rect width="600" height="600" fill="url(#bgG2)"/>
+    <rect width="600" height="600" fill="url(#haloG2)"/>
+
+    <g transform="translate(300, 280)" opacity="0.95">
+        <rect x="-160" y="-90" width="320" height="180" rx="50" fill="#14101f" stroke="url(#goldG2)" stroke-width="2"/>
+        <circle cx="-95" cy="-30" r="14" fill="url(#violetG2)"/>
+        <circle cx="-95" cy="20" r="14" fill="url(#violetG2)"/>
+        <circle cx="-95" cy="70" r="14" fill="url(#violetG2)"/>
+        <rect x="-60" y="-30" width="80" height="6" rx="3" fill="url(#goldG2)"/>
+        <rect x="-60" y="20" width="60" height="6" rx="3" fill="url(#goldG2)"/>
+        <rect x="-60" y="70" width="100" height="6" rx="3" fill="url(#goldG2)"/>
+        <rect x="40" y="-50" width="80" height="110" rx="6" fill="#0a0814" stroke="url(#violetG2)" stroke-width="2"/>
+        <text x="80" y="14" font-family="Playfair Display, serif" font-style="italic" font-size="38" fill="url(#goldG2)" text-anchor="middle">A</text>
+    </g>
+
+    <text x="30" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">SAMPLE · GALLERY 02</text>
+    <text x="570" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.7" text-anchor="end">Imagen 2</text>
+
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
+    <rect x="30" y="30" width="540" height="540" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.2"/>
+
+    <rect width="600" height="600" filter="url(#grainG2)" opacity="0.5"/>
+</svg>

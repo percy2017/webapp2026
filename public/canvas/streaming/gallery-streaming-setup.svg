@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gallery — Setup del stream">
+    <defs>
+        <linearGradient id="bgSetup" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a0814"/>
+            <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <radialGradient id="haloSetup" cx="0.5" cy="0.45" r="0.55">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="goldSetup" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fff5d8"/>
+            <stop offset="50%" stop-color="#f4d870"/>
+            <stop offset="100%" stop-color="#8a5a18"/>
+        </linearGradient>
+        <linearGradient id="violetSetup" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#5b21b6"/>
+        </linearGradient>
+        <filter id="grainSetup" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="21"/>
+            <feColorMatrix values="0 0 0 0 0.83  0 0 0 0 0.61  0 0 0 0 0.23  0 0 0 0.18 0"/>
+        </filter>
+    </defs>
+
+    <rect width="600" height="600" fill="url(#bgSetup)"/>
+    <rect width="600" height="600" fill="url(#haloSetup)"/>
+
+    <g transform="translate(300, 290)" opacity="0.95">
+        <rect x="-150" y="-100" width="300" height="190" rx="14" fill="#0a0814" stroke="url(#goldSetup)" stroke-width="2"/>
+        <rect x="-135" y="-86" width="270" height="160" rx="6" fill="#14101f"/>
+        <circle cx="0" cy="-6" r="42" fill="none" stroke="url(#violetSetup)" stroke-width="2.5"/>
+        <path d="M -14 -28 L -14 16 L 22 -6 Z" fill="url(#violetSetup)"/>
+        <rect x="-30" y="92" width="60" height="14" rx="3" fill="url(#goldSetup)" opacity="0.85"/>
+        <rect x="-72" y="106" width="144" height="6" rx="3" fill="#14101f" stroke="url(#goldSetup)" stroke-width="1.5" opacity="0.7"/>
+
+        <path d="M -110 50 Q -130 25 -110 0 L -85 0 Q -68 25 -85 50 Z" fill="none" stroke="url(#goldSetup)" stroke-width="2.5"/>
+        <circle cx="-118" cy="25" r="14" fill="#14101f" stroke="url(#goldSetup)" stroke-width="2"/>
+        <circle cx="-78" cy="25" r="14" fill="#14101f" stroke="url(#goldSetup)" stroke-width="2"/>
+    </g>
+
+    <text x="30" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">Nº 002 · SETUP</text>
+    <text x="570" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.7" text-anchor="end">Mi setup</text>
+
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
+    <rect x="30" y="30" width="540" height="540" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.2"/>
+
+    <rect width="600" height="600" filter="url(#grainSetup)" opacity="0.5"/>
+</svg>

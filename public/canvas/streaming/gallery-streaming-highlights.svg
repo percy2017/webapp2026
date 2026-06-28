@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gallery — Highlights del mes">
+    <defs>
+        <linearGradient id="bgHigh" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a0814"/>
+            <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <radialGradient id="haloHigh" cx="0.5" cy="0.45" r="0.55">
+            <stop offset="0%" stop-color="#f4d870" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#f4d870" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="goldHigh" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff5d8"/>
+            <stop offset="100%" stop-color="#8a5a18"/>
+        </linearGradient>
+        <filter id="grainHigh" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="26"/>
+            <feColorMatrix values="0 0 0 0 0.83  0 0 0 0 0.61  0 0 0 0 0.23  0 0 0 0.18 0"/>
+        </filter>
+    </defs>
+
+    <rect width="600" height="600" fill="url(#bgHigh)"/>
+    <rect width="600" height="600" fill="url(#haloHigh)"/>
+
+    <g transform="translate(300, 280)" opacity="0.95">
+        <path d="M 0 -140 L 35 -45 L 135 -45 L 55 15 L 85 110 L 0 50 L -85 110 L -55 15 L -135 -45 L -35 -45 Z" fill="url(#goldHigh)"/>
+        <path d="M 0 -110 L 25 -35 L 105 -35 L 40 12 L 65 88 L 0 42 L -65 88 L -40 12 L -105 -35 L -25 -35 Z" fill="#0a0814"/>
+
+        <g opacity="0.85">
+            <path d="M -180 -90 L -170 -100 L -160 -90 L -150 -100 L -160 -80 L -150 -70 L -160 -85 L -170 -75 Z" fill="#f4d870"/>
+            <path d="M 180 -90 L 190 -100 L 200 -90 L 210 -100 L 200 -80 L 210 -70 L 200 -85 L 190 -75 Z" fill="#f4d870"/>
+            <path d="M -160 110 L -150 100 L -140 110 L -130 100 L -140 120 L -130 130 L -140 115 L -150 125 Z" fill="#f4d870"/>
+            <path d="M 160 110 L 170 100 L 180 110 L 190 100 L 180 120 L 190 130 L 180 115 L 170 125 Z" fill="#f4d870"/>
+        </g>
+    </g>
+
+    <text x="30" y="40" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">Nº 007 · HIGHLIGHTS</text>
+    <text x="570" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.7" text-anchor="end">Highlights</text>
+
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.45"/>
+    <rect x="30" y="30" width="540" height="540" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.2"/>
+
+    <rect width="600" height="600" filter="url(#grainHigh)" opacity="0.5"/>
+</svg>

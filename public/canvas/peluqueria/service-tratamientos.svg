@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ilustración simulada — Tratamientos capilares">
+    <defs>
+        <linearGradient id="bgSvcTrat" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a1424"/>
+            <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <radialGradient id="haloTrat" cx="0.5" cy="0.5" r="0.6">
+            <stop offset="0%" stop-color="#d49b3a" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="#d49b3a" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="dropGold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff5d8"/>
+            <stop offset="40%" stop-color="#f4d870"/>
+            <stop offset="100%" stop-color="#a85828"/>
+        </linearGradient>
+        <filter id="grainTrat"><feTurbulence baseFrequency="0.9" numOctaves="2" seed="66"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+    </defs>
+
+    <rect width="800" height="600" fill="url(#bgSvcTrat)"/>
+    <rect width="800" height="600" fill="url(#haloTrat)"/>
+
+    <!-- Dropper bottle -->
+    <g transform="translate(330, 320)">
+        <!-- bottle body -->
+        <rect x="-60" y="-40" width="120" height="180" rx="14" fill="#1a0a08"/>
+        <rect x="-60" y="-40" width="120" height="180" rx="14" fill="none" stroke="url(#dropGold)" stroke-width="2"/>
+        <!-- label -->
+        <rect x="-50" y="40" width="100" height="80" fill="#0c0a14"/>
+        <text x="0" y="62" font-family="JetBrains Mono, monospace" font-size="9" fill="#d49b3a" text-anchor="middle" letter-spacing="2">KERATINA</text>
+        <text x="0" y="78" font-family="JetBrains Mono, monospace" font-size="7" fill="#e8d8c4" text-anchor="middle" letter-spacing="1">100 ML · USO PROF.</text>
+        <line x1="-30" y1="92" x2="30" y2="92" stroke="#d49b3a" stroke-width="0.5"/>
+        <text x="0" y="108" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#e8784a" text-anchor="middle">— premium —</text>
+        <!-- cap -->
+        <rect x="-25" y="-80" width="50" height="40" rx="6" fill="url(#dropGold)"/>
+        <rect x="-25" y="-80" width="50" height="40" rx="6" fill="none" stroke="#1a0a08" stroke-width="1"/>
+        <!-- dropper tube -->
+        <line x1="0" y1="-40" x2="0" y2="20" stroke="#d49b3a" stroke-width="1.5" opacity="0.6"/>
+        <!-- liquid inside -->
+        <rect x="-50" y="40" width="100" height="80" rx="8" fill="#a85828" opacity="0.4"/>
+    </g>
+
+    <!-- Falling droplets -->
+    <g>
+        <path d="M 460 180 Q 455 200, 460 220 Q 470 200, 460 180 Z" fill="url(#dropGold)"/>
+        <path d="M 510 240 Q 506 256, 510 272 Q 518 256, 510 240 Z" fill="url(#dropGold)" opacity="0.85"/>
+        <path d="M 480 320 Q 477 333, 480 346 Q 486 333, 480 320 Z" fill="url(#dropGold)" opacity="0.7"/>
+        <path d="M 540 380 Q 537 392, 540 404 Q 546 392, 540 380 Z" fill="url(#dropGold)" opacity="0.55"/>
+    </g>
+
+    <!-- Single large drop (right side) -->
+    <g transform="translate(620, 280)" opacity="0.95">
+        <path d="M 0 -60 Q 30 0, 30 30 A 30 30 0 1 1 -30 30 Q -30 0, 0 -60 Z" fill="url(#dropGold)"/>
+        <ellipse cx="-8" cy="0" rx="6" ry="14" fill="#fff5d8" opacity="0.7"/>
+    </g>
+
+    <!-- Hair strand (curly, healthy) -->
+    <g transform="translate(150, 460)" opacity="0.6" stroke="#e8d8c4" stroke-width="2" fill="none" stroke-linecap="round">
+        <path d="M 0 0 Q -10 -30, 10 -50 Q 30 -70, 10 -100 Q -10 -120, 20 -140"/>
+        <path d="M 40 10 Q 30 -20, 50 -40 Q 70 -60, 50 -90"/>
+    </g>
+
+    <rect x="20" y="20" width="760" height="560" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.5"/>
+    <rect x="30" y="30" width="740" height="540" fill="none" stroke="#d49b3a" stroke-width="0.3" opacity="0.3"/>
+
+    <text x="50" y="60" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.6">PL. III — SERVICIOS</text>
+    <text x="750" y="60" font-family="JetBrains Mono, monospace" font-size="11" fill="#d49b3a" text-anchor="end" opacity="0.7">Nº 005 — TRATAMIENTO</text>
+
+    <text x="400" y="540" font-family="Playfair Display, serif" font-style="italic" font-size="22" fill="#e8d8c4" text-anchor="middle">Tratamientos</text>
+    <text x="400" y="565" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" text-anchor="middle" letter-spacing="2">DESDE 450 BS · 150 MIN</text>
+
+    <rect width="800" height="600" filter="url(#grainTrat)" opacity="0.6"/>
+</svg>

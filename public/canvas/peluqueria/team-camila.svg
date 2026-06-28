@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Retrato simulado de Camila M., Directora y Colorista">
+    <defs>
+        <linearGradient id="bgCamila" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a1424"/>
+            <stop offset="55%" stop-color="#2a1c30"/>
+            <stop offset="100%" stop-color="#050308"/>
+        </linearGradient>
+        <linearGradient id="hairCamila" x1="0.2" y1="0" x2="0.8" y2="1">
+            <stop offset="0%" stop-color="#3a1f1a"/>
+            <stop offset="60%" stop-color="#5a2a20"/>
+            <stop offset="100%" stop-color="#1a0a08"/>
+        </linearGradient>
+        <linearGradient id="skinCamila" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8c4a0"/>
+            <stop offset="100%" stop-color="#c89878"/>
+        </linearGradient>
+        <linearGradient id="goldCamila" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#f4d870"/>
+            <stop offset="40%" stop-color="#d49b3a"/>
+            <stop offset="100%" stop-color="#8a5a18"/>
+        </linearGradient>
+        <radialGradient id="coralHaloCamila" cx="0.5" cy="0.3" r="0.6">
+            <stop offset="0%" stop-color="#e8784a" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#e8784a" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="grainCamila">
+            <feTurbulence baseFrequency="0.9" numOctaves="2" seed="3"/>
+            <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"/>
+            <feComposite in2="SourceGraphic" operator="in"/>
+        </filter>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="1000" fill="url(#bgCamila)"/>
+    <rect width="800" height="1000" fill="url(#coralHaloCamila)"/>
+
+    <!-- Subtle hair-light radial -->
+    <radialGradient id="hairLightCamila" cx="0.5" cy="0.18" r="0.5">
+        <stop offset="0%" stop-color="#d49b3a" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#d49b3a" stop-opacity="0"/>
+    </radialGradient>
+    <rect width="800" height="1000" fill="url(#hairLightCamila)"/>
+
+    <!-- Shoulders / top -->
+    <path d="M 100 1000 L 100 850 Q 200 720, 400 720 Q 600 720, 700 850 L 700 1000 Z" fill="#0c0a14"/>
+    <path d="M 100 1000 L 100 850 Q 200 720, 400 720 Q 600 720, 700 850 L 700 1000 Z" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- Neck -->
+    <rect x="340" y="600" width="120" height="140" fill="url(#skinCamila)"/>
+
+    <!-- Scissors detail (colorist) -->
+    <g transform="translate(620, 760) rotate(-15)" opacity="0.7">
+        <circle cx="0" cy="0" r="14" fill="none" stroke="#d49b3a" stroke-width="2"/>
+        <circle cx="36" cy="0" r="14" fill="none" stroke="#d49b3a" stroke-width="2"/>
+        <line x1="0" y1="0" x2="48" y2="-12" stroke="#d49b3a" stroke-width="2"/>
+        <line x1="0" y1="0" x2="48" y2="12" stroke="#d49b3a" stroke-width="2"/>
+    </g>
+
+    <!-- Head shape -->
+    <ellipse cx="400" cy="430" rx="135" ry="170" fill="url(#skinCamila)"/>
+
+    <!-- Hair (long, wavy) -->
+    <path d="M 270 360 Q 260 220, 400 200 Q 540 220, 530 360 Q 545 410, 540 520 Q 555 600, 540 660 L 500 660 Q 510 580, 500 500 Q 510 420, 470 380 Q 400 350, 330 380 Q 290 420, 300 500 Q 290 580, 300 660 L 260 660 Q 245 600, 260 520 Q 255 410, 270 360 Z" fill="url(#hairCamila)"/>
+
+    <!-- Hair highlights (coral balayage) -->
+    <path d="M 290 380 Q 310 280, 400 270 Q 490 280, 510 380" fill="none" stroke="#e8784a" stroke-width="2" opacity="0.5"/>
+    <path d="M 280 460 Q 285 380, 320 320" fill="none" stroke="#d49b3a" stroke-width="1.5" opacity="0.6"/>
+    <path d="M 520 460 Q 515 380, 480 320" fill="none" stroke="#d49b3a" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Eyes -->
+    <g>
+        <ellipse cx="358" cy="425" rx="14" ry="8" fill="#1a0a08"/>
+        <ellipse cx="442" cy="425" rx="14" ry="8" fill="#1a0a08"/>
+        <circle cx="361" cy="423" r="3" fill="#e8d8c4"/>
+        <circle cx="445" cy="423" r="3" fill="#e8d8c4"/>
+        <!-- eyebrows -->
+        <path d="M 340 405 Q 358 398, 376 405" stroke="#3a1f1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M 424 405 Q 442 398, 460 405" stroke="#3a1f1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Nose -->
+    <path d="M 400 450 Q 396 480, 392 495 Q 400 500, 408 495 Q 404 480, 400 450" fill="none" stroke="#a87858" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Lips -->
+    <path d="M 380 525 Q 400 530, 420 525 Q 412 540, 400 542 Q 388 540, 380 525 Z" fill="#c8523a"/>
+    <path d="M 380 525 Q 400 528, 420 525" stroke="#8a3520" stroke-width="1" fill="none"/>
+
+    <!-- Earrings (gold) -->
+    <circle cx="266" cy="450" r="3" fill="#d49b3a"/>
+    <circle cx="534" cy="450" r="3" fill="#d49b3a"/>
+
+    <!-- Frame border (gold thin) -->
+    <rect x="20" y="20" width="760" height="960" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.5"/>
+    <rect x="30" y="30" width="740" height="940" fill="none" stroke="#d49b3a" stroke-width="0.3" opacity="0.3"/>
+
+    <!-- Top-left plate label -->
+    <text x="50" y="70" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#e8d8c4" opacity="0.6">PL. II — EQUIPO</text>
+
+    <!-- Top-right catalog number -->
+    <text x="750" y="70" font-family="JetBrains Mono, monospace" font-size="12" fill="#d49b3a" text-anchor="end" opacity="0.7">Nº 001 — MMXXVI</text>
+
+    <!-- Bottom caption -->
+    <text x="400" y="940" font-family="Playfair Display, serif" font-style="italic" font-size="22" fill="#e8d8c4" text-anchor="middle">Camila M.</text>
+    <text x="400" y="965" font-family="JetBrains Mono, monospace" font-size="11" fill="#d49b3a" text-anchor="middle" letter-spacing="2">DIRECTORA · COLORISTA</text>
+
+    <!-- Grain overlay -->
+    <rect width="800" height="1000" filter="url(#grainCamila)" opacity="0.6"/>
+</svg>

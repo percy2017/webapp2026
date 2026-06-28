@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Galería — Balayage">
+    <defs>
+        <linearGradient id="bgGBal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1424"/><stop offset="100%" stop-color="#050308"/></linearGradient>
+        <linearGradient id="hairBal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a1f0e"/><stop offset="50%" stop-color="#7a4818"/><stop offset="80%" stop-color="#d49b3a"/><stop offset="100%" stop-color="#f4d870"/></linearGradient>
+        <radialGradient id="haloBal" cx="0.5" cy="0.35" r="0.55"><stop offset="0%" stop-color="#d49b3a" stop-opacity="0.45"/><stop offset="100%" stop-color="#d49b3a" stop-opacity="0"/></radialGradient>
+        <filter id="grainGBal"><feTurbulence baseFrequency="0.9" numOctaves="2" seed="202"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+    </defs>
+    <rect width="600" height="600" fill="url(#bgGBal)"/>
+    <rect width="600" height="600" fill="url(#haloBal)"/>
+    <g transform="translate(300, 320)">
+        <path d="M -150 280 L -150 180 Q -80 120, 0 120 Q 80 120, 150 180 L 150 280 Z" fill="#0a0a14"/>
+        <rect x="-30" y="20" width="60" height="100" fill="#c89878"/>
+        <ellipse cx="0" cy="-50" rx="85" ry="110" fill="#c89878"/>
+        <!-- long wavy hair with balayage -->
+        <path d="M -100 -90 Q -110 -200, 0 -215 Q 110 -200, 100 -90 Q 120 0, 110 80 Q 130 180, 110 240 L 70 240 Q 90 180, 80 80 Q 90 -20, 60 -40 Q 0 -55, -60 -40 Q -90 -20, -80 80 Q -90 180, -70 240 L -110 240 Q -130 180, -110 80 Q -120 0, -100 -90 Z" fill="url(#hairBal)"/>
+        <path d="M -70 -160 Q -50 -180, 0 -185" stroke="#fff5d8" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <path d="M 70 -160 Q 50 -180, 0 -185" stroke="#fff5d8" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <ellipse cx="-30" cy="-50" rx="6" ry="3" fill="#1a0e08"/>
+        <ellipse cx="30" cy="-50" rx="6" ry="3" fill="#1a0e08"/>
+        <path d="M -10 -10 Q 0 -3, 10 -10" stroke="#8a3520" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <g fill="#f4d870" opacity="0.8"><path d="M 90 80 L 94 90 L 104 94 L 94 98 L 90 108 L 86 98 L 76 94 L 86 90 Z"/></g>
+    <text x="40" y="50" font-family="JetBrains Mono, monospace" font-size="10" fill="#d49b3a" opacity="0.7" letter-spacing="2">Nº 015 · BALAYAGE</text>
+    <text x="560" y="570" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#e8d8c4" opacity="0.7" text-anchor="end">Balayage</text>
+    <rect x="15" y="15" width="570" height="570" fill="none" stroke="#d49b3a" stroke-width="0.5" opacity="0.5"/>
+    <rect width="600" height="600" filter="url(#grainGBal)" opacity="0.5"/>
+</svg>
