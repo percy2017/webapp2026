@@ -8,9 +8,9 @@ import {
     Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
-import AppLayout from '@/layouts/app-layout';
-import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/confirm-dialog';
+import { IconPicker, getMenuIcon } from '@/components/icon-picker';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -29,7 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { IconPicker, getMenuIcon } from '@/components/icon-picker';
+import AppLayout from '@/layouts/app-layout';
 import {
     destroy as destroyRoute,
     down as downRoute,
@@ -82,14 +82,17 @@ const EMPTY_FORM: FormState = {
 
 function flattenForReorder(items: MenuItem[]): MenuItem[] {
     const result: MenuItem[] = [];
+
     for (const item of items) {
         result.push(item);
+
         if (item.children && item.children.length > 0) {
             for (const child of item.children) {
                 result.push({ ...child, parent_id: item.id });
             }
         }
     }
+
     return result;
 }
 
@@ -170,7 +173,10 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
     }
 
     function handleDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         router.delete(destroyRoute(deleting.id).url, {
             preserveScroll: true,
             onFinish: () => setDeleting(null),
@@ -220,6 +226,7 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
                         <ul className="divide-y">
                             {items.map((item) => {
                                 const Icon = getMenuIcon(item.icon);
+
                                 return (
                                     <MenuItemRow
                                         key={item.id}
@@ -228,14 +235,13 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
                                         onAddChild={() => openCreate(item)}
                                         onEdit={() => openEdit(item)}
                                         onDelete={() => setDeleting(item)}
-                                        onMove={(dir) =>
-                                            handleMove(item, dir)
-                                        }
+                                        onMove={(dir) => handleMove(item, dir)}
                                     >
                                         {item.children?.map((child) => {
                                             const ChildIcon = getMenuIcon(
                                                 child.icon,
                                             );
+
                                             return (
                                                 <MenuItemRow
                                                     key={child.id}
@@ -266,11 +272,7 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
 
                 <p className="text-xs text-muted-foreground">
                     Los items activos se muestran en el header público (
-                    <Link
-                        href="/"
-                        target="_blank"
-                        className="underline"
-                    >
+                    <Link href="/" target="_blank" className="underline">
                         ver sitio
                     </Link>
                     ).
@@ -280,7 +282,9 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
             <Dialog
                 open={creating || editing !== null}
                 onOpenChange={(open) => {
-                    if (!open) closeDialogs();
+                    if (!open) {
+                        closeDialogs();
+                    }
                 }}
             >
                 <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
@@ -303,7 +307,9 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
                         className="space-y-4 py-2"
                     >
                         <div className="space-y-2">
-                            <Label htmlFor="menu-parent">Padre (opcional)</Label>
+                            <Label htmlFor="menu-parent">
+                                Padre (opcional)
+                            </Label>
                             <Select
                                 value={form.parent_id || 'none'}
                                 onValueChange={(v) =>
@@ -324,9 +330,7 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
                                         <SelectItem
                                             key={p.id}
                                             value={String(p.id)}
-                                            disabled={
-                                                editing?.id === p.id
-                                            }
+                                            disabled={editing?.id === p.id}
                                         >
                                             {p.label}
                                         </SelectItem>
@@ -382,9 +386,7 @@ export default function SiteMenuIndex({ items, parentOptions }: Props) {
 
                         <IconPicker
                             value={form.icon}
-                            onChange={(icon) =>
-                                setForm({ ...form, icon })
-                            }
+                            onChange={(icon) => setForm({ ...form, icon })}
                         />
                         {errors.icon && (
                             <p className="text-xs text-destructive">
@@ -504,9 +506,7 @@ function MenuItemRow({
                     <div className="flex items-center gap-2">
                         <span
                             className={
-                                isChild
-                                    ? 'text-sm font-medium'
-                                    : 'font-medium'
+                                isChild ? 'text-sm font-medium' : 'font-medium'
                             }
                         >
                             {item.label}
@@ -517,25 +517,15 @@ function MenuItemRow({
                             </span>
                         )}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                        {item.href}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{item.href}</p>
                 </div>
                 {onAddChild && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={onAddChild}
-                    >
+                    <Button variant="ghost" size="sm" onClick={onAddChild}>
                         <Plus className="mr-1 h-3.5 w-3.5" />
                         Sub-item
                     </Button>
                 )}
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={onEdit}
-                >
+                <Button variant="outline" size="sm" onClick={onEdit}>
                     Editar
                 </Button>
                 <Button

@@ -1,17 +1,17 @@
 import type { ComponentType } from 'react';
 import { BeforeAfterBlock } from '@site/blocks/before-after-block';
 import { CountdownBlock } from '@site/blocks/countdown-block';
+import { GalleryBlock } from '@site/blocks/gallery-block';
+import { ScheduleBlock } from '@site/blocks/schedule-block';
+import { StatsBlock } from '@site/blocks/stats-block';
 import { CtaSection } from '@site/sections/cta-section';
 import { FaqSection } from '@site/sections/faq-section';
 import { FeaturesSection } from '@site/sections/features-section';
-import { GalleryBlock } from '@site/blocks/gallery-block';
 import { HeroSection } from '@site/sections/hero-section';
 import { LocationSection } from '@site/sections/location-section';
 import { PricingSection } from '@site/sections/pricing-section';
-import { ScheduleBlock } from '@site/blocks/schedule-block';
 import { ServicesGridSection } from '@site/sections/services-grid-section';
 import { SliderSection } from '@site/sections/slider-section';
-import { StatsBlock } from '@site/blocks/stats-block';
 import { TeamSection } from '@site/sections/team-section';
 import { TestimonialsSection } from '@site/sections/testimonials-section';
 
@@ -37,7 +37,8 @@ export type ContentFieldType =
     | 'boolean'
     | 'list'
     | 'icon'
-    | 'radio';
+    | 'radio'
+    | 'slot';
 
 export type FieldOption = {
     label: string;
@@ -57,6 +58,12 @@ export type ContentField = {
      * picker should filter for images or videos. Defaults to 'image'.
      */
     mediaKind?: 'image' | 'video';
+    /**
+     * Optional callback used by array/list fields to render a summary
+     * of each row in the Puck sidebar. The function receives the item
+     * and should return a short human-readable label.
+     */
+    getItemSummary?: (item: Record<string, unknown>) => string;
 };
 
 export type SectionDefinition = {
@@ -95,10 +102,22 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             { key: 'eyebrow', label: 'Etiqueta superior', type: 'text' },
             { key: 'headline', label: 'Titular', type: 'text' },
             { key: 'subheadline', label: 'Subtítulo', type: 'textarea' },
-            { key: 'cta_label', label: 'Texto del botón principal', type: 'text' },
+            {
+                key: 'cta_label',
+                label: 'Texto del botón principal',
+                type: 'text',
+            },
             { key: 'cta_href', label: 'URL del botón principal', type: 'text' },
-            { key: 'secondary_label', label: 'Texto del botón secundario', type: 'text' },
-            { key: 'secondary_href', label: 'URL del botón secundario', type: 'text' },
+            {
+                key: 'secondary_label',
+                label: 'Texto del botón secundario',
+                type: 'text',
+            },
+            {
+                key: 'secondary_href',
+                label: 'URL del botón secundario',
+                type: 'text',
+            },
             {
                 key: 'source',
                 label: 'Fuente de la imagen',
@@ -133,13 +152,12 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             eyebrow: 'Testimonios',
             title: 'Lo que dicen nuestros clientes',
             description: 'Confianza real de personas reales.',
-            columns: '3',
+            columns: '4',
             variant: 'card',
-            show_rating: false,
+            show_rating: true,
             items: [
                 {
-                    quote:
-                        'Cambió completamente cómo trabajamos. En una semana ya éramos 3x más rápidos.',
+                    quote: 'Cambió completamente cómo trabajamos. En una semana ya éramos 3x más rápidos.',
                     author_name: 'María Pérez',
                     author_role: 'CTO, Acme Inc.',
                     author_image_media_id: null,
@@ -147,8 +165,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     rating: 5,
                 },
                 {
-                    quote:
-                        'La mejor inversión que hicimos este año. El soporte responde en minutos.',
+                    quote: 'La mejor inversión que hicimos este año. El soporte responde en minutos.',
                     author_name: 'Juan López',
                     author_role: 'CEO, Studio Norte',
                     author_image_media_id: null,
@@ -156,12 +173,19 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     rating: 5,
                 },
                 {
-                    quote:
-                        'Simple, rápido y funciona. Sin sorpresas ni curvas de aprendizaje.',
+                    quote: 'Simple, rápido y funciona. Sin sorpresas ni curvas de aprendizaje.',
                     author_name: 'Lucía Méndez',
                     author_role: 'Head of Growth, Beta Co.',
                     author_image_media_id: null,
                     author_image_url: '/blocks/avatar-streaming-diego.svg',
+                    rating: 5,
+                },
+                {
+                    quote: 'Lo recomiendo a todo el equipo. La curva de adopción fue mínima.',
+                    author_name: 'Diego Salas',
+                    author_role: 'Founder, Delta Studio',
+                    author_image_media_id: null,
+                    author_image_url: '/blocks/avatar-admin.svg',
                     rating: 5,
                 },
             ],
@@ -242,7 +266,8 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
         component: FaqSection,
         defaultContent: {
             title: 'Preguntas frecuentes',
-            subtitle: 'Respuestas a las dudas más comunes de nuestros clientes.',
+            subtitle:
+                'Respuestas a las dudas más comunes de nuestros clientes.',
             items: [
                 {
                     question: '¿Cuánto tarda en estar listo mi sitio?',
@@ -316,11 +341,25 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     cta_href: '#contact',
                 },
                 {
+                    name: 'Business',
+                    description: 'Para equipos que necesitan colaboración.',
+                    price: '$79',
+                    features: [
+                        { feature: 'Todo lo de Pro' },
+                        { feature: 'Multi-usuario (5 seats)' },
+                        { feature: 'Workflows de aprobación' },
+                        { feature: 'API & webhooks' },
+                    ],
+                    highlighted: false,
+                    cta_label: 'Probar Business',
+                    cta_href: '#contact',
+                },
+                {
                     name: 'Enterprise',
                     description: 'Para equipos y empresas.',
                     price: 'A medida',
                     features: [
-                        { feature: 'Todo lo de Pro' },
+                        { feature: 'Todo lo de Business' },
                         { feature: 'SSO y roles avanzados' },
                         { feature: 'SLA dedicado' },
                         { feature: 'Onboarding personalizado' },
@@ -506,7 +545,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             title: 'Las manos detrás de cada look',
             subtitle:
                 'Especialistas con años de experiencia, capacitadas en las últimas tendencias.',
-            columns: '3',
+            columns: '4',
             variant: 'card',
             items: [
                 {
@@ -548,6 +587,20 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     photo_media_id: null,
                     photo_url: '/blocks/avatar-streaming-diego.svg',
                     schedule: 'Lun a Sáb',
+                    instagram_handle: '',
+                },
+                {
+                    name: 'Sofía P.',
+                    role: 'Tratamientos & Keratina',
+                    specialties: [
+                        { specialty: 'Keratina' },
+                        { specialty: 'Alisado' },
+                        { specialty: 'Nutrición' },
+                    ],
+                    source: 'url',
+                    photo_media_id: null,
+                    photo_url: '/blocks/avatar-admin.svg',
+                    schedule: 'Mié a Sáb',
                     instagram_handle: '',
                 },
             ],
@@ -643,7 +696,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
             title: 'Nuestros servicios',
             subtitle:
                 'Conocé qué incluye cada uno, cuánto tarda y desde cuánto sale.',
-            columns: '3',
+            columns: '4',
             default_currency: 'Bs.',
             items: [
                 {
@@ -684,6 +737,20 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     duration_minutes: 30,
                     price_from: '40',
                     category: 'Música',
+                    cta_label: 'Pedir por WhatsApp',
+                    cta_href: '#contact',
+                    highlighted: false,
+                },
+                {
+                    title: 'HBO Max + Paramount',
+                    description:
+                        'Series originales, películas estreno y deportes en vivo.',
+                    source: 'url',
+                    image_media_id: null,
+                    image_url: '/blocks/platform-hbo.svg',
+                    duration_minutes: 30,
+                    price_from: '60',
+                    category: 'Video',
                     cta_label: 'Pedir por WhatsApp',
                     cta_href: '#contact',
                     highlighted: false,
@@ -731,7 +798,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                             { label: 'Archivo de Medios', value: 'media' },
                         ],
                     },
-                    { key: 'image_url', label: 'URL de la imagen', type: 'text' },
+                    {
+                        key: 'image_url',
+                        label: 'URL de la imagen',
+                        type: 'text',
+                    },
                     {
                         key: 'image_media_id',
                         label: 'Imagen de la biblioteca',
@@ -921,8 +992,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
         component: BeforeAfterBlock,
         defaultContent: {
             title: 'Transformaciones reales',
-            subtitle:
-                'Deslizá para ver el antes y el después de cada trabajo.',
+            subtitle: 'Deslizá para ver el antes y el después de cada trabajo.',
             columns: '1',
             aspect: 'video',
             columns_mobile_stack: true,
@@ -983,7 +1053,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                             { label: 'Archivo de Medios', value: 'media' },
                         ],
                     },
-                    { key: 'before_url', label: 'URL imagen "antes"', type: 'text' },
+                    {
+                        key: 'before_url',
+                        label: 'URL imagen "antes"',
+                        type: 'text',
+                    },
                     {
                         key: 'before_media_id',
                         label: 'Imagen "antes" de la biblioteca',
@@ -999,7 +1073,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                             { label: 'Archivo de Medios', value: 'media' },
                         ],
                     },
-                    { key: 'after_url', label: 'URL imagen "después"', type: 'text' },
+                    {
+                        key: 'after_url',
+                        label: 'URL imagen "después"',
+                        type: 'text',
+                    },
                     {
                         key: 'after_media_id',
                         label: 'Imagen "después" de la biblioteca',
@@ -1045,8 +1123,7 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                 key: 'target_date',
                 label: 'Fecha objetivo',
                 type: 'text',
-                helper:
-                    'ISO datetime: 2026-12-31T23:59:59 o fecha simple: 2026-12-31',
+                helper: 'ISO datetime: 2026-12-31T23:59:59 o fecha simple: 2026-12-31',
             },
             { key: 'title', label: 'Título', type: 'text' },
             { key: 'expired_text', label: 'Texto al expirar', type: 'text' },
@@ -1102,10 +1179,30 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                 'Cifras que resumen el trabajo de todo el equipo y la confianza de nuestros clientes.',
             accent: 'primary',
             items: [
-                { icon: 'Users', value: 320, suffix: '+', label: 'Clientes activos' },
-                { icon: 'Star', value: 4.9, suffix: '/5', label: 'Calificación promedio' },
-                { icon: 'Clock', value: 4, suffix: ' años', label: 'En el rubro' },
-                { icon: 'Heart', value: 1200, suffix: '+', label: 'Pedidos completados' },
+                {
+                    icon: 'Users',
+                    value: 320,
+                    suffix: '+',
+                    label: 'Clientes activos',
+                },
+                {
+                    icon: 'Star',
+                    value: 4.9,
+                    suffix: '/5',
+                    label: 'Calificación promedio',
+                },
+                {
+                    icon: 'Clock',
+                    value: 4,
+                    suffix: ' años',
+                    label: 'En el rubro',
+                },
+                {
+                    icon: 'Heart',
+                    value: 1200,
+                    suffix: '+',
+                    label: 'Pedidos completados',
+                },
             ],
         },
         schema: [
@@ -1158,22 +1255,49 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
     schedule: {
         id: 'schedule',
         label: 'Agenda semanal',
-        description: 'Grid semanal con días, horarios y estado (abierto/cerrado).',
+        description:
+            'Grid semanal con días, horarios y estado (abierto/cerrado).',
         icon: 'CalendarDays',
         component: ScheduleBlock,
         defaultContent: {
             eyebrow: 'Agenda semanal',
             title: 'Nuestros horarios',
-            subtitle: 'Reservá tu turno en el día y horario que más te convenga.',
+            subtitle:
+                'Reservá tu turno en el día y horario que más te convenga.',
             timezone: 'America/La_Paz',
             accent: 'primary',
             show_today: true,
             slots: [
-                { day: 'Lunes', time: '09–18', title: 'Atención al cliente', active: true },
-                { day: 'Martes', time: '09–18', title: 'Atención al cliente', active: true },
-                { day: 'Miércoles', time: '09–18', title: 'Atención al cliente', active: true },
-                { day: 'Jueves', time: '09–18', title: 'Atención al cliente', active: true },
-                { day: 'Viernes', time: '09–18', title: 'Atención al cliente', active: true },
+                {
+                    day: 'Lunes',
+                    time: '09–18',
+                    title: 'Atención al cliente',
+                    active: true,
+                },
+                {
+                    day: 'Martes',
+                    time: '09–18',
+                    title: 'Atención al cliente',
+                    active: true,
+                },
+                {
+                    day: 'Miércoles',
+                    time: '09–18',
+                    title: 'Atención al cliente',
+                    active: true,
+                },
+                {
+                    day: 'Jueves',
+                    time: '09–18',
+                    title: 'Atención al cliente',
+                    active: true,
+                },
+                {
+                    day: 'Viernes',
+                    time: '09–18',
+                    title: 'Atención al cliente',
+                    active: true,
+                },
                 { day: 'Sábado', time: '09–13', title: 'Mañana', active: true },
                 { day: 'Domingo', time: '—', title: 'Cerrado', active: false },
             ],
@@ -1243,16 +1367,30 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                 {
                     source: 'url',
                     image_media_id: null,
-                    image_url: '/blocks/sample-gallery-1.svg',
-                    alt: 'Trabajo de muestra 1',
-                    caption: 'Trabajo destacado 1',
+                    image_url: '/blocks/gallery-balayage.svg',
+                    alt: 'Balayage',
+                    caption: 'Balayage en tonos cálidos',
                 },
                 {
                     source: 'url',
                     image_media_id: null,
-                    image_url: '/blocks/sample-gallery-2.svg',
-                    alt: 'Trabajo de muestra 2',
-                    caption: 'Trabajo destacado 2',
+                    image_url: '/blocks/gallery-corte-bob.svg',
+                    alt: 'Corte bob',
+                    caption: 'Corte bob con movimiento',
+                },
+                {
+                    source: 'url',
+                    image_media_id: null,
+                    image_url: '/blocks/gallery-color-fantasia.svg',
+                    alt: 'Color fantasia',
+                    caption: 'Color fantasía con mechas',
+                },
+                {
+                    source: 'url',
+                    image_media_id: null,
+                    image_url: '/blocks/gallery-fade.svg',
+                    alt: 'Fade',
+                    caption: 'Fade bajo con diseño de cejas',
                 },
             ],
             columns: '3',
@@ -1280,7 +1418,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                             { label: 'Archivo de Medios', value: 'media' },
                         ],
                     },
-                    { key: 'image_url', label: 'URL de la imagen', type: 'text' },
+                    {
+                        key: 'image_url',
+                        label: 'URL de la imagen',
+                        type: 'text',
+                    },
                     {
                         key: 'image_media_id',
                         label: 'Imagen de la biblioteca',
@@ -1405,6 +1547,17 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     cta_label: 'Reservar',
                     cta_href: '#contact',
                 },
+                {
+                    eyebrow: 'Bookings',
+                    title: 'Reservá tu turno online',
+                    description:
+                        'Elegí día, hora y servicio desde la web. Confirmación al instante.',
+                    source: 'url',
+                    image_media_id: null,
+                    image_url: '/blocks/hero-peluqueria.svg',
+                    cta_label: 'Reservar ahora',
+                    cta_href: '#contact',
+                },
             ],
         },
         schema: [
@@ -1440,7 +1593,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                     { label: 'Redondeados', value: 'xl' },
                 ],
             },
-            { key: 'autoplay', label: 'Avanzar automáticamente', type: 'boolean' },
+            {
+                key: 'autoplay',
+                label: 'Avanzar automáticamente',
+                type: 'boolean',
+            },
             {
                 key: 'interval',
                 label: 'Intervalo de autoplay (segundos)',
@@ -1457,7 +1614,11 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                 itemSchema: [
                     { key: 'eyebrow', label: 'Etiqueta', type: 'text' },
                     { key: 'title', label: 'Título', type: 'text' },
-                    { key: 'description', label: 'Descripción', type: 'textarea' },
+                    {
+                        key: 'description',
+                        label: 'Descripción',
+                        type: 'textarea',
+                    },
                     {
                         key: 'source',
                         label: 'Fuente de la imagen',
@@ -1467,14 +1628,22 @@ export const SECTION_REGISTRY: Record<string, SectionDefinition> = {
                             { label: 'Archivo de Medios', value: 'media' },
                         ],
                     },
-                    { key: 'image_url', label: 'URL de la imagen', type: 'text' },
+                    {
+                        key: 'image_url',
+                        label: 'URL de la imagen',
+                        type: 'text',
+                    },
                     {
                         key: 'image_media_id',
                         label: 'Imagen de la biblioteca',
                         type: 'image',
                         mediaKind: 'image',
                     },
-                    { key: 'cta_label', label: 'Texto del botón', type: 'text' },
+                    {
+                        key: 'cta_label',
+                        label: 'Texto del botón',
+                        type: 'text',
+                    },
                     { key: 'cta_href', label: 'URL del botón', type: 'text' },
                 ],
             },

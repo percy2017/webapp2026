@@ -21,11 +21,11 @@ import {
     Store,
     Stethoscope,
     Tag,
-    type LucideIcon,
     Users,
     UtensilsCrossed,
     Video,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 export const TEMPLATE_ICONS: Record<string, LucideIcon> = {
     Home,
@@ -58,5 +58,6 @@ export function getTemplateIcon(name: string | null | undefined): LucideIcon {
     if (name && TEMPLATE_ICONS[name]) {
         return TEMPLATE_ICONS[name];
     }
+
     return LayoutTemplate;
 }

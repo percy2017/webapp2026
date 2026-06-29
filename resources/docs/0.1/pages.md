@@ -7,10 +7,10 @@ Las páginas son la parte central de WebApp: tu **tarjeta de presentación digit
 1. En la sidebar, andá a **Sitio público → Páginas**.
 2. Hacé click en **"Nueva página"**.
 3. En la pantalla de creación:
-   - **Elegí una plantilla** (obligatorio) — Hacé click en una de las plantillas disponibles (Peluquería, Streaming, etc.). Cada una viene con contenido de ejemplo.
-   - **Nombre** — El nombre interno de la página (ej: "Estudio Camila").
-   - **Slug** — La URL pública (ej: `estudio-camila`). El sitio será accesible en `tusitio.com/estudio-camila`.
-   - **Descripción** — Una descripción corta para uso interno.
+    - **Elegí una plantilla** (obligatorio) — Hacé click en una de las plantillas disponibles (Peluquería, Streaming, etc.). Cada una viene con contenido de ejemplo.
+    - **Nombre** — El nombre interno de la página (ej: "Estudio Camila").
+    - **Slug** — La URL pública (ej: `estudio-camila`). El sitio será accesible en `tusitio.com/estudio-camila`.
+    - **Descripción** — Una descripción corta para uso interno.
 4. Click en **"Crear página"**.
 
 La página se crea con todas las secciones, bloques y menú de la plantilla elegida. Queda **inactiva** por defecto (tenés que activarla a mano).

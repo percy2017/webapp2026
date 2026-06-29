@@ -7,6 +7,7 @@ La configuración del sitio controla los **datos globales** de tu negocio: nombr
 En la sidebar, andá a **Sitio público → Ajuste**. Vas a ver dos secciones:
 
 ### Identidad y SEO
+
 - **Nombre del sitio** — El nombre de tu negocio (ej: "Estudio Camila"). Aparece en el título del navegador y en el header de tu sitio.
 - **Tagline** — Una descripción corta (ej: "Peluquería & Estética · La Paz").
 - **Logo** — Tu logo. Aparece en la navbar y como favicon.
@@ -15,6 +16,7 @@ En la sidebar, andá a **Sitio público → Ajuste**. Vas a ver dos secciones:
 - **Meta description** (SEO) — La descripción que aparece en los resultados de Google. Por default usa el tagline.
 
 ### Imágenes
+
 - Subí tu logo y favicon desde la biblioteca de medios o arrastrándolos al campo.
 
 ## Contacto
@@ -26,6 +28,7 @@ En la misma página, abajo, podés configurar:
 - **Dirección** — Dirección física.
 
 Estos datos se usan en:
+
 - La sección "Ubicación" de las plantillas.
 - El chat widget (para mostrar el contacto al visitante).
 - Futuras integraciones (formularios de contacto, etc).

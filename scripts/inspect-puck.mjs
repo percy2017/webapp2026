@@ -1,5 +1,5 @@
-import ts from 'typescript';
 import fs from 'node:fs';
+import ts from 'typescript';
 
 const src = fs.readFileSync('resources/js/site/lib/puck-config.tsx', 'utf8');
 // Strip imports and type exports — they reference modules that don't resolve
@@ -34,10 +34,12 @@ new Function('exports', 'module', wrapper)(mod.exports, mod);
 try {
   const cfg = mod.exports.buildPuckConfig({ theme: {} });
   console.log('=== Puck categories ===');
+
   for (const [catId, cat] of Object.entries(cfg.categories)) {
     console.log('  ' + catId + ' (' + cat.title + ') — ' + cat.components.length + ' components:');
     cat.components.forEach(c => console.log('    - ' + c));
   }
+
   console.log('\n=== All components (' + Object.keys(cfg.components).length + ') ===');
   Object.keys(cfg.components).forEach(c => console.log('  - ' + c));
 } catch (e) {

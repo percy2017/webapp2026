@@ -1,24 +1,52 @@
-import { Loader2, Lock, Mail, MessageCircle, Phone, User as UserIcon } from 'lucide-react';
+import {
+    Loader2,
+    Lock,
+    Mail,
+    MessageCircle,
+    Phone,
+    User as UserIcon,
+    X,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { csrfJson } from '@/lib/csrf';
-import { login as loginRoute, register as registerRoute } from '@/routes/widget/auth';
+import {
+    login as loginRoute,
+    register as registerRoute,
+} from '@/routes/widget/auth';
 
 type Props = {
     onAuthed: () => void;
+    // onClose is provided so the auth view can render its own close button
+    // on mobile (where the widget's absolute-positioned close button sits
+    // outside the panel). On desktop the absolute close button is enough.
+    onClose?: () => void;
 };
 
-export function ChatAuthPanel({ onAuthed }: Props) {
+export function ChatAuthPanel({ onAuthed, onClose }: Props) {
     const [tab, setTab] = useState<'login' | 'register'>('login');
 
     return (
         <div className="flex h-full flex-col">
-            <div className="bg-primary text-primary-foreground flex items-center gap-2 px-4 py-3">
-                <MessageCircle className="h-4 w-4" />
-                <p className="text-sm font-semibold">Chat en vivo</p>
+            <div className="flex items-center justify-between gap-2 bg-primary px-4 py-3 pr-12 text-primary-foreground">
+                <div className="flex items-center gap-2">
+                    <MessageCircle className="h-4 w-4" />
+                    <p className="text-sm font-semibold">Chat en vivo</p>
+                </div>
+                {onClose && (
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded p-1 opacity-90 hover:bg-white/20 hover:opacity-100 sm:hidden"
+                        aria-label="Cerrar chat"
+                        title="Cerrar chat"
+                    >
+                        <X className="h-3.5 w-3.5" />
+                    </button>
+                )}
             </div>
 
             <Tabs
@@ -96,7 +124,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
                     Email
                 </Label>
                 <div className="relative">
-                    <Mail className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
+                    <Mail className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="chat-email"
                         type="email"
@@ -113,7 +141,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
                     Contraseña
                 </Label>
                 <div className="relative">
-                    <Lock className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
+                    <Lock className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="chat-password"
                         type="password"
@@ -126,15 +154,9 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
                 </div>
             </div>
 
-            {error && (
-                <p className="text-xs text-destructive">{error}</p>
-            )}
+            {error && <p className="text-xs text-destructive">{error}</p>}
 
-            <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Ingresando...' : 'Ingresar'}
             </Button>
         </form>
@@ -145,6 +167,7 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<Record<string, string[]>>({});
     const [loading, setLoading] = useState(false);
 
@@ -154,15 +177,23 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
         setLoading(true);
 
         try {
+            // If the user left the password blank, omit it from the
+            // payload entirely so the server falls back to its random
+            // 40-char password. Either way the visitor is logged in and
+            // the session is sticky.
+            const body: Record<string, string> = { name, email, phone };
+            if (password.trim()) body.password = password;
+
             const response = await csrfJson(registerRoute.url(), {
                 method: 'POST',
-                body: { name, email, phone },
+                body,
             });
 
             const data = await response.json().catch(() => ({}));
 
             if (!response.ok) {
                 setErrors(data?.errors ?? {});
+
                 return;
             }
 
@@ -182,7 +213,7 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                     Nombre
                 </Label>
                 <div className="relative">
-                    <UserIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
+                    <UserIcon className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="reg-name"
                         value={name}
@@ -201,7 +232,7 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                     Email
                 </Label>
                 <div className="relative">
-                    <Mail className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
+                    <Mail className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="reg-email"
                         type="email"
@@ -223,7 +254,7 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                     Teléfono
                 </Label>
                 <div className="relative">
-                    <Phone className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
+                    <Phone className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="reg-phone"
                         type="tel"
@@ -241,17 +272,36 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                     </p>
                 )}
             </div>
+            <div className="space-y-1.5">
+                <Label htmlFor="reg-password" className="text-xs">
+                    Contraseña <span className="text-muted-foreground">(opcional)</span>
+                </Label>
+                <div className="relative">
+                    <Lock className="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                        id="reg-password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="new-password"
+                        placeholder="Una clave simple para volver a entrar"
+                        className="pl-9"
+                    />
+                </div>
+                {errors.password && (
+                    <p className="text-xs text-destructive">
+                        {errors.password[0]}
+                    </p>
+                )}
+            </div>
 
-            <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Creando cuenta...' : 'Crear cuenta'}
             </Button>
 
             <p className="text-center text-[11px] text-muted-foreground">
-                Al registrarte podrás chatear con nuestro equipo.
+                Al registrarte podrás chatear con nuestro equipo. Si dejás la
+                contraseña vacía, te generamos una sesión persistente.
             </p>
         </form>
     );

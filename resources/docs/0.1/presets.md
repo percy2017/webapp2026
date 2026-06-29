@@ -5,6 +5,7 @@ Las plantillas son **diseños pre-armados** que te permiten crear una página pr
 ## Plantillas disponibles
 
 ### Peluquería & Barbería
+
 Ideal para peluquerías, barberías y salones de belleza. Incluye:
 
 - **Hero** con llamado a la acción para reservar turno.
@@ -20,6 +21,7 @@ Ideal para peluquerías, barberías y salones de belleza. Incluye:
 **Datos de ejemplo**: Estudio Camila en La Paz, Bolivia. Reservas por WhatsApp.
 
 ### Streaming
+
 Ideal para streamers, gamers y creadores de contenido. Incluye:
 
 - **Hero** con "En vivo · Todos los días 20:00 hs".

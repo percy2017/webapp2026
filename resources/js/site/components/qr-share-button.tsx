@@ -1,5 +1,6 @@
 import { QrCode, Download, Copy, Check } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -8,7 +9,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 
 type Props = {
     /**
@@ -42,6 +42,7 @@ export function QrShareButton({
 
             return;
         }
+
         if (typeof window !== 'undefined') {
             setResolvedUrl(window.location.href);
         }
@@ -69,7 +70,7 @@ export function QrShareButton({
             <Button
                 type="button"
                 size="icon"
-                className="fixed bottom-6 right-6 z-40 h-12 w-12 rounded-full shadow-lg"
+                className="fixed right-6 bottom-6 z-40 h-12 w-12 rounded-full shadow-lg"
                 aria-label={label}
             >
                 <QrCode className="h-5 w-5" />
@@ -127,10 +128,7 @@ export function QrShareButton({
 
                     <div className="flex w-full gap-2">
                         <Button asChild className="flex-1">
-                            <a
-                                href={downloadHref}
-                                download="tarjeta-qr.png"
-                            >
+                            <a href={downloadHref} download="tarjeta-qr.png">
                                 <Download className="mr-2 h-4 w-4" />
                                 Descargar PNG
                             </a>

@@ -78,7 +78,22 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
             return $this->avatarMedia?->getUrl();
         }
 
-        return $this->getFirstMedia('avatar')?->getUrl();
+        $media = $this->getFirstMedia('avatar');
+        if ($media) {
+            return $media->getUrl();
+        }
+
+        // Default fallback served directly from /public — no row in the
+        // `media` table, no file in storage/app/public. Reserved for the
+        // admin user so the system user (and any other admin) always
+        // shows a real avatar placeholder instead of bare initials.
+        // Non-admin users keep returning null so the UI shows the
+        // initials fallback until they upload their own avatar.
+        if ($this->hasRole('admin')) {
+            return '/blocks/avatar-admin.svg';
+        }
+
+        return null;
     }
 
     /**

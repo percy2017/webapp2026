@@ -1,5 +1,3 @@
-import { Head, router, usePage } from '@inertiajs/react';
-import FullCalendar from '@fullcalendar/react';
 import type {
     DateClickArg,
     DateSelectArg,
@@ -7,15 +5,18 @@ import type {
     EventDropArg,
     EventInput,
 } from '@fullcalendar/core';
+import esLocale from '@fullcalendar/core/locales/es';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
+import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import esLocale from '@fullcalendar/core/locales/es';
+import { Head, router, usePage } from '@inertiajs/react';
 import { Loader2, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/confirm-dialog';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogContent,
@@ -27,9 +28,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { destroy, store, update, events as eventsRoute } from '@/routes/agenda';
 import { admin } from '@/routes';
+import { destroy, store, update, events as eventsRoute } from '@/routes/agenda';
 
 type Props = Record<string, never>;
 
@@ -67,9 +67,15 @@ const EMPTY_FORM: EventFormState = {
 };
 
 function toLocalInput(date: Date | string | null, allDay = false): string {
-    if (!date) return '';
+    if (!date) {
+        return '';
+    }
+
     const d = typeof date === 'string' ? new Date(date) : date;
-    if (Number.isNaN(d.getTime())) return '';
+
+    if (Number.isNaN(d.getTime())) {
+        return '';
+    }
 
     const pad = (n: number) => String(n).padStart(2, '0');
     const yyyy = d.getFullYear();
@@ -87,9 +93,16 @@ function toLocalInput(date: Date | string | null, allDay = false): string {
 }
 
 function defaultEnd(start: string, allDay: boolean): string {
-    if (!start) return '';
+    if (!start) {
+        return '';
+    }
+
     const d = new Date(start);
-    if (allDay) return toLocalInput(d, true);
+
+    if (allDay) {
+        return toLocalInput(d, true);
+    }
+
     d.setHours(d.getHours() + 1);
 
     return toLocalInput(d);
@@ -122,12 +135,15 @@ export default function AgendaIndex(_: Props) {
             can_edit?: boolean;
         };
         const allDay = Boolean(event.allDay);
-        const start = event.start ? toLocalInput(new Date(event.start), allDay) : '';
+        const start = event.start
+            ? toLocalInput(new Date(event.start), allDay)
+            : '';
         const end = event.end ? toLocalInput(new Date(event.end), allDay) : '';
         setForm({
-            id: typeof event.id === 'string' || typeof event.id === 'number'
-                ? Number(event.id)
-                : undefined,
+            id:
+                typeof event.id === 'string' || typeof event.id === 'number'
+                    ? Number(event.id)
+                    : undefined,
             title: event.title ?? '',
             description: extended.description ?? '',
             start_at: start,
@@ -169,7 +185,10 @@ export default function AgendaIndex(_: Props) {
     }
 
     function handleDelete() {
-        if (!deleting?.id) return;
+        if (!deleting?.id) {
+            return;
+        }
+
         const id = Number(deleting.id);
         router.delete(destroy(id), {
             onFinish: () => setDeleting(null),
@@ -190,9 +209,11 @@ export default function AgendaIndex(_: Props) {
             can_edit?: boolean;
             can_delete?: boolean;
         };
+
         if (!extended.can_edit && !extended.can_delete) {
             return;
         }
+
         openEdit({
             id: clickInfo.event.id,
             title: clickInfo.event.title,
@@ -207,6 +228,7 @@ export default function AgendaIndex(_: Props) {
     function handleEventDrop(dropInfo: EventDropArg) {
         const event = dropInfo.event;
         const extended = (event.extendedProps ?? {}) as { can_edit?: boolean };
+
         if (!extended.can_edit) {
             dropInfo.revert();
 
@@ -242,7 +264,10 @@ export default function AgendaIndex(_: Props) {
         }).url;
 
         fetch(url, {
-            headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
             credentials: 'same-origin',
         })
             .then((r) => r.json())
@@ -264,7 +289,12 @@ export default function AgendaIndex(_: Props) {
                 <div className="agenda-calendar rounded-lg border bg-card p-4">
                     <FullCalendar
                         ref={calendarRef}
-                        plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+                        plugins={[
+                            dayGridPlugin,
+                            timeGridPlugin,
+                            listPlugin,
+                            interactionPlugin,
+                        ]}
                         initialView="dayGridMonth"
                         locale={esLocale}
                         firstDay={1}
@@ -325,7 +355,9 @@ export default function AgendaIndex(_: Props) {
                                 <Label htmlFor="start_at">Inicio</Label>
                                 <Input
                                     id="start_at"
-                                    type={form.all_day ? 'date' : 'datetime-local'}
+                                    type={
+                                        form.all_day ? 'date' : 'datetime-local'
+                                    }
                                     value={form.start_at}
                                     onChange={(e) => {
                                         const start = e.target.value;
@@ -333,9 +365,13 @@ export default function AgendaIndex(_: Props) {
                                             ...prev,
                                             start_at: start,
                                             end_at:
-                                                prev.end_at && prev.end_at >= start
+                                                prev.end_at &&
+                                                prev.end_at >= start
                                                     ? prev.end_at
-                                                    : defaultEnd(start, prev.all_day),
+                                                    : defaultEnd(
+                                                          start,
+                                                          prev.all_day,
+                                                      ),
                                         }));
                                     }}
                                     required
@@ -346,10 +382,15 @@ export default function AgendaIndex(_: Props) {
                                 <Label htmlFor="end_at">Fin</Label>
                                 <Input
                                     id="end_at"
-                                    type={form.all_day ? 'date' : 'datetime-local'}
+                                    type={
+                                        form.all_day ? 'date' : 'datetime-local'
+                                    }
                                     value={form.end_at}
                                     onChange={(e) =>
-                                        setForm({ ...form, end_at: e.target.value })
+                                        setForm({
+                                            ...form,
+                                            end_at: e.target.value,
+                                        })
                                     }
                                     disabled={form.all_day}
                                 />
@@ -390,7 +431,10 @@ export default function AgendaIndex(_: Props) {
                                 id="location"
                                 value={form.location}
                                 onChange={(e) =>
-                                    setForm({ ...form, location: e.target.value })
+                                    setForm({
+                                        ...form,
+                                        location: e.target.value,
+                                    })
                                 }
                                 placeholder="Sala, dirección..."
                             />
@@ -402,7 +446,10 @@ export default function AgendaIndex(_: Props) {
                                 id="description"
                                 value={form.description}
                                 onChange={(e) =>
-                                    setForm({ ...form, description: e.target.value })
+                                    setForm({
+                                        ...form,
+                                        description: e.target.value,
+                                    })
                                 }
                                 rows={3}
                             />
@@ -417,7 +464,10 @@ export default function AgendaIndex(_: Props) {
                                         type="button"
                                         title={option.label}
                                         onClick={() =>
-                                            setForm({ ...form, color: option.value })
+                                            setForm({
+                                                ...form,
+                                                color: option.value,
+                                            })
                                         }
                                         className={`h-7 w-7 rounded-full border-2 transition ${option.class} ${
                                             form.color === option.value

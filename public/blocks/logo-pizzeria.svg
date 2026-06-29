@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Logo — Pizzería Don Pepe">
+    <defs>
+        <linearGradient id="bgPizz" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1f0d0d"/>
+            <stop offset="100%" stop-color="#0a0303"/>
+        </linearGradient>
+        <radialGradient id="cheeseGrad" cx="0.5" cy="0.5" r="0.6">
+            <stop offset="0%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#f4c97b"/>
+        </radialGradient>
+    </defs>
+    <rect width="512" height="512" rx="96" fill="url(#bgPizz)"/>
+    <circle cx="256" cy="256" r="200" fill="none" stroke="#dc2626" stroke-width="4" opacity="0.35"/>
+
+    <!-- Pizza circular -->
+    <circle cx="256" cy="256" r="160" fill="#dc2626"/>
+    <circle cx="256" cy="256" r="148" fill="url(#cheeseGrad)"/>
+
+    <!-- Borde de masa crujiente -->
+    <circle cx="256" cy="256" r="148" fill="none" stroke="#b45309" stroke-width="14" opacity="0.6"/>
+
+    <!-- Pepperoni y aceitunas -->
+    <g>
+        <circle cx="200" cy="200" r="22" fill="#991b1b"/>
+        <circle cx="200" cy="200" r="18" fill="#dc2626"/>
+        <circle cx="196" cy="196" r="4" fill="#7f1d1d"/>
+
+        <circle cx="312" cy="210" r="20" fill="#991b1b"/>
+        <circle cx="312" cy="210" r="16" fill="#dc2626"/>
+
+        <circle cx="220" cy="316" r="22" fill="#991b1b"/>
+        <circle cx="220" cy="316" r="18" fill="#dc2626"/>
+
+        <circle cx="320" cy="320" r="20" fill="#991b1b"/>
+        <circle cx="320" cy="320" r="16" fill="#dc2626"/>
+
+        <!-- Aceitunas -->
+        <ellipse cx="256" cy="166" rx="11" ry="7" fill="#1f2937"/>
+        <ellipse cx="172" cy="260" rx="11" ry="7" fill="#1f2937"/>
+        <ellipse cx="346" cy="262" rx="11" ry="7" fill="#1f2937"/>
+        <ellipse cx="262" cy="354" rx="11" ry="7" fill="#1f2937"/>
+    </g>
+
+    <!-- Corte en cuartos (líneas finas) -->
+    <g stroke="#fbbf24" stroke-width="2" opacity="0.45" stroke-linecap="round">
+        <line x1="256" y1="100" x2="256" y2="412"/>
+        <line x1="100" y1="256" x2="412" y2="256"/>
+    </g>
+</svg>

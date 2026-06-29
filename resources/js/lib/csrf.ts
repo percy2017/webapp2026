@@ -1,13 +1,17 @@
 type CookieRecord = { name: string; value: string };
 
 function readCookie(name: string): string | null {
-    if (typeof document === 'undefined') return null;
+    if (typeof document === 'undefined') {
+        return null;
+    }
 
     const match = document.cookie
         .split('; ')
         .find((row) => row.startsWith(`${name}=`));
 
-    return match ? decodeURIComponent(match.split('=').slice(1).join('=')) : null;
+    return match
+        ? decodeURIComponent(match.split('=').slice(1).join('='))
+        : null;
 }
 
 function xsrfHeaders(): Record<string, string> {

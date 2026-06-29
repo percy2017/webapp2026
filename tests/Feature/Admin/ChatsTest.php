@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Chat;
+use App\Models\MediaHolder;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
@@ -106,4 +108,75 @@ it('updates chat last_message_at when sending a message', function () {
         ]);
 
     expect($chat->fresh()->last_message_at)->not->toBeNull();
+});
+
+it('shows the latest text content as the sidebar preview', function () {
+    // Plain text latest message → preview is the text itself, not "Sin
+    // mensajes aún". Regression guard for the dedicated previewText()
+    // helper, which used to be a fragile inline expression that lost
+    // media-only messages.
+    $admin = makeAdmin();
+    $visitor = User::factory()->create();
+    $chat = Chat::factory()->for($visitor)->create();
+    $chat->messages()->create([
+        'sender_id' => $visitor->id,
+        'sender_type' => 'visitor',
+        'content' => 'Probando el chat hace días',
+    ]);
+
+    actingAs($admin)
+        ->get('/admin/chat-live/chats')
+        ->assertInertia(fn ($page) => $page
+            ->where('chats.data.0.preview', 'Probando el chat hace días'));
+});
+
+it('shows the media-only latest message in the sidebar preview', function () {
+    // Regression: a visitor sending just an image (text empty, content
+    // of media_ids filled) was being shown as "Sin mensajes aún"
+    // because the old transform() only checked `content` and the
+    // legacy Spatie `attachments` collection, NOT the new media_ids
+    // references.
+    $admin = makeAdmin();
+    $visitor = User::factory()->create();
+    $chat = Chat::factory()->for($visitor)->create();
+    $chat->messages()->create([
+        'sender_id' => $visitor->id,
+        'sender_type' => 'visitor',
+        'content' => null,
+        // `media_ids` is a real `chat_messages.media_ids` JSON column;
+        // an empty array is enough to trigger the preview fallback.
+        'media_ids' => [],
+    ]);
+
+    // Insert a real MediaHolder + Media so the preview resolver has
+    // something to count via referencedMedia(). Keep id references
+    // consistent with what the front-end saves today.
+    $holder = MediaHolder::firstOrCreate(['name' => 'default']);
+    // Spatie's `media` table has a NOT NULL `manipulations` JSON column
+    // (and others) that `Model::create()` won't auto-fill — use the
+    // Spatie factory if available, otherwise hand-build the row with
+    // every required column.
+    $media = Media::create([
+        'model_type' => MediaHolder::class,
+        'model_id' => $holder->id,
+        'collection_name' => 'default',
+        'name' => 'fake',
+        'file_name' => 'img.png',
+        'mime_type' => 'image/png',
+        'disk' => 'public',
+        'size' => 1,
+        'manipulations' => [],
+        'custom_properties' => [],
+        'generated_conversions' => [],
+        'responsive_images' => [],
+        'order_column' => 1,
+    ]);
+    $chat->messages()->latest('id')->first()->update([
+        'media_ids' => [$media->id],
+    ]);
+
+    actingAs($admin)
+        ->get('/admin/chat-live/chats')
+        ->assertInertia(fn ($page) => $page
+            ->where('chats.data.0.preview', '🖼️ Archivo adjunto'));
 });

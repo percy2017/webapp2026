@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Logo — Estudio Camila, peluquería y estética">
+    <defs>
+        <linearGradient id="bgPelu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1c1917"/>
+            <stop offset="100%" stop-color="#0c0a09"/>
+        </linearGradient>
+        <linearGradient id="strokePelu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fbbf24"/>
+            <stop offset="100%" stop-color="#b45309"/>
+        </linearGradient>
+    </defs>
+    <rect width="512" height="512" rx="96" fill="url(#bgPelu)"/>
+    <circle cx="256" cy="256" r="200" fill="none" stroke="#b45309" stroke-width="4" opacity="0.35"/>
+
+    <!-- Tijeras estilizadas -->
+    <g transform="translate(256 256) rotate(-20)" fill="none" stroke="url(#strokePelu)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Hojas (dos óvalos rotados formando la X) -->
+        <ellipse cx="-58" cy="-58" rx="46" ry="28" transform="rotate(45 -58 -58)"/>
+        <ellipse cx="58" cy="-58" rx="46" ry="28" transform="rotate(-45 58 -58)"/>
+        <!-- Mangos -->
+        <line x1="-22" y1="-22" x2="58" y2="58"/>
+        <line x1="22" y1="-22" x2="-58" y2="58"/>
+        <!-- Pivote -->
+        <circle cx="0" cy="0" r="10" fill="#fbbf24" stroke="none"/>
+    </g>
+
+    <!-- Onda de cabello inferior -->
+    <path d="M 96 360 Q 160 320 224 360 T 352 360 T 480 360"
+          fill="none" stroke="#fbbf24" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+    <path d="M 80 396 Q 160 360 240 396 T 400 396 T 528 396"
+          fill="none" stroke="#b45309" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+</svg>

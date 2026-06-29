@@ -20,6 +20,7 @@ for (const key of targets) {
         'm',
     );
     const headerMatch = src.match(headerRe);
+
     if (!headerMatch) {
         console.warn(`! Could not find entry "${key}"`);
         continue;
@@ -33,12 +34,18 @@ for (const key of targets) {
     // We stop when depth returns to 0 — that's the matching `},` (or `}`).
     let depth = 0;
     let endIdx = -1;
+
     for (let i = startIdx; i < lines.length; i++) {
         const line = lines[i];
+
         for (const ch of line) {
-            if (ch === '{') depth += 1;
-            else if (ch === '}') depth -= 1;
+            if (ch === '{') {
+depth += 1;
+} else if (ch === '}') {
+depth -= 1;
+}
         }
+
         if (depth === 0) {
             endIdx = i;
             break;

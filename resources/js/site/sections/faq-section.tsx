@@ -1,6 +1,6 @@
 import { ChevronDown, HelpCircle } from 'lucide-react';
-import type { SectionProps } from '@site/lib/template-registry';
 import { richTextToHtml, richTextToPlainText } from '@site/lib/richtext';
+import type { SectionProps } from '@site/lib/template-registry';
 
 type FaqItem = { question: string; answer: unknown };
 
@@ -15,7 +15,10 @@ export function FaqSection({ content, theme }: SectionProps) {
     const primaryColor = theme?.primary_color;
 
     return (
-        <section id="faq" className="border-b bg-muted/20 py-12 sm:py-16 lg:py-20">
+        <section
+            id="faq"
+            className="border-b bg-muted/20 py-12 sm:py-16 lg:py-20"
+        >
             <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
                 <div className="text-center">
                     <span
@@ -44,7 +47,8 @@ export function FaqSection({ content, theme }: SectionProps) {
                     )}
                     {!title && (
                         <p className="mt-3 text-sm text-muted-foreground">
-                            Configurá el título y las preguntas desde el panel derecho.
+                            Configurá el título y las preguntas desde el panel
+                            derecho.
                         </p>
                     )}
                 </div>
@@ -54,15 +58,14 @@ export function FaqSection({ content, theme }: SectionProps) {
                         {list.map((item, idx) => (
                             <details
                                 key={`${item.question}-${idx}`}
-                                className="group border-b last:border-b-0 transition-colors open:bg-muted/30"
+                                className="group border-b transition-colors last:border-b-0 open:bg-muted/30"
                             >
                                 <summary
                                     className="flex cursor-pointer list-none items-center gap-4 px-5 py-4 text-left text-base font-semibold text-foreground transition-colors hover:bg-accent/40 sm:px-7 sm:py-5 sm:text-lg"
                                     style={
                                         primaryColor
                                             ? ({
-                                                  '--puck-accent':
-                                                      primaryColor,
+                                                  '--puck-accent': primaryColor,
                                               } as React.CSSProperties)
                                             : undefined
                                     }
@@ -85,18 +88,19 @@ export function FaqSection({ content, theme }: SectionProps) {
                                     </span>
                                     <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
                                 </summary>
-                                {item.answer && richTextToPlainText(item.answer) && (
-                                    <div className="border-l-2 border-primary/30 bg-muted/20 px-5 pb-5 pl-12 pt-1 sm:px-7 sm:pl-[4.25rem]">
-                                        <div
-                                            className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground prose-headings:text-foreground prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground"
-                                            dangerouslySetInnerHTML={{
-                                                __html: richTextToHtml(
-                                                    item.answer,
-                                                ),
-                                            }}
-                                        />
-                                    </div>
-                                )}
+                                {item.answer &&
+                                    richTextToPlainText(item.answer) && (
+                                        <div className="border-l-2 border-primary/30 bg-muted/20 px-5 pt-1 pb-5 pl-12 sm:px-7 sm:pl-[4.25rem]">
+                                            <div
+                                                className="prose prose-sm dark:prose-invert prose-headings:text-foreground prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground max-w-none text-muted-foreground"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: richTextToHtml(
+                                                        item.answer,
+                                                    ),
+                                                }}
+                                            />
+                                        </div>
+                                    )}
                             </details>
                         ))}
                     </div>

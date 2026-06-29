@@ -57,23 +57,46 @@ const DEFAULT_ACCEPT =
     'image/*,.pdf,.doc,.docx,.txt,.xls,.xlsx,.zip,.rar,.csv,.json';
 
 function formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    if (bytes < 1024 * 1024 * 1024) {
+        return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    }
 
     return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
 }
 
 function iconForMime(mime: string) {
-    if (mime.startsWith('image/')) return ImageIcon;
-    if (mime.startsWith('video/')) return VideoIcon;
-    if (mime.startsWith('audio/')) return Music;
-    if (mime === 'application/pdf' || mime.startsWith('text/')) return FileText;
+    if (mime.startsWith('image/')) {
+        return ImageIcon;
+    }
+
+    if (mime.startsWith('video/')) {
+        return VideoIcon;
+    }
+
+    if (mime.startsWith('audio/')) {
+        return Music;
+    }
+
+    if (mime === 'application/pdf' || mime.startsWith('text/')) {
+        return FileText;
+    }
+
     return File;
 }
 
 function thumbForMime(item: MediaItem): string | null {
-    if (item.mime_type.startsWith('image/')) return item.thumb_url;
+    if (item.mime_type.startsWith('image/')) {
+        return item.thumb_url;
+    }
+
     return null;
 }
 
@@ -91,7 +114,10 @@ export function MediaAttachmentsPicker({
     const isControlled = openProp !== undefined;
     const open = isControlled ? openProp : internalOpen;
     const setOpen = (value: boolean) => {
-        if (!isControlled) setInternalOpen(value);
+        if (!isControlled) {
+            setInternalOpen(value);
+        }
+
         onOpenChange?.(value);
     };
     const [items, setItems] = useState<MediaItem[]>([]);
@@ -108,6 +134,7 @@ export function MediaAttachmentsPicker({
 
     async function load(targetPage: number, term: string) {
         setLoading(true);
+
         try {
             const url = mediaList.url({
                 query: { search: term, page: targetPage },
@@ -121,27 +148,30 @@ export function MediaAttachmentsPicker({
             if (!response.ok) {
                 setItems([]);
                 setLastPage(1);
+
                 return;
             }
 
             const data = await response.json();
-            const list: MediaItem[] = (data?.data ?? []).map((m: {
-                id: number;
-                name: string;
-                file_name: string;
-                mime_type: string;
-                size: number;
-                url: string;
-                thumb_url: string;
-            }) => ({
-                id: m.id,
-                name: m.name,
-                file_name: m.file_name,
-                mime_type: m.mime_type,
-                size: m.size,
-                url: m.url,
-                thumb_url: m.thumb_url ?? m.url,
-            }));
+            const list: MediaItem[] = (data?.data ?? []).map(
+                (m: {
+                    id: number;
+                    name: string;
+                    file_name: string;
+                    mime_type: string;
+                    size: number;
+                    url: string;
+                    thumb_url: string;
+                }) => ({
+                    id: m.id,
+                    name: m.name,
+                    file_name: m.file_name,
+                    mime_type: m.mime_type,
+                    size: m.size,
+                    url: m.url,
+                    thumb_url: m.thumb_url ?? m.url,
+                }),
+            );
 
             setItems(list);
             setLastPage(data?.last_page ?? 1);
@@ -153,28 +183,43 @@ export function MediaAttachmentsPicker({
     }
 
     useEffect(() => {
-        if (open) load(1, '');
+        if (open) {
+            load(1, '');
+        }
     }, [open]);
 
     useEffect(() => {
-        if (!open) return;
-        if (searchDebounce.current) clearTimeout(searchDebounce.current);
+        if (!open) {
+            return;
+        }
+
+        if (searchDebounce.current) {
+            clearTimeout(searchDebounce.current);
+        }
+
         searchDebounce.current = setTimeout(() => {
             setPage(1);
             load(1, searchInput);
         }, 300);
 
         return () => {
-            if (searchDebounce.current) clearTimeout(searchDebounce.current);
+            if (searchDebounce.current) {
+                clearTimeout(searchDebounce.current);
+            }
         };
     }, [searchInput]);
 
     function toggleItem(item: MediaItem) {
         if (selectedIds.has(item.id)) {
             onChange(selected.filter((s) => s.id !== item.id));
+
             return;
         }
-        if (atCap) return;
+
+        if (atCap) {
+            return;
+        }
+
         onChange([...selected, item]);
     }
 
@@ -187,10 +232,15 @@ export function MediaAttachmentsPicker({
     }
 
     async function handleFilesChosen(files: FileList | null) {
-        if (!files || files.length === 0) return;
+        if (!files || files.length === 0) {
+            return;
+        }
+
         setUploading(true);
+
         try {
             const incoming = Array.from(files).slice(0, max - selected.length);
+
             for (const file of incoming) {
                 const formData = new FormData();
                 formData.append('file', file);
@@ -203,8 +253,13 @@ export function MediaAttachmentsPicker({
                     credentials: 'same-origin',
                     body: formData,
                 });
-                if (!response.ok) continue;
+
+                if (!response.ok) {
+                    continue;
+                }
+
                 const data = await response.json();
+
                 if (data?.id) {
                     const next: MediaItem = {
                         id: data.id,
@@ -218,6 +273,7 @@ export function MediaAttachmentsPicker({
                     onChange([...selected, next].slice(0, max));
                 }
             }
+
             // Refresh the list so newly uploaded items appear next time
             // the modal is reopened.
             load(page, searchInput);
@@ -225,7 +281,11 @@ export function MediaAttachmentsPicker({
             // ignore
         } finally {
             setUploading(false);
-            if (fileInput.current) fileInput.current.value = '';
+
+            if (fileInput.current) {
+                fileInput.current.value = '';
+            }
+
             // Close the modal so the user sees their chip in the composer
             // and can immediately hit Send. Reopen if they need more files.
             setOpen(false);
@@ -250,10 +310,11 @@ export function MediaAttachmentsPicker({
                             {selected.map((item) => {
                                 const Icon = iconForMime(item.mime_type);
                                 const thumb = thumbForMime(item);
+
                                 return (
                                     <div
                                         key={item.id}
-                                        className="flex items-center gap-2 rounded-md border bg-muted/40 py-1 pl-1 pr-1.5 text-xs"
+                                        className="flex items-center gap-2 rounded-md border bg-muted/40 py-1 pr-1.5 pl-1 text-xs"
                                     >
                                         {thumb ? (
                                             <img
@@ -319,7 +380,7 @@ export function MediaAttachmentsPicker({
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 value={searchInput}
                                 onChange={(e) => setSearchInput(e.target.value)}
@@ -366,16 +427,17 @@ export function MediaAttachmentsPicker({
                                     const thumb = thumbForMime(item);
                                     const checked = selectedIds.has(item.id);
                                     const disabled = !checked && atCap;
+
                                     return (
                                         <li key={item.id}>
                                             <button
                                                 type="button"
-                                                onClick={() =>
-                                                    toggleItem(item)
-                                                }
+                                                onClick={() => toggleItem(item)}
                                                 disabled={disabled}
                                                 className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition hover:bg-accent/40 disabled:cursor-not-allowed disabled:opacity-50 ${
-                                                    checked ? 'bg-accent/60' : ''
+                                                    checked
+                                                        ? 'bg-accent/60'
+                                                        : ''
                                                 }`}
                                             >
                                                 <span

@@ -2,11 +2,11 @@ import { Images, ZoomIn } from 'lucide-react';
 import type { BlockProps } from '@site/lib/basic-blocks-registry';
 
 const COLS_CLASS: Record<string, string> = {
-    '2': 'grid-cols-1 sm:grid-cols-2',
-    '3': 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-    '4': 'grid-cols-2 lg:grid-cols-4',
-    '5': 'grid-cols-2 lg:grid-cols-5',
-    '6': 'grid-cols-2 lg:grid-cols-6',
+    '2': 'sm:grid-cols-2',
+    '3': 'sm:grid-cols-2 lg:grid-cols-3',
+    '4': 'lg:grid-cols-4',
+    '5': 'lg:grid-cols-5',
+    '6': 'lg:grid-cols-6',
 };
 
 const ASPECT_CLASS: Record<string, string> = {
@@ -48,6 +48,7 @@ function resolveItem(item: GalleryItem): {
 
     if (raw && typeof raw === 'object' && 'id' in raw) {
         const obj = raw as { url?: unknown };
+
         if (typeof obj.url === 'string') {
             url = obj.url;
         }
@@ -62,6 +63,74 @@ function resolveItem(item: GalleryItem): {
         alt: typeof item.alt === 'string' ? item.alt : '',
         caption: typeof item.caption === 'string' ? item.caption : '',
     };
+}
+
+/**
+ * Una figura individual de galería. Recibe `className` adicional
+ * para que el wrapper móvil (carrusel horizontal) pueda fijar el
+ * ancho de la imagen y el wrapper desktop (grid) lo omita y deje
+ * que el grid la estire.
+ *
+ * Si la imagen está vacía se renderiza un placeholder dashed igual
+ * al del bloque original — el estado vacío se preserva en ambos
+ * wrappers.
+ */
+function GalleryFigure({
+    item,
+    idx,
+    aspectCls,
+    radiusCls,
+    showCaptions,
+    className = '',
+}: {
+    item: GalleryItem;
+    idx: number;
+    aspectCls: string;
+    radiusCls: string;
+    showCaptions: boolean;
+    className?: string;
+}) {
+    const { url, alt, caption } = resolveItem(item);
+
+    if (!url) {
+        return (
+            <div
+                key={idx}
+                className={`flex aspect-square w-full flex-col items-center justify-center border-2 border-dashed bg-muted/30 text-xs text-muted-foreground ${radiusCls} ${className}`}
+            >
+                <Images className="mb-1 h-5 w-5 opacity-60" />
+                Vacía
+            </div>
+        );
+    }
+
+    return (
+        <figure
+            className={`group relative overflow-hidden bg-muted ${radiusCls} ${aspectCls} ${className}`}
+        >
+            <img
+                src={url}
+                alt={alt}
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+            />
+
+            {/* Hover overlay: solo visible cuando hay imagen */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+            {/* Icono de zoom */}
+            <div className="pointer-events-none absolute top-3 right-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-foreground opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                <ZoomIn className="h-4 w-4" />
+            </div>
+
+            {/* Caption: dentro del figure, parte inferior */}
+            {showCaptions && caption && (
+                <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/80 to-black/0 px-3 py-3 text-sm font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:px-4 sm:py-4">
+                    {caption}
+                </figcaption>
+            )}
+        </figure>
+    );
 }
 
 export function GalleryBlock({ content }: BlockProps) {
@@ -108,7 +177,7 @@ export function GalleryBlock({ content }: BlockProps) {
             {(eyebrow || title || subtitle) && (
                 <div className="mb-8 text-center sm:mb-10">
                     {eyebrow && (
-                        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-semibold tracking-[0.18em] text-muted-foreground uppercase">
                             <Images className="h-3.5 w-3.5" />
                             {eyebrow}
                         </span>
@@ -126,51 +195,46 @@ export function GalleryBlock({ content }: BlockProps) {
                 </div>
             )}
 
-            <div className={`grid ${colsCls} ${gapCls}`}>
-                {items.map((item, idx) => {
-                    const { url, alt, caption } = resolveItem(item);
+            {/* Mobile: carrusel horizontal con scroll-snap, una imagen
+                por fila (w-[85vw]) — la galeria es lo más importante
+                del bloque, queremos que cada foto tenga su momento.
+                Hidden a partir de sm: y el grid desktop se encarga del
+                resto. */}
+            <div className="sm:hidden">
+                <div
+                    className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    role="region"
+                    aria-label="Galería"
+                    aria-roledescription="carrusel"
+                >
+                    {items.map((item, idx) => (
+                        <GalleryFigure
+                            key={`m-${idx}`}
+                            item={item}
+                            idx={idx}
+                            aspectCls={aspectCls}
+                            radiusCls={radiusCls}
+                            showCaptions={show_captions}
+                            className="w-[85vw] shrink-0 snap-start"
+                        />
+                    ))}
+                </div>
+            </div>
 
-                    if (!url) {
-                        return (
-                            <div
-                                key={idx}
-                                className={`flex aspect-square w-full flex-col items-center justify-center border-2 border-dashed bg-muted/30 text-xs text-muted-foreground ${radiusCls}`}
-                            >
-                                <Images className="mb-1 h-5 w-5 opacity-60" />
-                                Vacía
-                            </div>
-                        );
-                    }
-
-                    return (
-                        <figure
-                            key={idx}
-                            className={`group relative overflow-hidden bg-muted ${radiusCls} ${aspectCls}`}
-                        >
-                            <img
-                                src={url}
-                                alt={alt}
-                                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                                loading="lazy"
-                            />
-
-                            {/* Hover overlay: solo visible cuando hay imagen */}
-                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                            {/* Icono de zoom */}
-                            <div className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/90 text-foreground opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                                <ZoomIn className="h-4 w-4" />
-                            </div>
-
-                            {/* Caption: dentro del figure, parte inferior */}
-                            {show_captions && caption && (
-                                <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/80 to-black/0 px-3 py-3 text-sm font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:px-4 sm:py-4">
-                                    {caption}
-                                </figcaption>
-                            )}
-                        </figure>
-                    );
-                })}
+            {/* Desktop: grid responsivo (sm:2 / md:3 / lg:columns).
+                Render separado del mobile porque Tailwind no resuelve
+                breakpoints distintos en el mismo wrapper. */}
+            <div className={`hidden grid-cols-2 sm:grid ${gapCls} ${colsCls}`}>
+                {items.map((item, idx) => (
+                    <GalleryFigure
+                        key={`d-${idx}`}
+                        item={item}
+                        idx={idx}
+                        aspectCls={aspectCls}
+                        radiusCls={radiusCls}
+                        showCaptions={show_captions}
+                    />
+                ))}
             </div>
         </section>
     );

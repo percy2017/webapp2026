@@ -23,15 +23,24 @@ function extractKeys(source, registryName) {
     // for keys at 4-space indent.
     const startPattern = new RegExp(`export const ${registryName}\\b`);
     const startMatch = startPattern.exec(source);
-    if (!startMatch) throw new Error(`Could not find ${registryName}`);
+
+    if (!startMatch) {
+throw new Error(`Could not find ${registryName}`);
+}
+
     const startIdx = startMatch.index;
     const block = source.slice(startIdx);
     const endIdx = block.indexOf('\n};');
-    if (endIdx === -1) throw new Error(`Could not find end of ${registryName}`);
+
+    if (endIdx === -1) {
+throw new Error(`Could not find end of ${registryName}`);
+}
+
     const slice = block.slice(0, endIdx);
     const keys = [
         ...slice.matchAll(/^\s{4}(?:'([a-z][a-z0-9-]*)'|"([a-z][a-z0-9-]*)"|([a-z][a-z0-9-]*)):\s*\{/gm),
     ].map((m) => m[1] ?? m[2] ?? m[3]);
+
     return keys;
 }
 
@@ -54,12 +63,14 @@ if (sectionDuplicates.length) {
     console.error('!! Duplicate section IDs:', sectionDuplicates);
     process.exit(1);
 }
+
 if (basicDuplicates.length) {
     console.error('!! Duplicate basic block IDs:', basicDuplicates);
     process.exit(1);
 }
 
 const overlap = sectionIds.filter((id) => basicIds.includes(id));
+
 if (overlap.length) {
     console.error('!! IDs that appear in BOTH registries:', overlap);
     process.exit(1);

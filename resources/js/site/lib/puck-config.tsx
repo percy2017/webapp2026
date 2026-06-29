@@ -1,17 +1,15 @@
-import type React from 'react';
 import type { Config, Fields } from '@puckeditor/core';
-import {
-    SECTION_REGISTRY,
-    type ContentField,
-    type SectionContent,
-    type SectionTheme,
-} from '@site/lib/template-registry';
-import {
-    BASIC_BLOCKS_REGISTRY,
-    type BlockContent,
-} from '@site/lib/basic-blocks-registry';
-import { imageField } from '@site/lib/puck-fields/image-field';
+import type React from 'react';
+import { BASIC_BLOCKS_REGISTRY } from '@site/lib/basic-blocks-registry';
+import type { BlockContent } from '@site/lib/basic-blocks-registry';
 import { iconField } from '@site/lib/puck-fields/icon-field';
+import { imageField } from '@site/lib/puck-fields/image-field';
+import type {
+    ContentField,
+    SectionContent,
+    SectionTheme,
+} from '@site/lib/template-registry';
+import { SECTION_REGISTRY } from '@site/lib/template-registry';
 
 type Props = {
     theme: SectionTheme;
@@ -25,8 +23,8 @@ function normalizeImageContent(
 
     if (value && typeof value === 'object' && 'id' in value) {
         const obj = value as { id: unknown; url: unknown };
-        result.image_media_id =
-            typeof obj.id === 'number' ? obj.id : null;
+        result.image_media_id = typeof obj.id === 'number' ? obj.id : null;
+
         if (typeof obj.url === 'string') {
             result.image_url = obj.url;
         }
@@ -65,6 +63,18 @@ function itemSchemaToArrayFields(
                 defaultItemProps: defaultItemProps(f.itemSchema),
                 getItemSummary,
             };
+        } else if (f.type === 'slot') {
+            // Patrón Puck v0.22+ para multi-column layouts: cada
+            // item del array lleva un sub-field `type: 'slot'`. El
+            // operator agrega/quita items con + y × de Puck y mete
+            // bloques dentro del slot.
+            fields[f.key] = {
+                type: 'slot',
+                label: f.label,
+                // Altura mínima para que la dropzone interna sea
+                // visible y clickeable cuando la columna está vacía.
+                minEmptyHeight: 80,
+            };
         } else if (f.type === 'icon') {
             fields[f.key] = {
                 type: 'custom',
@@ -91,12 +101,23 @@ function itemSchemaToArrayFields(
     return fields;
 }
 
-function defaultItemProps(itemSchema?: ContentField[]): Record<string, unknown> {
+function defaultItemProps(
+    itemSchema?: ContentField[],
+): Record<string, unknown> {
     const obj: Record<string, unknown> = {};
     itemSchema?.forEach((f) => {
-        if (f.type === 'boolean') obj[f.key] = false;
-        else if (f.type === 'list') obj[f.key] = [];
-        else obj[f.key] = '';
+        if (f.type === 'boolean') {
+            obj[f.key] = false;
+        } else if (f.type === 'list') {
+            obj[f.key] = [];
+        } else if (f.type === 'slot') {
+            // Los slots almacenan un array de ComponentData cuando
+            // están vacíos. Inicializamos como `[]` para que Puck
+            // muestre la dropzone vacía.
+            obj[f.key] = [];
+        } else {
+            obj[f.key] = '';
+        }
     });
 
     return obj;
@@ -115,6 +136,7 @@ function getItemSummary(item: unknown, index: number): string {
 
 function schemaToFields(schema: ContentField[]): Fields {
     const fields: Fields = {};
+
     for (const f of schema) {
         if (f.type === 'richtext') {
             fields[f.key] = {
@@ -161,7 +183,10 @@ function schemaToFields(schema: ContentField[]): Fields {
                 label: f.label,
                 arrayFields: itemSchemaToArrayFields(f.itemSchema),
                 defaultItemProps: defaultItemProps(f.itemSchema),
-                getItemSummary,
+                // El schema puede sobrescribir getItemSummary con uno
+                // específico del bloque (ej: el contenedor muestra
+                // "N bloques" en el sidebar).
+                getItemSummary: f.getItemSummary ?? getItemSummary,
             };
         } else {
             fields[f.key] = { type: 'text', label: f.label };
@@ -184,6 +209,7 @@ export function buildPuckConfig({ theme }: Props): Config {
 
     // --- Group 1: pre-designed sections ---------------------------------
     const preDesignedIds = Object.keys(SECTION_REGISTRY);
+
     for (const id of preDesignedIds) {
         const def = SECTION_REGISTRY[id];
         components[id] = {
@@ -192,7 +218,11 @@ export function buildPuckConfig({ theme }: Props): Config {
             defaultProps: { ...def.defaultContent },
             render: (renderProps) => {
                 const Component = def.component;
-                const { hidden, id: _id, ...rest } = renderProps as {
+                const {
+                    hidden,
+                    id: _id,
+                    ...rest
+                } = renderProps as {
                     hidden?: boolean;
                     id?: string;
                 } & Record<string, unknown>;
@@ -226,31 +256,23 @@ export function buildPuckConfig({ theme }: Props): Config {
 
     // --- Group 2: basic blocks ------------------------------------------
     const basicIds = Object.keys(BASIC_BLOCKS_REGISTRY);
+
     for (const id of basicIds) {
         const def = BASIC_BLOCKS_REGISTRY[id];
-        const isContainer = id === 'container';
         components[id] = {
             label: def.label,
-            fields: isContainer
-                ? {
-                      ...schemaToFields(def.schema),
-                      children: {
-                          type: 'slot',
-                      },
-                  }
-                : schemaToFields(def.schema),
+            // Para todos los bloques (incluido el contenedor) declaramos
+            // los fields via el schema declarativo. El contenedor tiene
+            // un campo `columns` con sub-slots — el mapeo slot → dropzone
+            // lo hace `schemaToFields` (que delega en
+            // `itemSchemaToArrayFields` para los items de array).
+            fields: schemaToFields(def.schema),
             defaultProps: { ...def.defaultContent },
             render: (renderProps) => {
                 const Component = def.component;
-                const {
-                    hidden,
-                    id: puckId,
-                    children: puckChildren,
-                    ...rest
-                } = renderProps as {
+                const { hidden, id: puckId, ...rest } = renderProps as {
                     hidden?: boolean;
                     id?: string;
-                    children?: React.ReactNode;
                 } & Record<string, unknown>;
 
                 if (hidden) {
@@ -270,18 +292,6 @@ export function buildPuckConfig({ theme }: Props): Config {
 
                 const normalized = normalizeImageContent(rest);
 
-                if (isContainer) {
-                    return (
-                        <Component
-                            id={puckId}
-                            content={normalized as BlockContent}
-                            theme={theme}
-                        >
-                            {puckChildren as React.ReactNode}
-                        </Component>
-                    );
-                }
-
                 return (
                     <Component
                         id={puckId}
@@ -297,7 +307,6 @@ export function buildPuckConfig({ theme }: Props): Config {
     // and vice versa — defensive check, but cheap.
     for (const id of preDesignedIds) {
         if (basicIds.includes(id)) {
-            // eslint-disable-next-line no-console
             console.warn(
                 `[puck-config] id "${id}" appears in both SECTION_REGISTRY and BASIC_BLOCKS_REGISTRY`,
             );

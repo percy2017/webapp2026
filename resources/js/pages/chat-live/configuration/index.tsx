@@ -88,8 +88,8 @@ export default function ChatLiveConfiguration({ settings }: Props) {
                             <CardHeader>
                                 <CardTitle>Estado del widget</CardTitle>
                                 <CardDescription>
-                                    Activar o desactivar el chat en las
-                                    páginas públicas.
+                                    Activar o desactivar el chat en las páginas
+                                    públicas.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -137,9 +137,9 @@ export default function ChatLiveConfiguration({ settings }: Props) {
                                                     : 'hover:bg-accent'
                                             }`}
                                         >
-                                            <div className="bg-muted/40 relative h-20 rounded">
+                                            <div className="relative h-20 rounded bg-muted/40">
                                                 <span
-                                                    className={`bg-primary absolute h-6 w-6 rounded-full ${pos.className}`}
+                                                    className={`absolute h-6 w-6 rounded-full bg-primary ${pos.className}`}
                                                 />
                                             </div>
                                             <p className="mt-2 text-center font-medium">
@@ -172,8 +172,8 @@ export default function ChatLiveConfiguration({ settings }: Props) {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="bg-muted/30 relative h-80 overflow-hidden rounded-lg border">
-                                    <div className="bg-background/60 absolute inset-0" />
+                                <div className="relative h-80 overflow-hidden rounded-lg border bg-muted/30">
+                                    <div className="absolute inset-0 bg-background/60" />
                                     <div
                                         className={`absolute ${
                                             form.position === 'top-left'
@@ -183,10 +183,10 @@ export default function ChatLiveConfiguration({ settings }: Props) {
                                                   : form.position ===
                                                       'bottom-left'
                                                     ? 'bottom-20 left-4'
-                                                    : 'bottom-20 right-4'
+                                                    : 'right-4 bottom-20'
                                         }`}
                                     >
-                                        <div className="bg-primary text-primary-foreground flex h-12 w-12 items-center justify-center rounded-full shadow-lg">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg">
                                             <MessageCircle className="h-6 w-6" />
                                         </div>
                                     </div>

@@ -24,7 +24,7 @@ export function ParagraphBlock({ content }: BlockProps) {
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             <div
-                className={`prose prose-sm dark:prose-invert max-w-none text-muted-foreground prose-headings:text-foreground prose-a:text-primary ${cls}`}
+                className={`prose prose-sm dark:prose-invert prose-headings:text-foreground prose-a:text-primary max-w-none text-muted-foreground ${cls}`}
                 dangerouslySetInnerHTML={{ __html: finalHtml }}
             />
         </div>

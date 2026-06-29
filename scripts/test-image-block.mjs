@@ -1,5 +1,5 @@
-import { renderToStaticMarkup } from 'react-dom/server';
 import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { ImageBlock } from '../resources/js/site/blocks/image-block.tsx';
 
 const defaultContent = {

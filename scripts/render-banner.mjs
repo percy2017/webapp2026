@@ -1,8 +1,8 @@
 // scripts/render-banner.mjs — render banner-webapp.svg to PNG via @resvg/resvg-js.
 // Usage: node scripts/render-banner.mjs
 
-import { Resvg } from '@resvg/resvg-js';
 import { readFileSync, writeFileSync } from 'node:fs';
+import { Resvg } from '@resvg/resvg-js';
 
 const svgPath = process.argv[2] ?? 'banner-webapp.svg';
 const pngPath = process.argv[3] ?? 'banner-webapp.png';

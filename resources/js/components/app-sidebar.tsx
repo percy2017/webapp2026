@@ -25,16 +25,16 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { admin } from '@/routes';
 import { index as agendaIndex } from '@/routes/agenda';
 import { index as chatsIndex } from '@/routes/chat-live/chats';
 import { edit as configEdit } from '@/routes/chat-live/config';
 import { index as mediaIndex } from '@/routes/media';
 import { index as rolesIndex } from '@/routes/roles';
-import { edit as siteSettingsEdit } from '@/routes/site-settings';
 import { index as siteMenuIndex } from '@/routes/site-menu';
+import { edit as siteSettingsEdit } from '@/routes/site-settings';
 import { index as siteTemplatesIndex } from '@/routes/site-templates';
 import { index as usersIndex } from '@/routes/users';
-import { admin } from '@/routes';
 import type { NavItem } from '@/types';
 
 const chatLiveNavItems: NavItem[] = [
@@ -130,7 +130,9 @@ export function AppSidebar() {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
                                             asChild
-                                            isActive={isCurrentOrParentUrl(item.href)}
+                                            isActive={isCurrentOrParentUrl(
+                                                item.href,
+                                            )}
                                             tooltip={{ children: item.title }}
                                         >
                                             <Link href={item.href} prefetch>
@@ -152,7 +154,9 @@ export function AppSidebar() {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
                                             asChild
-                                            isActive={isCurrentOrParentUrl(item.href)}
+                                            isActive={isCurrentOrParentUrl(
+                                                item.href,
+                                            )}
                                             tooltip={{ children: item.title }}
                                         >
                                             <Link href={item.href} prefetch>
@@ -174,7 +178,9 @@ export function AppSidebar() {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
                                             asChild
-                                            isActive={isCurrentOrParentUrl(item.href)}
+                                            isActive={isCurrentOrParentUrl(
+                                                item.href,
+                                            )}
                                             tooltip={{ children: item.title }}
                                         >
                                             <Link href={item.href} prefetch>
@@ -196,7 +202,9 @@ export function AppSidebar() {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
                                             asChild
-                                            isActive={isCurrentOrParentUrl(item.href)}
+                                            isActive={isCurrentOrParentUrl(
+                                                item.href,
+                                            )}
                                             tooltip={{ children: item.title }}
                                         >
                                             <Link href={item.href} prefetch>

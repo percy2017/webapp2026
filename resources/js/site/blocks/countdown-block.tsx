@@ -31,28 +31,42 @@ type Countdown = {
 function diff(targetMs: number): Countdown {
     const now = Date.now();
     const delta = targetMs - now;
+
     if (delta <= 0) {
         return { days: 0, hours: 0, minutes: 0, seconds: 0, done: true };
     }
+
     const seconds = Math.floor(delta / 1000) % 60;
     const minutes = Math.floor(delta / (1000 * 60)) % 60;
     const hours = Math.floor(delta / (1000 * 60 * 60)) % 24;
     const days = Math.floor(delta / (1000 * 60 * 60 * 24));
+
     return { days, hours, minutes, seconds, done: false };
 }
 
 function parseTarget(value: unknown): number | null {
-    if (typeof value !== 'string' || !value.trim()) return null;
+    if (typeof value !== 'string' || !value.trim()) {
+        return null;
+    }
+
     const direct = new Date(value);
-    if (!Number.isNaN(direct.getTime())) return direct.getTime();
+
+    if (!Number.isNaN(direct.getTime())) {
+        return direct.getTime();
+    }
 
     const match = value
         .trim()
         .match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?$/);
-    if (!match) return null;
+
+    if (!match) {
+        return null;
+    }
+
     const [, y, m, d, hh = '00', mm = '00'] = match;
     const iso = `${y}-${m}-${d}T${hh}:${mm}:00`;
     const fallback = new Date(iso);
+
     return Number.isNaN(fallback.getTime()) ? null : fallback.getTime();
 }
 
@@ -85,8 +99,10 @@ export function CountdownBlock({ content }: BlockProps) {
 
     useEffect(() => {
         const targetMs = parseTarget(target_date);
+
         if (targetMs === null) {
             setTime({ days: 0, hours: 0, minutes: 0, seconds: 0, done: true });
+
             return;
         }
 
@@ -94,7 +110,10 @@ export function CountdownBlock({ content }: BlockProps) {
         const tick = setInterval(() => {
             const next = diff(targetMs);
             setTime(next);
-            if (next.done) clearInterval(tick);
+
+            if (next.done) {
+                clearInterval(tick);
+            }
         }, 1000);
 
         return () => clearInterval(tick);
@@ -115,7 +134,9 @@ export function CountdownBlock({ content }: BlockProps) {
 
     if (time.done) {
         return (
-            <div className={`mx-auto max-w-md rounded-2xl px-6 py-5 text-center ${accentCls}`}>
+            <div
+                className={`mx-auto max-w-md rounded-2xl px-6 py-5 text-center ${accentCls}`}
+            >
                 <p className="text-lg font-semibold sm:text-xl">
                     {expired_text}
                 </p>
@@ -127,7 +148,7 @@ export function CountdownBlock({ content }: BlockProps) {
         return (
             <div className="flex flex-col items-center gap-2 text-center">
                 {title && (
-                    <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                    <p className="text-sm font-medium tracking-wider text-muted-foreground uppercase">
                         {title}
                     </p>
                 )}
@@ -144,7 +165,7 @@ export function CountdownBlock({ content }: BlockProps) {
     return (
         <div className="flex flex-col items-center gap-4 text-center">
             {title && (
-                <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+                <p className="text-sm font-semibold tracking-wider text-primary uppercase">
                     {title}
                 </p>
             )}
@@ -162,12 +183,12 @@ export function CountdownBlock({ content }: BlockProps) {
                         className={`flex min-w-[4rem] flex-col items-center justify-center rounded-xl px-3 py-3 ring-1 sm:min-w-[5rem] sm:px-4 sm:py-4 ${accentCls} ${ringCls}`}
                     >
                         <span
-                            className={`font-mono font-bold leading-none tabular-nums ${sizeCls.value}`}
+                            className={`font-mono leading-none font-bold tabular-nums ${sizeCls.value}`}
                         >
                             {pad(unit.value)}
                         </span>
                         <span
-                            className={`mt-1.5 font-medium uppercase tracking-wider opacity-80 ${sizeCls.label}`}
+                            className={`mt-1.5 font-medium tracking-wider uppercase opacity-80 ${sizeCls.label}`}
                         >
                             {unit.label}
                         </span>

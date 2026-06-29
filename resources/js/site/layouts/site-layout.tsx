@@ -1,9 +1,9 @@
 import { usePage } from '@inertiajs/react';
-import { SiteHeader } from '@site/components/site-header';
-import { SiteFooter } from '@site/components/site-footer';
-import { ChatWidget } from '@site/components/chat/chat-widget';
-import type { ChatWidgetSetting } from '@site/lib/types';
 import type { ReactNode } from 'react';
+import { ChatWidget } from '@site/components/chat/chat-widget';
+import { SiteFooter } from '@site/components/site-footer';
+import { SiteHeader } from '@site/components/site-header';
+import type { ChatWidgetSetting } from '@site/lib/types';
 
 type Props = {
     children: ReactNode;

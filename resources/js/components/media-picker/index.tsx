@@ -113,9 +113,17 @@ const COPY: Record<
 };
 
 function formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    if (bytes < 1024 * 1024 * 1024) {
+        return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    }
 
     return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
 }
@@ -144,6 +152,7 @@ export function MediaPicker({
 
     async function load(targetPage: number, term: string) {
         setLoading(true);
+
         try {
             const url = mediaList.url({
                 query: {
@@ -163,27 +172,30 @@ export function MediaPicker({
             if (!response.ok) {
                 setItems([]);
                 setLastPage(1);
+
                 return;
             }
 
             const data = await response.json();
-            const list: MediaItem[] = (data?.data ?? []).map((m: {
-                id: number;
-                name: string;
-                file_name: string;
-                mime_type: string;
-                size: number;
-                url: string;
-                thumb_url: string;
-            }) => ({
-                id: m.id,
-                name: m.name,
-                file_name: m.file_name,
-                mime_type: m.mime_type,
-                size: m.size,
-                url: m.url,
-                thumb_url: m.thumb_url ?? m.url,
-            }));
+            const list: MediaItem[] = (data?.data ?? []).map(
+                (m: {
+                    id: number;
+                    name: string;
+                    file_name: string;
+                    mime_type: string;
+                    size: number;
+                    url: string;
+                    thumb_url: string;
+                }) => ({
+                    id: m.id,
+                    name: m.name,
+                    file_name: m.file_name,
+                    mime_type: m.mime_type,
+                    size: m.size,
+                    url: m.url,
+                    thumb_url: m.thumb_url ?? m.url,
+                }),
+            );
 
             setItems(list);
             setLastPage(data?.last_page ?? 1);
@@ -195,19 +207,29 @@ export function MediaPicker({
     }
 
     useEffect(() => {
-        if (open) load(1, '');
+        if (open) {
+            load(1, '');
+        }
     }, [open, mediaKind]);
 
     useEffect(() => {
-        if (!open) return;
-        if (searchDebounce.current) clearTimeout(searchDebounce.current);
+        if (!open) {
+            return;
+        }
+
+        if (searchDebounce.current) {
+            clearTimeout(searchDebounce.current);
+        }
+
         searchDebounce.current = setTimeout(() => {
             setPage(1);
             load(1, searchInput);
         }, 300);
 
         return () => {
-            if (searchDebounce.current) clearTimeout(searchDebounce.current);
+            if (searchDebounce.current) {
+                clearTimeout(searchDebounce.current);
+            }
         };
     }, [searchInput]);
 
@@ -226,7 +248,11 @@ export function MediaPicker({
 
     function handleFileChosen(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
-        if (!file) return;
+
+        if (!file) {
+            return;
+        }
+
         setOpen(false);
 
         const formData = new FormData();
@@ -243,11 +269,15 @@ export function MediaPicker({
         })
             .then((r) => r.json())
             .then((data) => {
-                if (data?.id) onChange(data.id, data.url);
+                if (data?.id) {
+                    onChange(data.id, data.url);
+                }
             })
             .catch(() => {})
             .finally(() => {
-                if (fileInput.current) fileInput.current.value = '';
+                if (fileInput.current) {
+                    fileInput.current.value = '';
+                }
             });
     }
 
@@ -317,7 +347,9 @@ export function MediaPicker({
                     </div>
                     <p className="text-xs text-muted-foreground">
                         {hideUpload
-                            ? copy.helperText.replace(' o subí una nueva', '').replace(' o subí uno nuevo', '')
+                            ? copy.helperText
+                                  .replace(' o subí una nueva', '')
+                                  .replace(' o subí uno nuevo', '')
                             : copy.helperText}
                     </p>
                 </div>
@@ -341,7 +373,7 @@ export function MediaPicker({
                     </DialogHeader>
 
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
@@ -408,7 +440,7 @@ export function MediaPicker({
                                             </span>
                                         </div>
                                         {mediaKind === 'video' && (
-                                            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white opacity-0 transition group-hover:opacity-100">
+                                            <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-2 text-white opacity-0 transition group-hover:opacity-100">
                                                 <FileVideo className="h-4 w-4" />
                                             </div>
                                         )}

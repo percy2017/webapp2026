@@ -16,11 +16,19 @@ type SlideItem = {
 
 function resolveImage(item: SlideItem): string | null {
     const raw = item.image_media_id;
+
     if (raw && typeof raw === 'object' && 'url' in raw) {
         const obj = raw as { url?: unknown };
-        if (typeof obj.url === 'string') return obj.url;
+
+        if (typeof obj.url === 'string') {
+            return obj.url;
+        }
     }
-    if (typeof item.image_url === 'string' && item.image_url) return item.image_url;
+
+    if (typeof item.image_url === 'string' && item.image_url) {
+        return item.image_url;
+    }
+
     return null;
 }
 
@@ -67,7 +75,10 @@ export function SliderSection({ content, theme }: SectionProps) {
 
     const goTo = useCallback(
         (idx: number) => {
-            if (total === 0) return;
+            if (total === 0) {
+                return;
+            }
+
             const next = ((idx % total) + total) % total;
             setCurrent(next);
         },
@@ -79,32 +90,54 @@ export function SliderSection({ content, theme }: SectionProps) {
 
     // Autoplay effect
     useEffect(() => {
-        if (!autoplay || paused || total <= 1) return;
+        if (!autoplay || paused || total <= 1) {
+            return;
+        }
+
         const ms = Math.max(1, interval) * 1000;
         const id = window.setInterval(() => {
             setCurrent((c) => (c + 1) % total);
         }, ms);
+
         return () => window.clearInterval(id);
     }, [autoplay, paused, interval, total]);
 
     // Keyboard navigation
     useEffect(() => {
-        if (total <= 1) return;
+        if (total <= 1) {
+            return;
+        }
+
         function onKey(e: KeyboardEvent) {
             const root = document.getElementById('slider-section');
-            if (!root) return;
-            if (!root.matches(':hover') && !root.contains(document.activeElement))
+
+            if (!root) {
                 return;
-            if (e.key === 'ArrowLeft') prev();
-            if (e.key === 'ArrowRight') next();
+            }
+
+            if (
+                !root.matches(':hover') &&
+                !root.contains(document.activeElement)
+            ) {
+                return;
+            }
+
+            if (e.key === 'ArrowLeft') {
+                prev();
+            }
+
+            if (e.key === 'ArrowRight') {
+                next();
+            }
         }
         window.addEventListener('keydown', onKey);
+
         return () => window.removeEventListener('keydown', onKey);
     }, [prev, next, total]);
 
     if (total === 0) {
         return (
-            <section className="mx-auto w-full max-w-6xl px-4 pb-12 pt-0 sm:px-6 sm:pb-16 sm:pt-0 lg:px-8 lg:pb-20 lg:pt-0">
+            <section className="mx-auto w-full max-w-6xl px-4 pt-0 pb-12 sm:px-6 sm:pt-0 sm:pb-16 lg:px-8 lg:pt-0 lg:pb-20">
                 <div className="flex aspect-[21/9] w-full items-center justify-center rounded-2xl border-2 border-dashed bg-muted/30 text-sm text-muted-foreground">
                     Agregá slides desde el panel derecho.
                 </div>
@@ -126,11 +159,13 @@ export function SliderSection({ content, theme }: SectionProps) {
     return (
         <section
             id="slider-section"
-            className="w-full pb-12 pt-0 sm:pb-16 sm:pt-0 lg:pb-20 lg:pt-0"
+            className="w-full pt-0 pb-12 sm:pt-0 sm:pb-16 lg:pt-0 lg:pb-20"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
         >
-            <div className={`relative w-full overflow-hidden ${radiusCls} bg-muted ${aspectCls}`}>
+            <div
+                className={`relative w-full overflow-hidden ${radiusCls} bg-muted ${aspectCls}`}
+            >
                 {/* Slides track */}
                 <div
                     className="flex h-full transition-transform duration-700 ease-out"
@@ -138,6 +173,7 @@ export function SliderSection({ content, theme }: SectionProps) {
                 >
                     {slides.map((slide, idx) => {
                         const imageUrl = resolveImage(slide);
+
                         return (
                             <div
                                 key={idx}
@@ -155,12 +191,21 @@ export function SliderSection({ content, theme }: SectionProps) {
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary/10 to-background" />
                                 )}
 
-                                {/* Gradient overlay para legibilidad */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
+                                {/* Gradient overlay: más fuerte en sm+ donde
+                                    hay texto encima que necesita contraste; en
+                                    mobile (sin texto) queda solo un sutil
+                                    viñeteo para no oscurecer la imagen. */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent sm:bg-gradient-to-t sm:from-black/90 sm:via-black/40 sm:to-black/30" />
 
-                                {/* Contenido del slide — texto SOBRE la imagen, full-width */}
+                                {/* Contenido del slide — texto SOBRE la imagen,
+                                    full-width. En mobile se oculta el bloque
+                                    entero de texto (eyebrow/title/desc/CTA)
+                                    porque la imagen manda en pantallas chicas;
+                                    la card es angosta y el texto se vuelve
+                                    ilegible sobre el gradiente. A partir de
+                                    sm: se muestra. */}
                                 <div
-                                    className={`relative z-10 flex h-full w-full p-6 sm:p-12 lg:p-20 ${overlayCls}`}
+                                    className={`relative z-10 hidden h-full w-full p-6 sm:flex sm:p-12 lg:p-20 ${overlayCls}`}
                                 >
                                     <div
                                         className={`flex max-w-2xl flex-col gap-3 text-white sm:gap-4 ${
@@ -173,10 +218,12 @@ export function SliderSection({ content, theme }: SectionProps) {
                                     >
                                         {slide.eyebrow && (
                                             <span
-                                                className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
+                                                className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold tracking-[0.18em] uppercase backdrop-blur-sm"
                                                 style={
                                                     primaryColor
-                                                        ? { backgroundColor: `${primaryColor}55` }
+                                                        ? {
+                                                              backgroundColor: `${primaryColor}55`,
+                                                          }
                                                         : undefined
                                                 }
                                             >
@@ -184,7 +231,7 @@ export function SliderSection({ content, theme }: SectionProps) {
                                             </span>
                                         )}
                                         {slide.title && (
-                                            <h3 className="text-3xl font-bold leading-[1.1] drop-shadow-lg sm:text-4xl lg:text-6xl">
+                                            <h3 className="text-3xl leading-[1.1] font-bold drop-shadow-lg sm:text-4xl lg:text-6xl">
                                                 {slide.title}
                                             </h3>
                                         )}
@@ -201,8 +248,10 @@ export function SliderSection({ content, theme }: SectionProps) {
                                                 style={
                                                     primaryColor
                                                         ? {
-                                                              backgroundColor: primaryColor,
-                                                              borderColor: primaryColor,
+                                                              backgroundColor:
+                                                                  primaryColor,
+                                                              borderColor:
+                                                                  primaryColor,
                                                               color: '#fff',
                                                           }
                                                         : undefined
@@ -210,7 +259,8 @@ export function SliderSection({ content, theme }: SectionProps) {
                                             >
                                                 <a
                                                     href={
-                                                        slide.cta_href || '#contact'
+                                                        slide.cta_href ||
+                                                        '#contact'
                                                     }
                                                 >
                                                     {slide.cta_label}
@@ -231,7 +281,7 @@ export function SliderSection({ content, theme }: SectionProps) {
                             type="button"
                             onClick={prev}
                             aria-label="Slide anterior"
-                            className="absolute left-3 top-1/2 z-20 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur transition-all hover:bg-white hover:scale-105 sm:left-4 sm:h-12 sm:w-12"
+                            className="absolute top-1/2 left-3 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur transition-all hover:scale-105 hover:bg-white sm:left-4 sm:h-12 sm:w-12"
                         >
                             <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                         </button>
@@ -239,7 +289,7 @@ export function SliderSection({ content, theme }: SectionProps) {
                             type="button"
                             onClick={next}
                             aria-label="Siguiente slide"
-                            className="absolute right-3 top-1/2 z-20 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur transition-all hover:bg-white hover:scale-105 sm:right-4 sm:h-12 sm:w-12"
+                            className="absolute top-1/2 right-3 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur transition-all hover:scale-105 hover:bg-white sm:right-4 sm:h-12 sm:w-12"
                         >
                             <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                         </button>
@@ -255,7 +305,9 @@ export function SliderSection({ content, theme }: SectionProps) {
                                 type="button"
                                 onClick={() => goTo(idx)}
                                 aria-label={`Ir al slide ${idx + 1}`}
-                                aria-current={idx === current ? 'true' : undefined}
+                                aria-current={
+                                    idx === current ? 'true' : undefined
+                                }
                                 className={`h-2 rounded-full transition-all ${
                                     idx === current
                                         ? 'w-8 bg-white'
@@ -270,7 +322,11 @@ export function SliderSection({ content, theme }: SectionProps) {
             {/* Counter */}
             {total > 1 && (
                 <p className="mt-3 text-center text-xs font-medium text-muted-foreground">
-                    Slide <span className="font-bold text-foreground">{current + 1}</span> de {total}
+                    Slide{' '}
+                    <span className="font-bold text-foreground">
+                        {current + 1}
+                    </span>{' '}
+                    de {total}
                 </p>
             )}
         </section>

@@ -1,15 +1,19 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useState } from 'react';
-import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { listPresetTemplates, type PresetTemplate } from '@site/lib/preset-templates';
-import { index as indexRoute, store as storeRoute } from '@/routes/site-templates';
+import AppLayout from '@/layouts/app-layout';
+import {
+    index as indexRoute,
+    store as storeRoute,
+} from '@/routes/site-templates';
 import type { BreadcrumbItem } from '@/types';
+import { listPresetTemplates } from '@site/lib/preset-templates';
+import type { PresetTemplate } from '@site/lib/preset-templates';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin', href: '/admin' },
@@ -59,7 +63,8 @@ export default function SiteTemplateCreate() {
 
         // Preset is optional — when none is picked the template is created
         // empty (no sections, no blocks, no menu items) and the user fills
-        // it in from the editor.
+        // it in from the editor. Brand identity (logo, favicon, PWA) is
+        // owned by /admin/site-settings, not by the template.
         const payload: Record<string, unknown> = {
             name,
             slug,
@@ -71,6 +76,13 @@ export default function SiteTemplateCreate() {
             payload.sections = selected.sections;
             payload.blocks = selected.blocks;
             payload.menu_items = selected.menu_items;
+            // Carry the preset's brand so /admin/site-settings, the
+            // PWA manifest, and the favicon reflect the preset's
+            // identity from minute one. The operator can override
+            // any of these on /admin/site-settings afterwards.
+            if (selected.brand) {
+                payload.brand = selected.brand;
+            }
         }
 
         router.post(storeRoute().url, payload, {
@@ -99,6 +111,7 @@ export default function SiteTemplateCreate() {
                                         value={name}
                                         onChange={(e) => {
                                             setName(e.target.value);
+
                                             if (
                                                 !slug ||
                                                 slug === slugify(name)
@@ -119,9 +132,7 @@ export default function SiteTemplateCreate() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="slug">
-                                        Slug (URL)
-                                    </Label>
+                                    <Label htmlFor="slug">Slug (URL)</Label>
                                     <Input
                                         id="slug"
                                         value={slug}
@@ -169,7 +180,7 @@ export default function SiteTemplateCreate() {
                                 <Label className="text-sm font-semibold">
                                     Plantilla inicial
                                 </Label>
-                                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground">
+                                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground uppercase">
                                     Opcional
                                 </span>
                             </div>
@@ -181,6 +192,7 @@ export default function SiteTemplateCreate() {
                             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                                 {presets.map((p) => {
                                     const isActive = selected?.id === p.id;
+
                                     return (
                                         <button
                                             key={p.id}
@@ -207,7 +219,7 @@ export default function SiteTemplateCreate() {
                                                     </p>
                                                 </div>
                                                 {isActive && (
-                                                    <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
+                                                    <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground uppercase">
                                                         Elegida
                                                     </span>
                                                 )}

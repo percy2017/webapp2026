@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SiteTemplateController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\PwaAssetsController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Widget\AuthController as WidgetAuthController;
@@ -135,6 +136,12 @@ Route::get('/canvas', function () {
         ->header('Pragma', 'no-cache')
         ->header('Expires', '0');
 });
+
+// PWA assets are generated dynamically from the active SiteSetting so
+// switching the active template changes the manifest + icons
+// immediately, no rebuild required.
+Route::get('/manifest.webmanifest', [PwaAssetsController::class, 'manifest'])
+    ->name('pwa.manifest');
 
 Route::get('/canvas/peluqueria-view', function () {
     return response()

@@ -1,6 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Loader2, Save } from 'lucide-react';
 import { useState } from 'react';
+import { MediaPicker } from '@/components/media-picker';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -12,10 +13,9 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MediaPicker } from '@/components/media-picker';
+import { useInitials } from '@/hooks/use-initials';
 import { admin } from '@/routes';
 import { index as usersIndex, store as usersStore } from '@/routes/users';
-import { useInitials } from '@/hooks/use-initials';
 import type { BreadcrumbItem } from '@/types';
 
 type Role = { id: number; name: string };
@@ -43,7 +43,10 @@ export default function UserCreate({ roles }: Props) {
 
     function handleMediaChange(id: number | null, url?: string) {
         setForm({ ...form, media_id: id });
-        if (url) setPreview(url);
+
+        if (url) {
+            setPreview(url);
+        }
     }
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -101,15 +104,15 @@ export default function UserCreate({ roles }: Props) {
                                 <CardHeader>
                                     <CardTitle>Roles</CardTitle>
                                     <CardDescription>
-                                        Asignale uno o varios roles al
-                                        usuario.
+                                        Asignale uno o varios roles al usuario.
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex flex-wrap gap-2">
                                         {roles.map((role) => {
-                                            const active =
-                                                form.roles.includes(role.name);
+                                            const active = form.roles.includes(
+                                                role.name,
+                                            );
 
                                             return (
                                                 <button
@@ -120,9 +123,7 @@ export default function UserCreate({ roles }: Props) {
                                                             ...form,
                                                             roles: active
                                                                 ? form.roles.filter(
-                                                                      (
-                                                                          r,
-                                                                      ) =>
+                                                                      (r) =>
                                                                           r !==
                                                                           role.name,
                                                                   )

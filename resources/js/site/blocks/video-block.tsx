@@ -17,30 +17,44 @@ const ASPECT_CLASS: Record<string, string> = {
 
 function parseYoutube(input: string): string | null {
     const url = input.trim();
-    if (!url) return null;
+
+    if (!url) {
+        return null;
+    }
 
     if (url.includes('youtube.com/embed/')) {
         const id = url.split('embed/')[1]?.split(/[?&]/)[0];
+
         return id ? `https://www.youtube.com/embed/${id}` : null;
     }
 
     if (url.includes('youtu.be/')) {
         const id = url.split('youtu.be/')[1]?.split(/[?&]/)[0];
+
         return id ? `https://www.youtube.com/embed/${id}` : null;
     }
 
     const match = url.match(/youtube\.com\/watch\?v=([^&]+)/);
-    if (match) return `https://www.youtube.com/embed/${match[1]}`;
+
+    if (match) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+    }
 
     return null;
 }
 
 function parseVimeo(input: string): string | null {
     const url = input.trim();
-    if (!url) return null;
+
+    if (!url) {
+        return null;
+    }
 
     const match = url.match(/vimeo\.com\/(\d+)/);
-    if (match) return `https://player.vimeo.com/video/${match[1]}`;
+
+    if (match) {
+        return `https://player.vimeo.com/video/${match[1]}`;
+    }
 
     return null;
 }
@@ -55,15 +69,26 @@ function resolveVideo(rawUrl: string): {
     fileUrl: string | null;
 } {
     const url = rawUrl.trim();
-    if (!url) return { type: 'unknown', embedUrl: null, fileUrl: null };
+
+    if (!url) {
+        return { type: 'unknown', embedUrl: null, fileUrl: null };
+    }
 
     const yt = parseYoutube(url);
-    if (yt) return { type: 'youtube', embedUrl: yt, fileUrl: null };
+
+    if (yt) {
+        return { type: 'youtube', embedUrl: yt, fileUrl: null };
+    }
 
     const vimeo = parseVimeo(url);
-    if (vimeo) return { type: 'vimeo', embedUrl: vimeo, fileUrl: null };
 
-    if (isDirectVideo(url)) return { type: 'file', embedUrl: null, fileUrl: url };
+    if (vimeo) {
+        return { type: 'vimeo', embedUrl: vimeo, fileUrl: null };
+    }
+
+    if (isDirectVideo(url)) {
+        return { type: 'file', embedUrl: null, fileUrl: url };
+    }
 
     return { type: 'unknown', embedUrl: null, fileUrl: null };
 }
@@ -71,9 +96,16 @@ function resolveVideo(rawUrl: string): {
 function resolveMediaField(value: unknown): string | null {
     if (value && typeof value === 'object' && 'url' in value) {
         const obj = value as { url?: unknown };
-        if (typeof obj.url === 'string') return obj.url;
+
+        if (typeof obj.url === 'string') {
+            return obj.url;
+        }
     }
-    if (typeof value === 'string') return value;
+
+    if (typeof value === 'string') {
+        return value;
+    }
+
     return null;
 }
 
@@ -123,7 +155,9 @@ export function VideoBlock({ content }: BlockProps) {
     if (video.type === 'file' && video.fileUrl) {
         return (
             <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-                <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
+                <div
+                    className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}
+                >
                     <video
                         src={video.fileUrl}
                         title={title || undefined}
@@ -140,19 +174,37 @@ export function VideoBlock({ content }: BlockProps) {
     }
 
     const embedSrc = video.embedUrl;
-    if (!embedSrc) return null;
+
+    if (!embedSrc) {
+        return null;
+    }
 
     const params = new URLSearchParams();
-    if (autoplay) params.set('autoplay', '1');
-    if (!controls) params.set('controls', '0');
-    if (loop) params.set('loop', '1');
-    if (muted) params.set('muted', '1');
+
+    if (autoplay) {
+        params.set('autoplay', '1');
+    }
+
+    if (!controls) {
+        params.set('controls', '0');
+    }
+
+    if (loop) {
+        params.set('loop', '1');
+    }
+
+    if (muted) {
+        params.set('muted', '1');
+    }
+
     const query = params.toString();
     const finalSrc = query ? `${embedSrc}?${query}` : embedSrc;
 
     return (
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-            <div className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}>
+            <div
+                className={`overflow-hidden bg-black ${radiusCls} ${aspectCls}`}
+            >
                 <iframe
                     src={finalSrc}
                     title={title || 'Video'}

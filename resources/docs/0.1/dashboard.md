@@ -5,12 +5,14 @@ El Dashboard es la **pantalla principal** del panel. Te da un resumen rápido de
 ## Elementos del Dashboard
 
 ### Estado del socket
+
 En la parte superior, un banner grande muestra si la conexión en tiempo real (socket) está **conectada** o **desconectada**. El socket es lo que permite que el chat en vivo funcione en tiempo real.
 
 - **Verde "Socket conectado"** — Todo funciona correctamente.
 - **Rojo "Socket desconectado"** — Los mensajes no se entregan en tiempo real. Contactanos.
 
 ### Métricas principales
+
 Cuatro tarjetas con los números clave:
 
 - **Mensajes hoy** — Mensajes de chat recibidos en las últimas 24 horas.
@@ -19,6 +21,7 @@ Cuatro tarjetas con los números clave:
 - **Pico de hoy** — La hora con más mensajes y cuántos fueron.
 
 ### Gráfico de actividad
+
 Un gráfico de barras con la **cantidad de mensajes por hora** de las últimas 24 horas. La última columna (hora actual) está resaltada en verde. Útil para ver en qué horarios tus clientes te escriben más.
 
 ## Acciones rápidas desde el Dashboard
@@ -33,10 +36,12 @@ El Dashboard se actualiza automáticamente cuando llegan mensajes nuevos (gracia
 ## Solución de problemas
 
 Si el **socket está desconectado**:
+
 1. Verificá tu conexión a internet.
 2. Recargá la página (Ctrl+Shift+R).
 3. Si persiste, contactanos por el chat de soporte o email.
 
 Si las **métricas no se actualizan**:
+
 1. Verificá que el socket esté conectado (banner verde arriba).
 2. Si está conectado pero las métricas están fijas, recargá la página.

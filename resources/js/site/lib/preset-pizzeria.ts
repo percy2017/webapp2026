@@ -8,12 +8,14 @@ import type { PresetTemplate } from './preset-templates';
 export const PIZZERIA_PRESET: PresetTemplate = {
     id: 'pizzeria',
     name: 'Pizzería',
-    description: 'Para pizzerías, empanaderías y restaurantes de comida rápida. Hero, slider de pizzas, equipo y CTA de pedido por WhatsApp.',
+    description:
+        'Para pizzerías, empanaderías y restaurantes de comida rápida. Hero, slider de pizzas, equipo y CTA de pedido por WhatsApp.',
     icon: 'Pizza',
     accent: 'bg-red-500/15 text-red-700 dark:text-red-300',
     defaultName: 'Pizzería Don Pepe',
     defaultSlug: 'pizzeria-don-pepe',
-    defaultDescription: 'Las mejores pizzas de La Paz, hechas en horno de piedra.',
+    defaultDescription:
+        'Las mejores pizzas de La Paz, hechas en horno de piedra.',
     sections: [
         {
             id: 'slider',
@@ -30,62 +32,80 @@ export const PIZZERIA_PRESET: PresetTemplate = {
                     {
                         eyebrow: 'Clásica',
                         title: 'Pizza Margherita',
-                        description: 'Salsa de tomate San Marzano, mozzarella di bufala, albahaca fresca y aceite de oliva extra virgen.',
+                        description:
+                            'Salsa de tomate San Marzano, mozzarella di bufala, albahaca fresca y aceite de oliva extra virgen.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE2MCIgcng9IjI4IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjYwIiBjeT0iMTUwIiByeD0iMjYiIHJ5PSIxOCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIxODAiIGN5PSIyNTAiIHJ4PSIzMCIgcnk9IjIyIiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjI1MCIgY3k9IjI0MCIgcng9IjI0IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjAwIiByeD0iMjYiIHJ5PSIyMCIgZmlsbD0iI2ZlZjljMyIvPjxlbGxpcHNlIGN4PSIxNjAiIGN5PSIyMDAiIHJ4PSIxMiIgcnk9IjYiIGZpbGw9IiMxNmEzNGEiIHRyYW5zZm9ybT0icm90YXRlKDMwIDE2MCAyMDApIi8+PGVsbGlwc2UgY3g9IjI0MCIgY3k9IjE5MCIgcng9IjEyIiByeT0iNiIgZmlsbD0iIzE2YTM0YSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDI0MCAxOTApIi8+PGVsbGlwc2UgY3g9IjIxMCIgY3k9IjIzMCIgcng9IjEyIiByeT0iNiIgZmlsbD0iIzIyYzU1ZSIgdHJhbnNmb3JtPSJyb3RhdGUoNjAgMjEwIDIzMCkiLz48L3N2Zz4=',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE2MCIgcng9IjI4IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjYwIiBjeT0iMTUwIiByeD0iMjYiIHJ5PSIxOCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIxODAiIGN5PSIyNTAiIHJ4PSIzMCIgcnk9IjIyIiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjI1MCIgY3k9IjI0MCIgcng9IjI0IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjAwIiByeD0iMjYiIHJ5PSIyMCIgZmlsbD0iI2ZlZjljMyIvPjxlbGxpcHNlIGN4PSIxNjAiIGN5PSIyMDAiIHJ4PSIxMiIgcnk9IjYiIGZpbGw9IiMxNmEzNGEiIHRyYW5zZm9ybT0icm90YXRlKDMwIDE2MCAyMDApIi8+PGVsbGlwc2UgY3g9IjI0MCIgY3k9IjE5MCIgcng9IjEyIiByeT0iNiIgZmlsbD0iIzE2YTM0YSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDI0MCAxOTApIi8+PGVsbGlwc2UgY3g9IjIxMCIgY3k9IjIzMCIgcng9IjEyIiByeT0iNiIgZmlsbD0iIzIyYzU1ZSIgdHJhbnNmb3JtPSJyb3RhdGUoNjAgMjEwIDIzMCkiLz48L3N2Zz4=',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Margherita',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Margherita',
                     },
                     {
                         eyebrow: 'La más pedida',
                         title: 'Pizza Pepperoni',
-                        description: 'Doble pepperoni importado, mozzarella extra y un toque de chile en flakes. Para los amantes del sabor intenso.',
+                        description:
+                            'Doble pepperoni importado, mozzarella extra y un toque de chile en flakes. Para los amantes del sabor intenso.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMTQwIiByPSIyNiIgZmlsbD0iI2I5MWMxYyIvPjxjaXJjbGUgY3g9IjE2MCIgY3k9IjE0MCIgcj0iMjIiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIxNDAiIHI9IjYiIGZpbGw9IiM3ZjFkMWQiLz48Y2lyY2xlIGN4PSIyNjAiIGN5PSIxNjAiIHI9IjI2IiBmaWxsPSIjYjkxYzFjIi8+PGNpcmNsZSBjeD0iMjYwIiBjeT0iMTYwIiByPSIyMiIgZmlsbD0iI2RjMjYyNiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iNiIgZmlsbD0iIzdmMWQxZCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMjgiIGZpbGw9IiNiOTFjMWMiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjI0IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSI2IiBmaWxsPSIjN2YxZDFkIi8+PGNpcmNsZSBjeD0iMTQwIiBjeT0iMjUwIiByPSIyNiIgZmlsbD0iI2I5MWMxYyIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjI1MCIgcj0iMjIiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIyNTAiIHI9IjYiIGZpbGw9IiM3ZjFkMWQiLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyNjAiIHI9IjI2IiBmaWxsPSIjYjkxYzFjIi8+PGNpcmNsZSBjeD0iMjcwIiBjeT0iMjYwIiByPSIyMiIgZmlsbD0iI2RjMjYyNiIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjI2MCIgcj0iNiIgZmlsbD0iIzdmMWQxZCIvPjwvc3ZnPg==',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMTQwIiByPSIyNiIgZmlsbD0iI2I5MWMxYyIvPjxjaXJjbGUgY3g9IjE2MCIgY3k9IjE0MCIgcj0iMjIiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIxNDAiIHI9IjYiIGZpbGw9IiM3ZjFkMWQiLz48Y2lyY2xlIGN4PSIyNjAiIGN5PSIxNjAiIHI9IjI2IiBmaWxsPSIjYjkxYzFjIi8+PGNpcmNsZSBjeD0iMjYwIiBjeT0iMTYwIiByPSIyMiIgZmlsbD0iI2RjMjYyNiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iNiIgZmlsbD0iIzdmMWQxZCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMjgiIGZpbGw9IiNiOTFjMWMiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjI0IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSI2IiBmaWxsPSIjN2YxZDFkIi8+PGNpcmNsZSBjeD0iMTQwIiBjeT0iMjUwIiByPSIyNiIgZmlsbD0iI2I5MWMxYyIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjI1MCIgcj0iMjIiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIyNTAiIHI9IjYiIGZpbGw9IiM3ZjFkMWQiLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyNjAiIHI9IjI2IiBmaWxsPSIjYjkxYzFjIi8+PGNpcmNsZSBjeD0iMjcwIiBjeT0iMjYwIiByPSIyMiIgZmlsbD0iI2RjMjYyNiIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjI2MCIgcj0iNiIgZmlsbD0iIzdmMWQxZCIvPjwvc3ZnPg==',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Pepperoni',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Pepperoni',
                     },
                     {
                         eyebrow: 'Especialidad',
                         title: 'Cuatro Quesos',
-                        description: 'Mozzarella, gorgonzola, parmesano y provolone. Cremosa, intensa y perfecta para compartir.',
+                        description:
+                            'Mozzarella, gorgonzola, parmesano y provolone. Cremosa, intensa y perfecta para compartir.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNmZWY5YzMiLz48ZWxsaXBzZSBjeD0iMTUwIiBjeT0iMTUwIiByeD0iMzYiIHJ5PSIyOCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIyNjAiIGN5PSIxNjAiIHJ4PSIzMiIgcnk9IjI0IiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjE3MCIgY3k9IjI0MCIgcng9IjM2IiByeT0iMjgiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjYwIiBjeT0iMjUwIiByeD0iMzIiIHJ5PSIyNiIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTYiIGZpbGw9IiNiZmRiZmUiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5MCIgcj0iNiIgZmlsbD0iIzFlNDBhZiIgb3BhY2l0eT0iMC41Ii8+PC9zdmc+',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNmZWY5YzMiLz48ZWxsaXBzZSBjeD0iMTUwIiBjeT0iMTUwIiByeD0iMzYiIHJ5PSIyOCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIyNjAiIGN5PSIxNjAiIHJ4PSIzMiIgcnk9IjI0IiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjE3MCIgY3k9IjI0MCIgcng9IjM2IiByeT0iMjgiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjYwIiBjeT0iMjUwIiByeD0iMzIiIHJ5PSIyNiIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTYiIGZpbGw9IiNiZmRiZmUiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjE5MCIgY3k9IjE5MCIgcj0iNiIgZmlsbD0iIzFlNDBhZiIgb3BhY2l0eT0iMC41Ii8+PC9zdmc+',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Cuatro%20Quesos',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Cuatro%20Quesos',
                     },
                     {
                         eyebrow: 'De la casa',
                         title: 'Fugazza Argentina',
-                        description: 'Cebolla caramelizada lentamente, oliva, orégano fresco y masa extra fina. Una explosión de sabor.',
+                        description:
+                            'Cebolla caramelizada lentamente, oliva, orégano fresco y masa extra fina. Una explosión de sabor.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iNiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iMjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyNTAiIHI9IjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iNiIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PGNpcmNsZSBjeD0iMTMwIiBjeT0iMjEwIiByPSIxOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjYiLz48L3N2Zz4=',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iNiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iMjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMjUwIiByPSIyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyNTAiIHI9IjIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iNiIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PGNpcmNsZSBjeD0iMTMwIiBjeT0iMjEwIiByPSIxOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjYiLz48L3N2Zz4=',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Fugazza',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Fugazza',
                     },
                     {
                         eyebrow: 'Picante',
                         title: 'Calabresa',
-                        description: 'Longaniza calabresa ahumada, cebolla morada y pimentón. Para los que buscan el balance justo entre spice y sabor.',
+                        description:
+                            'Longaniza calabresa ahumada, cebolla morada y pimentón. Para los que buscan el balance justo entre spice y sabor.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMTUwIiByPSIyNiIgZmlsbD0iIzdjMmQxMiIvPjxjaXJjbGUgY3g9IjE2MCIgY3k9IjE1MCIgcj0iMjIiIGZpbGw9IiM5YTM0MTIiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIxNTAiIHI9IjYiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIyNjAiIGN5PSIxNjAiIHI9IjI2IiBmaWxsPSIjN2MyZDEyIi8+PGNpcmNsZSBjeD0iMjYwIiBjeT0iMTYwIiByPSIyMiIgZmlsbD0iIzlhMzQxMiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iNiIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIxMCIgcj0iMjgiIGZpbGw9IiM3YzJkMTIiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMTAiIHI9IjI0IiBmaWxsPSIjOWEzNDEyIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjEwIiByPSI2IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMjYwIiByPSIyNiIgZmlsbD0iIzdjMmQxMiIvPjxjaXJjbGUgY3g9IjE1MCIgY3k9IjI2MCIgcj0iMjIiIGZpbGw9IiM5YTM0MTIiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIyNjAiIHI9IjYiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyNjAiIHI9IjI2IiBmaWxsPSIjN2MyZDEyIi8+PGNpcmNsZSBjeD0iMjcwIiBjeT0iMjYwIiByPSIyMiIgZmlsbD0iIzlhMzQxMiIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjI2MCIgcj0iNiIgZmlsbD0iI2ZlZjNjNyIvPjwvc3ZnPg==',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMTYwIiBjeT0iMTUwIiByPSIyNiIgZmlsbD0iIzdjMmQxMiIvPjxjaXJjbGUgY3g9IjE2MCIgY3k9IjE1MCIgcj0iMjIiIGZpbGw9IiM5YTM0MTIiLz48Y2lyY2xlIGN4PSIxNjAiIGN5PSIxNTAiIHI9IjYiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIyNjAiIGN5PSIxNjAiIHI9IjI2IiBmaWxsPSIjN2MyZDEyIi8+PGNpcmNsZSBjeD0iMjYwIiBjeT0iMTYwIiByPSIyMiIgZmlsbD0iIzlhMzQxMiIvPjxjaXJjbGUgY3g9IjI2MCIgY3k9IjE2MCIgcj0iNiIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIxMCIgcj0iMjgiIGZpbGw9IiM3YzJkMTIiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMTAiIHI9IjI0IiBmaWxsPSIjOWEzNDEyIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjEwIiByPSI2IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMjYwIiByPSIyNiIgZmlsbD0iIzdjMmQxMiIvPjxjaXJjbGUgY3g9IjE1MCIgY3k9IjI2MCIgcj0iMjIiIGZpbGw9IiM5YTM0MTIiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIyNjAiIHI9IjYiIGZpbGw9IiNmZWYzYzciLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyNjAiIHI9IjI2IiBmaWxsPSIjN2MyZDEyIi8+PGNpcmNsZSBjeD0iMjcwIiBjeT0iMjYwIiByPSIyMiIgZmlsbD0iIzlhMzQxMiIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjI2MCIgcj0iNiIgZmlsbD0iI2ZlZjNjNyIvPjwvc3ZnPg==',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Calabresa',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Calabresa',
                     },
                     {
                         eyebrow: 'Tradicional',
                         title: 'Napolitana',
-                        description: 'Anchoas, alcaparras, aceitunas y tomate fresco. La receta original de Nápoles en tu mesa.',
+                        description:
+                            'Anchoas, alcaparras, aceitunas y tomate fresco. La receta original de Nápoles en tu mesa.',
                         source: 'url',
                         image_media_id: null,
-                        image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGVsbGlwc2UgY3g9IjE1MCIgY3k9IjE2MCIgcng9IjI4IiByeT0iMjIiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjUwIiBjeT0iMTcwIiByeD0iMjYiIHJ5PSIyMCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIxODAiIGN5PSIyNDAiIHJ4PSIyOCIgcnk9IjIyIiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjI0MCIgY3k9IjI1MCIgcng9IjI2IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjAwIiByeD0iMjgiIHJ5PSIyMiIgZmlsbD0iI2ZlZjljMyIvPjxlbGxpcHNlIGN4PSIxNjAiIGN5PSIyMDAiIHJ4PSIxNiIgcnk9IjQiIGZpbGw9IiM5MjQwMGUiIHRyYW5zZm9ybT0icm90YXRlKDIwIDE2MCAyMDApIi8+PGVsbGlwc2UgY3g9IjI1MCIgY3k9IjIyMCIgcng9IjE2IiByeT0iNCIgZmlsbD0iIzkyNDAwZSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDI1MCAyMjApIi8+PGVsbGlwc2UgY3g9IjIwMCIgY3k9IjI3MCIgcng9IjE0IiByeT0iNCIgZmlsbD0iIzkyNDAwZSIgdHJhbnNmb3JtPSJyb3RhdGUoNDUgMjAwIDI3MCkiLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIyMzAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48Y2lyY2xlIGN4PSIyMzAiIGN5PSIxOTAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyMzAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48L3N2Zz4=',
+                        image_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE5NSIgZmlsbD0iI2Y0Yzk4NyIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgcj0iMTkwIiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMjAwIiByPSIxNjAiIGZpbGw9IiNkYzI2MjYiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjE1NSIgZmlsbD0iI2VmNDQ0NCIgb3BhY2l0eT0iMC43Ii8+PGVsbGlwc2UgY3g9IjE1MCIgY3k9IjE2MCIgcng9IjI4IiByeT0iMjIiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjUwIiBjeT0iMTcwIiByeD0iMjYiIHJ5PSIyMCIgZmlsbD0iI2ZlZjNjNyIvPjxlbGxpcHNlIGN4PSIxODAiIGN5PSIyNDAiIHJ4PSIyOCIgcnk9IjIyIiBmaWxsPSIjZmVmM2M3Ii8+PGVsbGlwc2UgY3g9IjI0MCIgY3k9IjI1MCIgcng9IjI2IiByeT0iMjAiIGZpbGw9IiNmZWYzYzciLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjAwIiByeD0iMjgiIHJ5PSIyMiIgZmlsbD0iI2ZlZjljMyIvPjxlbGxpcHNlIGN4PSIxNjAiIGN5PSIyMDAiIHJ4PSIxNiIgcnk9IjQiIGZpbGw9IiM5MjQwMGUiIHRyYW5zZm9ybT0icm90YXRlKDIwIDE2MCAyMDApIi8+PGVsbGlwc2UgY3g9IjI1MCIgY3k9IjIyMCIgcng9IjE2IiByeT0iNCIgZmlsbD0iIzkyNDAwZSIgdHJhbnNmb3JtPSJyb3RhdGUoLTMwIDI1MCAyMjApIi8+PGVsbGlwc2UgY3g9IjIwMCIgY3k9IjI3MCIgcng9IjE0IiByeT0iNCIgZmlsbD0iIzkyNDAwZSIgdHJhbnNmb3JtPSJyb3RhdGUoNDUgMjAwIDI3MCkiLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSIyMzAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48Y2lyY2xlIGN4PSIyMzAiIGN5PSIxOTAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48Y2lyY2xlIGN4PSIyNzAiIGN5PSIyMzAiIHI9IjQiIGZpbGw9IiM2NWEzMGQiLz48L3N2Zz4=',
                         cta_label: 'Pedir',
-                        cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Napolitana',
+                        cta_href:
+                            'https://wa.me/59170000000?text=Hola%2C%20quiero%20una%20Pizza%20Napolitana',
                     },
                 ],
             },
@@ -96,15 +116,19 @@ export const PIZZERIA_PRESET: PresetTemplate = {
             content: {
                 eyebrow: 'Pizzería Don Pepe',
                 headline: 'Pizzas de horno de piedra',
-                subheadline: 'Masa madre, ingredientes frescos y 30 años de tradición en La Paz. Delivery en 30 minutos o tu pizza es gratis.',
+                subheadline:
+                    'Masa madre, ingredientes frescos y 30 años de tradición en La Paz. Delivery en 30 minutos o tu pizza es gratis.',
                 cta_label: 'Hacer pedido',
-                cta_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido',
+                cta_href:
+                    'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido',
                 secondary_label: 'Ver equipo',
                 secondary_href: '#team',
                 source: 'url',
                 image_media_id: null,
-                image_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNTAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzFhMDcwNyIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSI0MjAiIHJ4PSIzODAiIHJ5PSIxMDAiIGZpbGw9IiNmZjhjMWEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0gMTIwIDQyMCBRIDEyMCAxMDAgNDAwIDEwMCBRIDY4MCAxMDAgNjgwIDQyMCBaIiBmaWxsPSIjMmEwZjBmIi8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQxMCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZjRjOTg3Ii8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQwOCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMzYwIiBjeT0iNDA1IiByPSI2IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDQwIiBjeT0iNDAyIiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDAwIiBjeT0iNDA4IiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMzkwIiBjeT0iMzk2IiByPSIzIiBmaWxsPSIjZmVmM2M3Ii8+PHBhdGggZD0iTSAyNDAgNDIwIFEgMjMwIDM4MCAyMjAgNDAwIFEgMjEwIDM3MCAyMDAgMzkwIFoiIGZpbGw9IiNmYjkyM2MiLz48cGF0aCBkPSJNIDU2MCA0MjAgUSA1NzAgMzgwIDU4MCA0MDAgUSA1OTAgMzcwIDYwMCAzOTAgWiIgZmlsbD0iI2ZiOTIzYyIvPjxyZWN0IHg9IjE4MCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjxyZWN0IHg9IjUwMCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjwvc3ZnPg==',
-                image_url_thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNTAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzFhMDcwNyIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSI0MjAiIHJ4PSIzODAiIHJ5PSIxMDAiIGZpbGw9IiNmZjhjMWEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0gMTIwIDQyMCBRIDEyMCAxMDAgNDAwIDEwMCBRIDY4MCAxMDAgNjgwIDQyMCBaIiBmaWxsPSIjMmEwZjBmIi8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQxMCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZjRjOTg3Ii8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQwOCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMzYwIiBjeT0iNDA1IiByPSI2IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDQwIiBjeT0iNDAyIiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDAwIiBjeT0iNDA4IiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMzkwIiBjeT0iMzk2IiByPSIzIiBmaWxsPSIjZmVmM2M3Ii8+PHBhdGggZD0iTSAyNDAgNDIwIFEgMjMwIDM4MCAyMjAgNDAwIFEgMjEwIDM3MCAyMDAgMzkwIFoiIGZpbGw9IiNmYjkyM2MiLz48cGF0aCBkPSJNIDU2MCA0MjAgUSA1NzAgMzgwIDU4MCA0MDAgUSA1OTAgMzcwIDYwMCAzOTAgWiIgZmlsbD0iI2ZiOTIzYyIvPjxyZWN0IHg9IjE4MCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjxyZWN0IHg9IjUwMCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjwvc3ZnPg==',
+                image_url:
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNTAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzFhMDcwNyIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSI0MjAiIHJ4PSIzODAiIHJ5PSIxMDAiIGZpbGw9IiNmZjhjMWEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0gMTIwIDQyMCBRIDEyMCAxMDAgNDAwIDEwMCBRIDY4MCAxMDAgNjgwIDQyMCBaIiBmaWxsPSIjMmEwZjBmIi8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQxMCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZjRjOTg3Ii8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQwOCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMzYwIiBjeT0iNDA1IiByPSI2IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDQwIiBjeT0iNDAyIiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDAwIiBjeT0iNDA4IiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMzkwIiBjeT0iMzk2IiByPSIzIiBmaWxsPSIjZmVmM2M3Ii8+PHBhdGggZD0iTSAyNDAgNDIwIFEgMjMwIDM4MCAyMjAgNDAwIFEgMjEwIDM3MCAyMDAgMzkwIFoiIGZpbGw9IiNmYjkyM2MiLz48cGF0aCBkPSJNIDU2MCA0MjAgUSA1NzAgMzgwIDU4MCA0MDAgUSA1OTAgMzcwIDYwMCAzOTAgWiIgZmlsbD0iI2ZiOTIzYyIvPjxyZWN0IHg9IjE4MCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjxyZWN0IHg9IjUwMCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjwvc3ZnPg==',
+                image_url_thumb:
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNTAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iIzFhMDcwNyIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSI0MjAiIHJ4PSIzODAiIHJ5PSIxMDAiIGZpbGw9IiNmZjhjMWEiIG9wYWNpdHk9IjAuMyIvPjxwYXRoIGQ9Ik0gMTIwIDQyMCBRIDEyMCAxMDAgNDAwIDEwMCBRIDY4MCAxMDAgNjgwIDQyMCBaIiBmaWxsPSIjMmEwZjBmIi8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQxMCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZjRjOTg3Ii8+PGVsbGlwc2UgY3g9IjQwMCIgY3k9IjQwOCIgcng9IjE2MCIgcnk9IjI4IiBmaWxsPSIjZmRlNjhhIi8+PGNpcmNsZSBjeD0iMzYwIiBjeT0iNDA1IiByPSI2IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDQwIiBjeT0iNDAyIiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iNDAwIiBjeT0iNDA4IiByPSI1IiBmaWxsPSIjZGMyNjI2Ii8+PGNpcmNsZSBjeD0iMzkwIiBjeT0iMzk2IiByPSIzIiBmaWxsPSIjZmVmM2M3Ii8+PHBhdGggZD0iTSAyNDAgNDIwIFEgMjMwIDM4MCAyMjAgNDAwIFEgMjEwIDM3MCAyMDAgMzkwIFoiIGZpbGw9IiNmYjkyM2MiLz48cGF0aCBkPSJNIDU2MCA0MjAgUSA1NzAgMzgwIDU4MCA0MDAgUSA1OTAgMzcwIDYwMCAzOTAgWiIgZmlsbD0iI2ZiOTIzYyIvPjxyZWN0IHg9IjE4MCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjxyZWN0IHg9IjUwMCIgeT0iNDMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwIiByeD0iNSIgZmlsbD0iIzc4MzUwZiIvPjwvc3ZnPg==',
             },
         },
         {
@@ -113,7 +137,8 @@ export const PIZZERIA_PRESET: PresetTemplate = {
             content: {
                 eyebrow: 'Equipo',
                 title: 'Las manos detrás del horno',
-                subtitle: 'Pizzeros con 30 años de experiencia y meseros que te hacen sentir como en casa.',
+                subtitle:
+                    'Pizzeros con 30 años de experiencia y meseros que te hacen sentir como en casa.',
                 columns: '3',
                 variant: 'card',
                 items: [
@@ -127,7 +152,8 @@ export const PIZZERIA_PRESET: PresetTemplate = {
                         ],
                         source: 'url',
                         photo_media_id: null,
-                        photo_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMiIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iI2Y0Yzk4NyIvPjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI2MCIgcng9IjM1IiByeT0iMjUiIGZpbGw9IiNmZmZmZmYiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNTUiIHJ4PSIzNSIgcnk9IjIwIiBmaWxsPSIjZjRmNGY1Ii8+PGNpcmNsZSBjeD0iOTAiIGN5PSI4NSIgcj0iMyIgZmlsbD0iIzFhMDcwNyIvPjxjaXJjbGUgY3g9IjExMCIgY3k9Ijg1IiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PHBhdGggZD0iTSA5MCAxMDAgUSAxMDAgMTA1IDExMCAxMDAiIHN0cm9rZT0iIzFhMDcwNyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1NSAxMzAgTCA1NSAyMDAgTCAxNDUgMjAwIEwgMTQ1IDEzMCBRIDEwMCAxMjAgNTUgMTMwIFoiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNIDU1IDE2MCBMIDE0NSAxNjAiIHN0cm9rZT0iI2RjMjYyNiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+',
+                        photo_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIzMiIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iI2Y0Yzk4NyIvPjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI2MCIgcng9IjM1IiByeT0iMjUiIGZpbGw9IiNmZmZmZmYiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNTUiIHJ4PSIzNSIgcnk9IjIwIiBmaWxsPSIjZjRmNGY1Ii8+PGNpcmNsZSBjeD0iOTAiIGN5PSI4NSIgcj0iMyIgZmlsbD0iIzFhMDcwNyIvPjxjaXJjbGUgY3g9IjExMCIgY3k9Ijg1IiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PHBhdGggZD0iTSA5MCAxMDAgUSAxMDAgMTA1IDExMCAxMDAiIHN0cm9rZT0iIzFhMDcwNyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1NSAxMzAgTCA1NSAyMDAgTCAxNDUgMjAwIEwgMTQ1IDEzMCBRIDEwMCAxMjAgNTUgMTMwIFoiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNIDU1IDE2MCBMIDE0NSAxNjAiIHN0cm9rZT0iI2RjMjYyNiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+',
                         schedule: 'Mar a Dom',
                         instagram_handle: 'donpepepizza',
                     },
@@ -141,7 +167,8 @@ export const PIZZERIA_PRESET: PresetTemplate = {
                         ],
                         source: 'url',
                         photo_media_id: null,
-                        photo_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzNSIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzMCIgZmlsbD0iI2Y0Yzk4NyIvPjxwYXRoIGQ9Ik0gNjggNTAgUSAxMDAgMzAgMTMyIDUwIEwgMTMyIDYwIFEgMTAwIDQwIDY4IDYwIFoiIGZpbGw9IiNmZmZmZmYiLz48Y2lyY2xlIGN4PSI5MCIgY3k9IjgwIiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PGNpcmNsZSBjeD0iMTEwIiBjeT0iODAiIHI9IjMiIGZpbGw9IiMxYTA3MDciLz48cGF0aCBkPSJNIDkwIDk1IFEgMTAwIDEwMCAxMTAgOTUiIHN0cm9rZT0iIzFhMDcwNyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1MCAxMzAgTCA1MCAyMDAgTCAxNTAgMjAwIEwgMTUwIDEzMCBRIDEwMCAxMTAgNTAgMTMwIFoiIGZpbGw9IiNkYzI2MjYiLz48cGF0aCBkPSJNIDUwIDEzMCBMIDUwIDE0NSBMIDE1MCAxNDUgTCAxNTAgMTMwIFEgMTAwIDExMCA1MCAxMzAgWiIgZmlsbD0iI2ZmZmZmZiIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjE2MCIgcj0iMyIgZmlsbD0iI2ZiYmYyNCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjE3NSIgcj0iMyIgZmlsbD0iI2ZiYmYyNCIvPjwvc3ZnPg==',
+                        photo_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzNSIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzMCIgZmlsbD0iI2Y0Yzk4NyIvPjxwYXRoIGQ9Ik0gNjggNTAgUSAxMDAgMzAgMTMyIDUwIEwgMTMyIDYwIFEgMTAwIDQwIDY4IDYwIFoiIGZpbGw9IiNmZmZmZmYiLz48Y2lyY2xlIGN4PSI5MCIgY3k9IjgwIiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PGNpcmNsZSBjeD0iMTEwIiBjeT0iODAiIHI9IjMiIGZpbGw9IiMxYTA3MDciLz48cGF0aCBkPSJNIDkwIDk1IFEgMTAwIDEwMCAxMTAgOTUiIHN0cm9rZT0iIzFhMDcwNyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1MCAxMzAgTCA1MCAyMDAgTCAxNTAgMjAwIEwgMTUwIDEzMCBRIDEwMCAxMTAgNTAgMTMwIFoiIGZpbGw9IiNkYzI2MjYiLz48cGF0aCBkPSJNIDUwIDEzMCBMIDUwIDE0NSBMIDE1MCAxNDUgTCAxNTAgMTMwIFEgMTAwIDExMCA1MCAxMzAgWiIgZmlsbD0iI2ZmZmZmZiIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjE2MCIgcj0iMyIgZmlsbD0iI2ZiYmYyNCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjE3NSIgcj0iMyIgZmlsbD0iI2ZiYmYyNCIvPjwvc3ZnPg==',
                         schedule: 'Mié a Dom',
                         instagram_handle: '',
                     },
@@ -155,7 +182,8 @@ export const PIZZERIA_PRESET: PresetTemplate = {
                         ],
                         source: 'url',
                         photo_media_id: null,
-                        photo_url: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzMiIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIyOCIgZmlsbD0iI2Y0Yzk4NyIvPjxwYXRoIGQ9Ik0gNzUgNjAgUSAxMDAgNTAgMTI1IDYwIEwgMTI1IDcwIFEgMTAwIDYwIDc1IDcwIFoiIGZpbGw9IiMxYTA3MDciLz48Y2lyY2xlIGN4PSI5MCIgY3k9IjgwIiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PGNpcmNsZSBjeD0iMTEwIiBjeT0iODAiIHI9IjMiIGZpbGw9IiMxYTA3MDciLz48cGF0aCBkPSJNIDUwIDEyNSBMIDUwIDIwMCBMIDE1MCAyMDAgTCAxNTAgMTI1IFEgMTAwIDExNSA1MCAxMjUgWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0gNTAgMTUwIEwgMTUwIDE1MCIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxODAiIHI9IjgiIGZpbGw9IiNmYmJmMjQiLz48L3N2Zz4=',
+                        photo_url:
+                            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZlZjNjNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIzMiIgZmlsbD0iI2ZkZTY4YSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIyOCIgZmlsbD0iI2Y0Yzk4NyIvPjxwYXRoIGQ9Ik0gNzUgNjAgUSAxMDAgNTAgMTI1IDYwIEwgMTI1IDcwIFEgMTAwIDYwIDc1IDcwIFoiIGZpbGw9IiMxYTA3MDciLz48Y2lyY2xlIGN4PSI5MCIgY3k9IjgwIiByPSIzIiBmaWxsPSIjMWEwNzA3Ii8+PGNpcmNsZSBjeD0iMTEwIiBjeT0iODAiIHI9IjMiIGZpbGw9IiMxYTA3MDciLz48cGF0aCBkPSJNIDUwIDEyNSBMIDUwIDIwMCBMIDE1MCAyMDAgTCAxNTAgMTI1IFEgMTAwIDExNSA1MCAxMjUgWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0gNTAgMTUwIEwgMTUwIDE1MCIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxODAiIHI9IjgiIGZpbGw9IiNmYmJmMjQiLz48L3N2Zz4=',
                         schedule: 'Lun a Dom',
                         instagram_handle: '',
                     },
@@ -167,9 +195,11 @@ export const PIZZERIA_PRESET: PresetTemplate = {
             visible: true,
             content: {
                 title: '¿Antojo de pizza?',
-                subtitle: 'Hacé tu pedido por WhatsApp y te lo llevamos en 30 minutos o es gratis.',
+                subtitle:
+                    'Hacé tu pedido por WhatsApp y te lo llevamos en 30 minutos o es gratis.',
                 button_label: 'Pedir por WhatsApp',
-                button_href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido',
+                button_href:
+                    'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido',
                 secondary_label: 'Llamar ahora',
                 secondary_href: 'tel:+59170000000',
             },
@@ -180,6 +210,23 @@ export const PIZZERIA_PRESET: PresetTemplate = {
         { label: 'Menú', href: '#slider', icon: 'Pizza' },
         { label: 'Inicio', href: '#hero', icon: 'Home' },
         { label: 'Equipo', href: '#team', icon: 'Users' },
-        { label: 'Pedir', href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido', icon: 'Phone' },
+        {
+            label: 'Pedir',
+            href: 'https://wa.me/59170000000?text=Hola%2C%20quiero%20hacer%20un%20pedido',
+            icon: 'Phone',
+        },
     ],
+    brand: {
+        site_name: 'Pizzería Don Pepe',
+        site_tagline: 'Pizzas a la piedra y empanadas gourmet en La Paz.',
+        pwa_short_name: 'Don Pepe',
+        pwa_description: 'Hacé tu pedido — delivery y retiro en local.',
+        pwa_theme_color: '#dc2626',
+        pwa_background_color: '#1f0d0d',
+        logo_path: '/blocks/logo-pizzeria.svg',
+        favicon_path: '/blocks/favicon-pizzeria.svg',
+        seo_title: 'Pizzería Don Pepe · Pizzas a la piedra en La Paz',
+        seo_description:
+            'Pizzas a la piedra, empanadas gourmet y delivery en 30 minutos en La Paz.',
+    },
 };

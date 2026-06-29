@@ -31,6 +31,7 @@ function isTiptapDoc(value: unknown): value is TiptapNode {
 function renderText(node: TiptapNode): string {
     let html = escapeHtml(node.text ?? '');
     const marks = node.marks ?? [];
+
     for (const mark of marks) {
         switch (mark.type) {
             case 'bold':
@@ -50,6 +51,7 @@ function renderText(node: TiptapNode): string {
                 break;
             case 'link': {
                 const href = mark.attrs?.href;
+
                 if (typeof href === 'string' && href.length > 0) {
                     const safeHref = escapeHtml(href);
                     const target =
@@ -58,12 +60,14 @@ function renderText(node: TiptapNode): string {
                             : '';
                     html = `<a href="${safeHref}"${target}>${html}</a>`;
                 }
+
                 break;
             }
             default:
                 break;
         }
     }
+
     return html;
 }
 
@@ -85,6 +89,7 @@ function renderNode(node: TiptapNode): string {
             const level =
                 typeof node.attrs?.level === 'number' ? node.attrs.level : 2;
             const safe = Math.min(Math.max(level, 1), 6);
+
             return `<h${safe}>${inner}</h${safe}>`;
         }
         case 'bulletList':
@@ -110,9 +115,11 @@ export function richTextToHtml(value: unknown): string {
     if (typeof value === 'string') {
         return value;
     }
+
     if (isTiptapDoc(value)) {
         return renderNode(value);
     }
+
     return '';
 }
 
@@ -120,13 +127,22 @@ export function richTextToPlainText(value: unknown): string {
     if (typeof value === 'string') {
         return value.replace(/<[^>]*>/g, '').trim();
     }
+
     if (isTiptapDoc(value)) {
         const collect = (node: TiptapNode): string => {
-            if (node.type === 'text') return node.text ?? '';
-            if (!Array.isArray(node.content)) return '';
+            if (node.type === 'text') {
+                return node.text ?? '';
+            }
+
+            if (!Array.isArray(node.content)) {
+                return '';
+            }
+
             return node.content.map(collect).join(' ');
         };
+
         return collect(value).trim();
     }
+
     return '';
 }

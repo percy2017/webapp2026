@@ -31,19 +31,34 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        {{-- Favicon links — driven by SiteSetting::favicon_url (the
+             accessor already prefers an operator-set URL over the
+             static /favicon.*.png shipping with the project). Updating
+             the favicon from /admin/site-settings now reflects in the
+             browser tab without rebuilding assets. The cache-buster
+             `?v=…` keeps stale icons out of the user's tab when they
+             switch templates. --}}
+        @php($faviconSetting = \App\Models\SiteSetting::instance())
+        @php($faviconUrl = $faviconSetting->favicon_url)
+        @if (! empty($faviconUrl))
+            <link rel="icon" href="{{ $faviconUrl }}?v={{ $faviconSetting->updated_at?->timestamp ?? '0' }}" sizes="any">
+        @else
+            <link rel="icon" href="/favicon.ico" sizes="any">
+            <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        @endif
+        <link rel="apple-touch-icon" href="{{ $faviconUrl ?: '/apple-touch-icon.png' }}">
 
-        {{-- PWA manifest + theme color --}}
-        <link rel="manifest" href="/manifest.webmanifest">
-        <meta name="theme-color" content="#0f172a">
+        {{-- PWA manifest + theme color. The manifest is generated
+             dynamically from the active SiteSetting (see
+             PwaAssetsController::manifest) so switching templates changes
+             icons + theme instantly. Use a query-string cache buster so a
+             newly activated template's manifest gets re-fetched instead
+             of being served from the PWA service-worker cache. --}}
+        <link rel="manifest" href="{{ route('pwa.manifest') }}?v={{ \App\Models\SiteSetting::instance()->updated_at?->timestamp ?? '0' }}">
+        <meta name="theme-color" content="{{ \App\Models\SiteSetting::instance()->pwa_theme_color ?: '#0f172a' }}">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="WebApp">
-        <link rel="apple-touch-icon" href="/pwa-icons/icon-192.png">
-        <link rel="apple-touch-icon" sizes="192x192" href="/pwa-icons/icon-192.png">
-        <link rel="apple-touch-icon" sizes="512x512" href="/pwa-icons/icon-512.png">
+        <meta name="apple-mobile-web-app-title" content="{{ \App\Models\SiteSetting::instance()->pwa_short_name ?: \App\Models\SiteSetting::instance()->site_name ?: 'WebApp' }}">
 
         @fonts
 

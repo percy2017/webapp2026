@@ -13,18 +13,23 @@ WebApp es un sistema integral que combina **tres pilares** en una sola plataform
 ## Características principales
 
 ### Multiusuario
+
 Soporte para múltiples usuarios con roles diferenciados. Cada persona de tu equipo puede tener su propio acceso con permisos específicos (administrador, operador, etc.).
 
 ### Páginas dinámicas
+
 Editor visual drag-and-drop. Cambiá textos, imágenes y bloques sin tocar código. Activá o desactivá páginas según la temporada o promoción.
 
 ### Plantillas prediseñadas
+
 Elegí entre plantillas listas para usar según tu rubro: peluquería, streamer, restaurante y más. Cada plantilla trae secciones, bloques y menú pre-armados.
 
 ### Chat en Vivo
+
 Tus clientes te escriben directamente desde tu sitio. El chat se actualiza en tiempo real sin que tengas que recargar la página.
 
 ### Calendario y reservas
+
 Gestioná turnos, eventos y reservas desde un calendario visual. Tus clientes pueden ver tu disponibilidad en tiempo real.
 
 ## ¿Para quién es esto?

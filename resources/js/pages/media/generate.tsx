@@ -1,11 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import {
-    Image as ImageIcon,
-    Loader2,
-    Sparkles,
-    Upload,
-    X,
-} from 'lucide-react';
+import { Image as ImageIcon, Loader2, Sparkles, Upload, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,12 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { generate, index } from '@/routes/media';
 
@@ -71,10 +60,7 @@ export default function MediaGenerate() {
     const [generating, setGenerating] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    function updateField<K extends keyof FormData>(
-        key: K,
-        value: FormData[K],
-    ) {
+    function updateField<K extends keyof FormData>(key: K, value: FormData[K]) {
         setForm((prev) => ({ ...prev, [key]: value }));
     }
 
@@ -93,6 +79,7 @@ export default function MediaGenerate() {
     function clearFile() {
         updateField('reference_image', null);
         setRefPreviewUrl(null);
+
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
@@ -130,6 +117,7 @@ export default function MediaGenerate() {
                 const flash = page.props.flash as
                     | { success?: string }
                     | undefined;
+
                 if (flash?.success) {
                     setGeneratedImages(['success']);
                 }
@@ -162,9 +150,7 @@ export default function MediaGenerate() {
                         <div className="space-y-6">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>
-                                        Generar imagen con IA
-                                    </CardTitle>
+                                    <CardTitle>Generar imagen con IA</CardTitle>
                                     <CardDescription>
                                         MiniMax image-01 — texto a imagen o con
                                         imagen de referencia.
@@ -256,7 +242,7 @@ export default function MediaGenerate() {
                                                                 onClick={
                                                                     clearFile
                                                                 }
-                                                                className="absolute -right-2 -top-2 rounded-full bg-destructive p-0.5 text-destructive-foreground shadow"
+                                                                className="absolute -top-2 -right-2 rounded-full bg-destructive p-0.5 text-destructive-foreground shadow"
                                                                 aria-label="Quitar imagen"
                                                             >
                                                                 <X className="h-3.5 w-3.5" />
@@ -278,8 +264,8 @@ export default function MediaGenerate() {
                                                 </div>
                                                 <p className="text-xs text-muted-foreground">
                                                     JPG o PNG, máximo 10 MB.
-                                                    Foto frontal del rostro
-                                                    para mejores resultados.
+                                                    Foto frontal del rostro para
+                                                    mejores resultados.
                                                 </p>
                                                 {errors.reference_image && (
                                                     <p className="text-xs text-destructive">
@@ -533,7 +519,7 @@ export default function MediaGenerate() {
                                     )}
 
                                     <div className="mt-4 space-y-2 rounded-lg border bg-muted/50 p-3">
-                                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                             Resumen
                                         </p>
                                         <div className="space-y-1 text-xs text-muted-foreground">

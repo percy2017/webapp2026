@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Avatar por defecto del administrador">
+    <defs>
+        <linearGradient id="bgAdmin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="#0f172a"/>
+        </linearGradient>
+        <linearGradient id="aStroke" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#38bdf8"/>
+            <stop offset="100%" stop-color="#0ea5e9"/>
+        </linearGradient>
+    </defs>
+    <rect width="256" height="256" rx="48" fill="url(#bgAdmin)"/>
+    <!-- A mayúscula estilizada (icono admin) -->
+    <path d="M 64 200 L 128 56 L 192 200 L 168 200 L 154 168 L 102 168 L 88 200 Z"
+          fill="none" stroke="url(#aStroke)" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- travesaño de la A -->
+    <line x1="111" y1="144" x2="145" y2="144"
+          stroke="url(#aStroke)" stroke-width="14" stroke-linecap="round"/>
+    <!-- pequeño escudo (estrella) abajo -->
+    <circle cx="128" cy="220" r="4" fill="#38bdf8"/>
+</svg>

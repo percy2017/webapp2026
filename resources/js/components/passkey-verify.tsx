@@ -33,12 +33,14 @@ export default function PasskeyVerify({
         onSuccess: (response) => {
             const target = response.redirect ?? '/admin';
             let safe = target;
+
             if (typeof target === 'string') {
                 if (target.startsWith('http://')) {
                     safe = target.replace(/^http:\/\//, 'https://');
                 } else if (target.startsWith('http')) {
                     try {
                         const u = new URL(target);
+
                         if (u.protocol === 'http:') {
                             u.protocol = 'https:';
                             safe = u.toString();
@@ -46,6 +48,7 @@ export default function PasskeyVerify({
                     } catch {}
                 }
             }
+
             router.visit(safe);
         },
     });

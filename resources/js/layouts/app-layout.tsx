@@ -19,6 +19,7 @@ function currentNotifyPermission(): NotifyPermission {
     if (typeof window === 'undefined' || !('Notification' in window)) {
         return 'unsupported';
     }
+
     return Notification.permission;
 }
 
@@ -26,6 +27,7 @@ function postToServiceWorker(payload: Record<string, unknown>) {
     if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) {
         return;
     }
+
     navigator.serviceWorker.ready
         .then((reg) => {
             reg.active?.postMessage({ type: 'chat:notify', payload });
@@ -59,7 +61,10 @@ export default function AppLayout({
         currentNotifyPermission,
     );
     const [enabled, setEnabled] = useState<boolean>(() => {
-        if (typeof window === 'undefined') return false;
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
         return window.localStorage.getItem(NOTIFY_KEY) === '1';
     });
     const enabledRef = useRef(enabled);
@@ -72,15 +77,22 @@ export default function AppLayout({
     }, [permission]);
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         window.localStorage.setItem(NOTIFY_KEY, enabled ? '1' : '0');
     }, [enabled]);
 
     async function requestPermission() {
-        if (permission === 'unsupported') return;
+        if (permission === 'unsupported') {
+            return;
+        }
+
         try {
             const result = await Notification.requestPermission();
             setPermission(result);
+
             if (result === 'granted') {
                 setEnabled(true);
                 // Subscribe for Web Push so we get notifications even when
@@ -102,20 +114,24 @@ export default function AppLayout({
         ) {
             return;
         }
+
         try {
             const reg = await navigator.serviceWorker.ready;
             let subscription = await reg.pushManager.getSubscription();
+
             if (!subscription) {
                 subscription = await reg.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+                    applicationServerKey:
+                        urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
                 });
             }
+
             await persistSubscription(subscription);
         } catch (err) {
             // Push is best-effort; if the browser rejects we just keep
             // the in-app + postMessage notifications.
-            // eslint-disable-next-line no-console
+
             console.warn('[PWA] push subscription failed:', err);
         }
     }
@@ -125,9 +141,11 @@ export default function AppLayout({
             endpoint: string;
             keys?: { p256dh?: string; auth?: string };
         };
+
         if (!payload.endpoint || !payload.keys?.p256dh || !payload.keys?.auth) {
             return;
         }
+
         const csrf = document
             .querySelector('meta[name="csrf-token"]')
             ?.getAttribute('content');
@@ -147,11 +165,13 @@ export default function AppLayout({
                     p256dh: payload.keys.p256dh,
                     auth: payload.keys.auth,
                 },
-                content_encoding:
-                    (subscription as unknown as { options?: { applicationServerKey?: ArrayBuffer } })
-                        ?.options?.applicationServerKey
-                        ? 'aesgcm'
-                        : 'aes128gcm',
+                content_encoding: (
+                    subscription as unknown as {
+                        options?: { applicationServerKey?: ArrayBuffer };
+                    }
+                )?.options?.applicationServerKey
+                    ? 'aesgcm'
+                    : 'aes128gcm',
             }),
         });
     }
@@ -162,17 +182,24 @@ export default function AppLayout({
         typeof window !== 'undefined' &&
         window.location.pathname.startsWith('/admin/chat-live');
     useEffect(() => {
-        if (!isChatLivePath) return;
+        if (!isChatLivePath) {
+            return;
+        }
+
         setUnseen(0);
     }, [isChatLivePath]);
 
     // Tab-title badge so the admin can see unseen chats even when they're
     // on another tab or app section.
     useEffect(() => {
-        if (typeof document === 'undefined') return;
+        if (typeof document === 'undefined') {
+            return;
+        }
+
         const stripped = document.title.replace(/^\(\d+\)\s*/, '');
         const original = stripped === '' ? 'WebApp' : stripped;
         document.title = unseen > 0 ? `(${unseen}) ${original}` : original;
+
         return () => {
             document.title = original;
         };
@@ -180,7 +207,10 @@ export default function AppLayout({
 
     useEffect(() => {
         const echo = (window as any).Echo;
-        if (!echo || !isAuthed) return;
+
+        if (!echo || !isAuthed) {
+            return;
+        }
 
         const onCreated = (event: {
             id?: number;
@@ -188,6 +218,7 @@ export default function AppLayout({
             preview?: string;
         }) => {
             setUnseen((n) => n + 1);
+
             if (enabledRef.current && permissionRef.current === 'granted') {
                 const name = event?.user?.name ?? 'un visitante';
                 postToServiceWorker({
@@ -219,7 +250,7 @@ export default function AppLayout({
             {children}
 
             {showToggle && (
-                <div className="fixed right-4 top-3 z-40 flex items-center gap-2">
+                <div className="fixed top-3 right-4 z-40 flex items-center gap-2">
                     {unseen > 0 && (
                         <Link
                             href={chatsIndex()}
@@ -230,9 +261,7 @@ export default function AppLayout({
                                 {unseen > 99 ? '99+' : unseen}
                             </span>
                             <span className="hidden sm:inline">
-                                {unseen === 1
-                                    ? 'chat nuevo'
-                                    : 'chats nuevos'}
+                                {unseen === 1 ? 'chat nuevo' : 'chats nuevos'}
                             </span>
                         </Link>
                     )}
@@ -276,8 +305,10 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
         .replace(/_/g, '/');
     const rawData = atob(base64);
     const output = new Uint8Array(rawData.length);
+
     for (let i = 0; i < rawData.length; i++) {
         output[i] = rawData.charCodeAt(i);
     }
+
     return output;
 }

@@ -1,14 +1,9 @@
 import { Head, usePage } from '@inertiajs/react';
 import { SiteLayout } from '@site/layouts/site-layout';
-import {
-    SECTION_REGISTRY,
-    type SectionTheme,
-    type SectionContent,
-} from '@site/lib/template-registry';
-import {
-    BASIC_BLOCKS_REGISTRY,
-    type BlockContent,
-} from '@site/lib/basic-blocks-registry';
+import { BASIC_BLOCKS_REGISTRY } from '@site/lib/basic-blocks-registry';
+import type { BlockContent } from '@site/lib/basic-blocks-registry';
+import { SECTION_REGISTRY } from '@site/lib/template-registry';
+import type { SectionTheme, SectionContent } from '@site/lib/template-registry';
 
 type SiteSettings = {
     site_name: string;
@@ -67,12 +62,17 @@ function mergeSectionContent(
     defaults: SectionContent | undefined,
     persisted: Record<string, unknown>,
 ): Record<string, unknown> {
-    if (!defaults) return persisted;
+    if (!defaults) {
+        return persisted;
+    }
 
-    const out: Record<string, unknown> = { ...(defaults as Record<string, unknown>) };
+    const out: Record<string, unknown> = {
+        ...(defaults as Record<string, unknown>),
+    };
 
     for (const [key, value] of Object.entries(persisted)) {
         const existing = out[key];
+
         if (
             value !== null &&
             typeof value === 'object' &&
@@ -105,8 +105,7 @@ export default function SiteLanding({ template, settings }: Props) {
     const s = props.settings;
 
     const pageTitle = s.default_seo?.title || s.site_name;
-    const pageDescription =
-        s.default_seo?.description || s.site_tagline || '';
+    const pageDescription = s.default_seo?.description || s.site_tagline || '';
 
     const sections = (tmpl?.sections ?? []).filter((s) => s.visible !== false);
     const visibleBlocks = blocks.filter((b) => b.visible !== false);
@@ -115,13 +114,10 @@ export default function SiteLanding({ template, settings }: Props) {
         <SiteLayout>
             <Head title={pageTitle}>
                 <meta name="description" content={pageDescription} />
-                {s.favicon_url && (
-                    <link rel="icon" href={s.favicon_url} />
-                )}
+                {s.favicon_url && <link rel="icon" href={s.favicon_url} />}
             </Head>
 
-            {sections.length === 0 &&
-            visibleBlocks.length === 0 ? (
+            {sections.length === 0 && visibleBlocks.length === 0 ? (
                 <div className="mx-auto flex min-h-[60vh] w-full max-w-3xl flex-col items-center justify-center gap-4 px-4 text-center">
                     <h1 className="text-3xl font-bold tracking-tight">
                         {s.site_name}
@@ -140,7 +136,11 @@ export default function SiteLanding({ template, settings }: Props) {
                 <div className="space-y-6">
                     {sections.map((section) => {
                         const definition = SECTION_REGISTRY[section.id];
-                        if (!definition) return null;
+
+                        if (!definition) {
+                            return null;
+                        }
+
                         // Merge defaults from registry into the section content
                         // so any missing field (e.g. image_url when a preset
                         // didn't persist it) still renders the sample asset.
@@ -148,8 +148,13 @@ export default function SiteLanding({ template, settings }: Props) {
                             definition.defaultContent,
                             section.content ?? {},
                         ) as SectionContent;
-                        if (definition.isEmpty?.(content)) return null;
+
+                        if (definition.isEmpty?.(content)) {
+                            return null;
+                        }
+
                         const Component = definition.component;
+
                         return (
                             <Component
                                 key={`section-${section.id}-${tmpl?.slug ?? 'none'}`}
@@ -161,12 +166,17 @@ export default function SiteLanding({ template, settings }: Props) {
 
                     {visibleBlocks.map((block, idx) => {
                         const definition = BASIC_BLOCKS_REGISTRY[block.type];
-                        if (!definition) return null;
+
+                        if (!definition) {
+                            return null;
+                        }
+
                         const content = mergeSectionContent(
                             definition.defaultContent,
                             block.content ?? {},
                         );
                         const Component = definition.component;
+
                         return (
                             <div
                                 key={`block-${block.id}-${idx}`}

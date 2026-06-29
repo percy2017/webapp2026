@@ -13,18 +13,18 @@ Si activás una página distinta, su menú reemplaza al anterior automáticament
 1. En la sidebar, andá a **Sitio público → Menú**.
 2. Vas a ver la lista de items del menú de la página activa.
 3. Para cada item podés:
-   - **Editar** — Cambiar etiqueta, link o ícono.
-   - **Reordenar** — Mover arriba/abajo con las flechas.
-   - **Eliminar** — Borrar el item.
+    - **Editar** — Cambiar etiqueta, link o ícono.
+    - **Reordenar** — Mover arriba/abajo con las flechas.
+    - **Eliminar** — Borrar el item.
 4. Para agregar un item nuevo, click en **"Nuevo item"**.
 
 ## Estructura de un item
 
 - **Etiqueta** — El texto que ve el visitante (ej: "Servicios").
 - **URL** — El destino del link. Puede ser:
-  - `#seccion` — Para links a secciones de la página actual (ej: `#features` para ir a la sección de características).
-  - `https://...` — Para links externos (ej: `https://wa.me/123456` para abrir WhatsApp).
-  - `/ruta` — Para links internos a otras páginas.
+    - `#seccion` — Para links a secciones de la página actual (ej: `#features` para ir a la sección de características).
+    - `https://...` — Para links externos (ej: `https://wa.me/123456` para abrir WhatsApp).
+    - `/ruta` — Para links internos a otras páginas.
 - **Ícono** — Un ícono opcional que aparece al lado de la etiqueta (Lucide icon).
 - **Item padre** — Para sub-items anidados. Si querés un menú con sub-items (ej: "Servicios > Corte, Color, Peinado"), dejá el item padre como "Sin padre" y los sub-items con "Item padre" apuntando al item principal.
 

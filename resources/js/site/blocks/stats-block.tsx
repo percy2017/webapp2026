@@ -37,12 +37,17 @@ const DEFAULT_ITEMS: StatItem[] = [
 ];
 
 function parseNumber(value: unknown): number | null {
-    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'number' && Number.isFinite(value)) {
+        return value;
+    }
+
     if (typeof value === 'string') {
         const cleaned = value.replace(/[^\d.-]/g, '');
         const n = Number.parseFloat(cleaned);
+
         return Number.isFinite(n) ? n : null;
     }
+
     return null;
 }
 
@@ -50,6 +55,7 @@ function formatNumber(value: number): string {
     if (value >= 1_000_000) {
         return `${(value / 1_000_000).toFixed(value >= 10_000_000 ? 0 : 1)}M`;
     }
+
     if (value >= 1_000) {
         return `${(value / 1_000).toFixed(value >= 10_000 ? 0 : 1)}K`;
     }
@@ -62,7 +68,10 @@ function useCountUp(target: number, duration = 1500) {
     const startedRef = useRef(false);
 
     useEffect(() => {
-        if (startedRef.current) return;
+        if (startedRef.current) {
+            return;
+        }
+
         startedRef.current = true;
 
         const start = performance.now();
@@ -73,7 +82,10 @@ function useCountUp(target: number, duration = 1500) {
             // ease-out cubic
             const eased = 1 - Math.pow(1 - t, 3);
             setValue(Math.round(target * eased));
-            if (t < 1) frame = requestAnimationFrame(tick);
+
+            if (t < 1) {
+                frame = requestAnimationFrame(tick);
+            }
         };
         frame = requestAnimationFrame(tick);
 
@@ -97,11 +109,11 @@ function StatCard({ item }: { item: StatItem }) {
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
                 <Icon className="h-6 w-6" />
             </div>
-            <div className="font-mono text-3xl font-bold tabular-nums text-foreground sm:text-4xl">
+            <div className="font-mono text-3xl font-bold text-foreground tabular-nums sm:text-4xl">
                 {displayValue}
                 {item.suffix}
             </div>
-            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
+            <div className="text-xs font-medium tracking-wider text-muted-foreground uppercase sm:text-sm">
                 {item.label}
             </div>
         </div>
@@ -129,14 +141,15 @@ export function StatsBlock({ content }: BlockProps) {
         cyan: 'ring-cyan-500/20',
     }[accent];
 
-    const list = Array.isArray(items) && items.length > 0 ? items : DEFAULT_ITEMS;
+    const list =
+        Array.isArray(items) && items.length > 0 ? items : DEFAULT_ITEMS;
 
     return (
         <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
             {(eyebrow || title || subtitle) && (
                 <div className="mb-8 text-center sm:mb-10">
                     {eyebrow && (
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                        <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
                             {eyebrow}
                         </p>
                     )}
@@ -152,7 +165,9 @@ export function StatsBlock({ content }: BlockProps) {
                     )}
                 </div>
             )}
-            <div className={`grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 ${accentRing}`}>
+            <div
+                className={`grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 ${accentRing}`}
+            >
                 {list.map((item, idx) => (
                     <StatCard key={`${item.label}-${idx}`} item={item} />
                 ))}

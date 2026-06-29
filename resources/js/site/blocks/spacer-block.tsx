@@ -16,5 +16,6 @@ const HEIGHT_CLASSES = [
 export function SpacerBlock({ content }: BlockProps) {
     const { height = 'h-16' } = content as { height?: string };
     const cls = HEIGHT_CLASSES.includes(height) ? height : 'h-16';
+
     return <div className={cls} aria-hidden />;
 }

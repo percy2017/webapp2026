@@ -14,7 +14,9 @@ export function CtaSection({ content, theme }: SectionProps) {
 
     const primaryColor = theme?.primary_color;
 
-    if (!title && !button_label) return null;
+    if (!title && !button_label) {
+        return null;
+    }
 
     return (
         <section

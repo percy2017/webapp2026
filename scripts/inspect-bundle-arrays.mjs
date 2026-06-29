@@ -12,7 +12,9 @@ console.log('Inspecting:', regFile);
 // Find every `id:` property in object literals
 const idMatches = [...regCode.matchAll(/id:([a-z0-9-]+)/g)].map((m) => m[1]);
 const counts = {};
-idMatches.forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
+idMatches.forEach((id) => {
+ counts[id] = (counts[id] || 0) + 1; 
+});
 const dup = Object.entries(counts).filter(([, c]) => c > 1);
 console.log('Total id: references:', idMatches.length);
 console.log('Distinct ids:', Object.keys(counts).length);

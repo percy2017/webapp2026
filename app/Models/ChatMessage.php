@@ -87,4 +87,63 @@ class ChatMessage extends Model implements HasMedia
     {
         return $this->sender_type === 'agent';
     }
+
+    /**
+     * Total count of attachments on this message — counts BOTH:
+     *   - Spatie's `attachments` collection (legacy / pre-`media_ids` path)
+     *   - the `media_ids` JSON references (current attachment path)
+     *
+     * Both must be checked; otherwise a media-only message (no text)
+     * would look empty in the sidebar preview.
+     */
+    public function attachmentCount(): int
+    {
+        $referenced = is_array($this->media_ids) ? count($this->media_ids) : 0;
+        $spatie = $this->getMedia('attachments')->count();
+
+        return $referenced + $spatie;
+    }
+
+    /**
+     * One-line preview used in the admin chat sidebar list.
+     *
+     * Order of preference:
+     *   1. the textual `content` if it's non-empty
+     *   2. the last attachment's mime-kind (image / video / audio / file)
+     *   3. a generic "📎 N archivos" line when more than one
+     *   4. "Sin contenido" as the final fallback
+     */
+    public function previewText(): string
+    {
+        $content = trim((string) ($this->content ?? ''));
+        if ($content !== '') {
+            return $content;
+        }
+
+        $referenced = $this->referencedMedia();
+        if ($referenced->isNotEmpty()) {
+            $first = $referenced->first();
+            $total = $referenced->count();
+            $extraCount = $referenced->count() - 1;
+            $extra = $extraCount > 0 ? " (+{$extraCount})" : '';
+
+            $mime = (string) ($first->mime_type ?? '');
+            $icon = match (true) {
+                str_starts_with($mime, 'image/') => '🖼️',
+                str_starts_with($mime, 'video/') => '🎬',
+                str_starts_with($mime, 'audio/') => '🎙️',
+                default => '📎',
+            };
+
+            return $total === 1
+                ? "{$icon} Archivo adjunto{$extra}"
+                : "{$icon} {$total} archivos adjuntos";
+        }
+
+        if ($this->getMedia('attachments')->isNotEmpty()) {
+            return '📎 Archivo adjunto';
+        }
+
+        return 'Sin contenido';
+    }
 }

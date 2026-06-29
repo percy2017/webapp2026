@@ -1,3 +1,4 @@
+import type { CustomField } from '@puckeditor/core';
 import {
     BarChart3,
     Bell,
@@ -29,9 +30,8 @@ import {
     Wrench,
     Youtube,
     Zap,
-    type LucideIcon,
 } from 'lucide-react';
-import type { CustomField } from '@puckeditor/core';
+import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ICONS: { name: string; Icon: LucideIcon }[] = [
@@ -83,6 +83,7 @@ function IconField({ value, onChange }: Props) {
             <div className="grid grid-cols-6 gap-1.5">
                 {ICONS.map(({ name, Icon }) => {
                     const selected = name === current;
+
                     return (
                         <button
                             key={name}
@@ -104,7 +105,8 @@ function IconField({ value, onChange }: Props) {
             </div>
             {current && (
                 <p className="text-[11px] text-muted-foreground">
-                    Ícono seleccionado: <span className="font-medium">{current}</span>
+                    Ícono seleccionado:{' '}
+                    <span className="font-medium">{current}</span>
                 </p>
             )}
         </div>

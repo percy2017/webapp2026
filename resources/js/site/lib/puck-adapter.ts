@@ -1,5 +1,5 @@
-import { SECTION_REGISTRY } from '@site/lib/template-registry';
 import { BASIC_BLOCKS_REGISTRY } from '@site/lib/basic-blocks-registry';
+import { SECTION_REGISTRY } from '@site/lib/template-registry';
 import type { SectionContent, SectionTheme } from '@site/lib/template-registry';
 
 export type SiteSectionSerialized = {
@@ -41,17 +41,22 @@ function normalizeMediaField(
         const result: Record<string, unknown> = {
             id: typeof obj.id === 'number' ? obj.id : null,
         };
+
         if (typeof obj.url === 'string') {
             result.url = obj.url;
         }
+
         return result;
     }
+
     if (typeof value === 'number') {
         return value;
     }
+
     if (value === null || value === undefined) {
         return null;
     }
+
     return null;
 }
 
@@ -81,13 +86,19 @@ export function sectionsToPuckData(
                 id: `${item.id}-${index}-${Math.random().toString(36).slice(2, 8)}`,
                 hidden: !item.visible,
             };
+
             if ('block_db_id' in item && item.block_db_id) {
                 props.block_db_id = item.block_db_id;
             }
+
             for (const [key, value] of Object.entries(item.content)) {
-                if (TRANSIENT_KEYS.has(key)) continue;
+                if (TRANSIENT_KEYS.has(key)) {
+                    continue;
+                }
+
                 if (key === 'image_media_id') {
                     const normalized = normalizeMediaField(value);
+
                     if (
                         typeof normalized === 'number' &&
                         normalized > 0 &&
@@ -104,6 +115,7 @@ export function sectionsToPuckData(
                     props[key] = value;
                 }
             }
+
             return {
                 type: item.id,
                 props,
@@ -122,18 +134,28 @@ export function puckDataToSplit(data: PuckData): PuckToSectionsResult {
     const sections: SiteSectionSerialized[] = [];
     const blocks: Array<Omit<SiteBlockSerialized, 'id'>> = [];
 
-    if (!data?.content) return { sections, blocks };
+    if (!data?.content) {
+        return { sections, blocks };
+    }
 
     for (const block of data.content) {
-        if (!block.type) continue;
+        if (!block.type) {
+            continue;
+        }
 
-        const { hidden, id: _id, block_db_id, ...content } = block.props as {
+        const {
+            hidden,
+            id: _id,
+            block_db_id,
+            ...content
+        } = block.props as {
             hidden?: boolean;
             id?: string;
             block_db_id?: number;
         } & Record<string, unknown>;
 
         const normalizedContent: Record<string, unknown> = {};
+
         for (const [key, value] of Object.entries(content)) {
             if (key === 'image_media_id') {
                 const mediaId = normalizeMediaField(value);

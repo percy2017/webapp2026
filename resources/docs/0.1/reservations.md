@@ -10,10 +10,10 @@ En la sidebar, andá a **General → Agenda**. Vas a ver el calendario con vista
 
 1. En la agenda, hacé click en cualquier día del calendario (o en el botón "+" según la vista).
 2. Completá el formulario:
-   - **Título** — Nombre del evento o reserva.
-   - **Fecha de inicio** — Día y hora.
-   - **Fecha de fin** — Día y hora (opcional, para eventos de todo el día).
-   - **Descripción** — Notas adicionales.
+    - **Título** — Nombre del evento o reserva.
+    - **Fecha de inicio** — Día y hora.
+    - **Fecha de fin** — Día y hora (opcional, para eventos de todo el día).
+    - **Descripción** — Notas adicionales.
 3. Click en **"Guardar"**.
 
 El evento aparece inmediatamente en el calendario.

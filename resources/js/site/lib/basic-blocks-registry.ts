@@ -88,9 +88,17 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                                 type: 'text',
                                 text: 'Acá va tu párrafo. Podés usar ',
                             },
-                            { type: 'text', marks: [{ type: 'bold' }], text: 'negrita' },
+                            {
+                                type: 'text',
+                                marks: [{ type: 'bold' }],
+                                text: 'negrita',
+                            },
                             { type: 'text', text: ', ' },
-                            { type: 'text', marks: [{ type: 'italic' }], text: 'cursiva' },
+                            {
+                                type: 'text',
+                                marks: [{ type: 'italic' }],
+                                text: 'cursiva',
+                            },
                             { type: 'text', text: ' y ' },
                             {
                                 type: 'text',
@@ -124,7 +132,9 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
         ],
         isEmpty: (content) =>
             !content.content ||
-            String(content.content).replace(/<[^>]*>/g, '').trim() === '',
+            String(content.content)
+                .replace(/<[^>]*>/g, '')
+                .trim() === '',
     },
     image: {
         id: 'image',
@@ -173,7 +183,9 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
             { key: 'rounded', label: 'Bordes redondeados', type: 'boolean' },
         ],
         isEmpty: (content) => {
-            if (content.source === 'media') return !content.image_media_id;
+            if (content.source === 'media') {
+                return !content.image_media_id;
+            }
 
             return !content.url && !content.image_url;
         },
@@ -231,66 +243,29 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
         id: 'container',
         label: 'Contenedor',
         description:
-            'Fila, columna o grid para agrupar otros bloques. Anidable.',
+            'Wrapper vertical con columnas agregables. Cada columna es un slot donde podés arrastrar bloques.',
         icon: 'LayoutGrid',
         component: ContainerBlock,
         defaultContent: {
-            layout: 'stack',
-            align: 'stretch',
-            gap: 'md',
             padding: 'md',
             background: 'transparent',
-            radius: 'none',
-            border: 'none',
-            max_width: 'full',
-            min_height: 'none',
+            max_width: 'container',
+            gap: 'sm',
+            // Viene con 1 columna vacía — el operator agrega más con
+            // el botón + de Puck. Arrastrar bloques adentro es la
+            // siguiente acción natural.
+            columns: [{ content: [] }],
         },
         schema: [
             {
-                key: 'layout',
-                label: 'Disposición',
-                type: 'radio',
-                options: [
-                    { label: 'Columna', value: 'stack' },
-                    { label: 'Fila', value: 'row' },
-                    { label: 'Fila inversa', value: 'row-reverse' },
-                    { label: 'Grid 3 col', value: 'grid' },
-                ],
-            },
-            {
-                key: 'align',
-                label: 'Alineación',
-                type: 'radio',
-                options: [
-                    { label: 'Arriba / Izquierda', value: 'start' },
-                    { label: 'Centro', value: 'center' },
-                    { label: 'Abajo / Derecha', value: 'end' },
-                    { label: 'Distribuido', value: 'between' },
-                    { label: 'Estirar', value: 'stretch' },
-                ],
-            },
-            {
-                key: 'gap',
-                label: 'Espacio entre hijos',
-                type: 'radio',
-                options: [
-                    { label: 'Ninguno', value: 'none' },
-                    { label: 'Chico', value: 'sm' },
-                    { label: 'Mediano', value: 'md' },
-                    { label: 'Grande', value: 'lg' },
-                    { label: 'Extra', value: 'xl' },
-                ],
-            },
-            {
                 key: 'padding',
-                label: 'Padding interno',
+                label: 'Padding vertical',
                 type: 'radio',
                 options: [
                     { label: 'Ninguno', value: 'none' },
                     { label: 'Chico', value: 'sm' },
                     { label: 'Mediano', value: 'md' },
                     { label: 'Grande', value: 'lg' },
-                    { label: 'Extra', value: 'xl' },
                 ],
             },
             {
@@ -300,56 +275,62 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                 options: [
                     { label: 'Transparente', value: 'transparent' },
                     { label: 'Fondo de página', value: 'background' },
-                    { label: 'Tarjeta', value: 'card' },
                     { label: 'Suave', value: 'muted' },
-                    { label: 'Primario', value: 'primary' },
-                    { label: 'Acento', value: 'accent' },
-                ],
-            },
-            {
-                key: 'radius',
-                label: 'Bordes redondeados',
-                type: 'radio',
-                options: [
-                    { label: 'Sin bordes', value: 'none' },
-                    { label: 'Suaves', value: 'sm' },
-                    { label: 'Medios', value: 'md' },
-                    { label: 'Redondeados', value: 'xl' },
-                    { label: 'Muy redondeados', value: 'full' },
-                ],
-            },
-            {
-                key: 'border',
-                label: 'Borde',
-                type: 'radio',
-                options: [
-                    { label: 'Sin borde', value: 'none' },
-                    { label: 'Sutil', value: 'light' },
-                    { label: 'Primario', value: 'primary' },
+                    { label: 'Tarjeta', value: 'card' },
                 ],
             },
             {
                 key: 'max_width',
-                label: 'Ancho máximo',
+                label: 'Ancho',
                 type: 'radio',
                 options: [
-                    { label: 'Full (sin límite)', value: 'full' },
-                    { label: 'Contenedor (1280px)', value: 'container' },
-                    { label: 'Angosto (896px)', value: 'narrow' },
-                    { label: 'Texto (65ch)', value: 'prose' },
+                    { label: 'Completo (sin límite)', value: 'full' },
+                    { label: 'Contenedor (1152px)', value: 'container' },
+                    { label: 'Angosto (768px)', value: 'narrow' },
                 ],
             },
             {
-                key: 'min_height',
-                label: 'Altura mínima',
+                key: 'gap',
+                label: 'Espacio entre columnas',
                 type: 'radio',
                 options: [
-                    { label: 'Auto', value: 'none' },
-                    { label: 'Chico (20vh)', value: 'sm' },
-                    { label: 'Mediano (40vh)', value: 'md' },
-                    { label: 'Grande (60vh)', value: 'lg' },
-                    { label: 'Pantalla completa', value: 'screen' },
+                    { label: 'Ninguno', value: 'none' },
+                    { label: 'Chico', value: 'sm' },
+                    { label: 'Mediano', value: 'md' },
+                    { label: 'Grande', value: 'lg' },
                 ],
+            },
+            {
+                // Patrón canónico de multi-column layouts en Puck
+                // v0.22+ — un array field donde cada item contiene
+                // un sub-field `slot`. El operator agrega/quita
+                // columnas con los botones + y × que Puck provee.
+                // Ver:
+                // https://puckeditor.com/docs/integrating-puck/multi-column-layouts
+                key: 'columns',
+                label: 'Columnas',
+                type: 'list',
+                itemLabel: 'Columna',
+                itemSchema: [
+                    {
+                        key: 'content',
+                        label: 'Contenido',
+                        type: 'slot',
+                    },
+                ],
+                getItemSummary: (
+                    item: Record<string, unknown>,
+                    index: number,
+                ): string => {
+                    const content = (item as { content?: unknown[] }).content;
+                    const n = Array.isArray(content) ? content.length : 0;
+
+                    if (n === 0) {
+                        return `Columna ${index + 1} (vacía)`;
+                    }
+
+                    return `Columna ${index + 1} · ${n} bloque${n === 1 ? '' : 's'}`;
+                },
             },
         ],
         isEmpty: () => false,
@@ -492,11 +473,10 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                 media !== null &&
                 media !== undefined &&
                 media !== '' &&
-                (!(
+                !(
                     typeof media === 'object' &&
-                    (!media ||
-                        (media.id == null && !media.url))
-                ));
+                    (!media || (media.id == null && !media.url))
+                );
 
             return !url && !hasMedia;
         },
@@ -523,8 +503,7 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                 key: 'address',
                 label: 'Dirección',
                 type: 'text',
-                helper:
-                    'Calle y ciudad, o "lat, lng" (ej: -34.6037, -58.3816).',
+                helper: 'Calle y ciudad, o "lat, lng" (ej: -34.6037, -58.3816).',
             },
             {
                 key: 'lat',
@@ -588,13 +567,9 @@ export const BASIC_BLOCKS_REGISTRY: Record<string, BasicBlockDefinition> = {
                     ? content.address.trim()
                     : '';
             const lat =
-                typeof content.lat === 'number'
-                    ? content.lat
-                    : Number.NaN;
+                typeof content.lat === 'number' ? content.lat : Number.NaN;
             const lng =
-                typeof content.lng === 'number'
-                    ? content.lng
-                    : Number.NaN;
+                typeof content.lng === 'number' ? content.lng : Number.NaN;
 
             return !address && (Number.isNaN(lat) || Number.isNaN(lng));
         },

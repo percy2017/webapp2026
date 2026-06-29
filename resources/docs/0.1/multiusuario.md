@@ -12,10 +12,10 @@ WebApp soporta múltiples usuarios con diferentes roles y permisos. Cada persona
 1. En la sidebar, andá a **Usuarios → Todos**.
 2. Hacé click en **"Nuevo"**.
 3. Completá los datos:
-   - **Nombre** — Nombre completo.
-   - **Email** — El email con el que va a iniciar sesión.
-   - **Contraseña** — Mínimo 8 caracteres.
-   - **Rol** — `admin` o `user`.
+    - **Nombre** — Nombre completo.
+    - **Email** — El email con el que va a iniciar sesión.
+    - **Contraseña** — Mínimo 8 caracteres.
+    - **Rol** — `admin` o `user`.
 4. Click en **"Crear"**.
 
 El nuevo usuario recibe un email de verificación y puede iniciar sesión inmediatamente.

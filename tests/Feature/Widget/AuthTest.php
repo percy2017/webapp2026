@@ -111,3 +111,50 @@ it('assigns only the user role on register (not admin)', function () {
     expect($user->hasRole('user'))->toBeTrue();
     expect($user->hasRole('admin'))->toBeFalse();
 });
+
+it('accepts a simple (non-complex) password on widget register', function () {
+    // The chat widget is a support channel, not an admin panel — visitors
+    // should be able to register with a single character or any
+    // non-complex string. Laravel's default `Password` rule would reject
+    // these.
+    postJson('/widget/auth/register', [
+        'name' => 'Clave Simple',
+        'email' => 'simple@example.com',
+        'phone' => '+5491122223333',
+        'password' => '1',
+    ])->assertOk();
+
+    $user = User::where('email', 'simple@example.com')->first();
+
+    expect($user)->not->toBeNull();
+    expect(Hash::check('1', $user->password))->toBeTrue();
+});
+
+it('logs in with the simple password the visitor registered', function () {
+    postJson('/widget/auth/register', [
+        'name' => 'Login Later',
+        'email' => 'login-later@example.com',
+        'phone' => '+5491144445555',
+        'password' => 'foo',
+    ])->assertOk();
+
+    // Second request — visitor comes back later from a clean browser
+    // session and signs in with their chosen simple password.
+    postJson('/widget/auth/login', [
+        'email' => 'login-later@example.com',
+        'password' => 'foo',
+    ])
+        ->assertOk()
+        ->assertJsonPath('user.email', 'login-later@example.com');
+});
+
+it('rejects a register with a non-string password field', function () {
+    // Only sanity check: sending an array/object instead of a string
+    // shouldn't crash the controller.
+    postJson('/widget/auth/register', [
+        'name' => 'Bad Password Type',
+        'email' => 'bad-type@example.com',
+        'phone' => '+5491155556666',
+        'password' => ['x' => 'y'],
+    ])->assertStatus(422);
+});

@@ -35,7 +35,7 @@ export function HeroSection({ content, theme }: SectionProps) {
                             : undefined
                     }
                 />
-                <div className="absolute right-1/4 top-1/2 hidden h-72 w-72 rounded-full bg-blue-500/10 blur-3xl sm:block" />
+                <div className="absolute top-1/2 right-1/4 hidden h-72 w-72 rounded-full bg-blue-500/10 blur-3xl sm:block" />
             </div>
 
             <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-12 sm:px-6 sm:py-16 md:gap-8 lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:py-20">
@@ -71,7 +71,11 @@ export function HeroSection({ content, theme }: SectionProps) {
                     {(cta_label || secondary_label) && (
                         <div className="mt-4 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-6 sm:flex-row sm:items-center sm:justify-start">
                             {cta_label && (
-                                <Button asChild size="lg" className="w-full sm:w-auto">
+                                <Button
+                                    asChild
+                                    size="lg"
+                                    className="w-full sm:w-auto"
+                                >
                                     <a href={cta_href || '#contact'}>
                                         {cta_label}
                                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -112,7 +116,8 @@ export function HeroSection({ content, theme }: SectionProps) {
                                 }
                             />
                             <p className="mt-4 text-sm text-muted-foreground">
-                                Elegí una imagen desde Medios para mostrarla acá.
+                                Elegí una imagen desde Medios para mostrarla
+                                acá.
                             </p>
                         </div>
                     )}

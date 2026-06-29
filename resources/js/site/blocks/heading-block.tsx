@@ -14,13 +14,19 @@ const LEVEL_CLASS: Record<string, string> = {
 };
 
 export function HeadingBlock({ content }: BlockProps) {
-    const { text, level = 'h2', align = 'left' } = content as {
+    const {
+        text,
+        level = 'h2',
+        align = 'left',
+    } = content as {
         text?: string;
         level?: string;
         align?: string;
     };
 
-    if (!text) return null;
+    if (!text) {
+        return null;
+    }
 
     const Tag = (level as keyof JSX.IntrinsicElements) || 'h2';
     const cls = `${LEVEL_CLASS[level] ?? LEVEL_CLASS.h2} ${ALIGN_CLASS[align] ?? ''}`;

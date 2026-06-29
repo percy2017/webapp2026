@@ -23,8 +23,8 @@ import {
     Wand2,
     Wrench,
     Zap,
-    type LucideIcon,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { SectionProps } from '@site/lib/template-registry';
 
 type FeatureItem = {
@@ -60,7 +60,10 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 function getIcon(name?: string): LucideIcon {
-    if (name && ICON_MAP[name]) return ICON_MAP[name];
+    if (name && ICON_MAP[name]) {
+        return ICON_MAP[name];
+    }
+
     return Sparkles;
 }
 
@@ -74,7 +77,9 @@ export function FeaturesSection({ content, theme }: SectionProps) {
     const list: FeatureItem[] = Array.isArray(items) ? items : [];
     const primaryColor = theme?.primary_color;
 
-    if (!title && list.length === 0) return null;
+    if (!title && list.length === 0) {
+        return null;
+    }
 
     return (
         <section
@@ -115,6 +120,7 @@ export function FeaturesSection({ content, theme }: SectionProps) {
                     <div className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
                         {list.map((item, idx) => {
                             const Icon = getIcon(item.icon);
+
                             return (
                                 <div
                                     key={`${item.title}-${idx}`}

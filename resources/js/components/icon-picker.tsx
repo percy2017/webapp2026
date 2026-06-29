@@ -32,8 +32,8 @@ import {
     Wand2,
     Wrench,
     Zap,
-    type LucideIcon,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export const MENU_ICONS: Record<string, LucideIcon> = {
@@ -72,7 +72,10 @@ export const MENU_ICONS: Record<string, LucideIcon> = {
 };
 
 export function getMenuIcon(name: string | null | undefined): LucideIcon {
-    if (name && MENU_ICONS[name]) return MENU_ICONS[name];
+    if (name && MENU_ICONS[name]) {
+        return MENU_ICONS[name];
+    }
+
     return Link2;
 }
 
@@ -103,6 +106,7 @@ export function IconPicker({ value, onChange }: Props) {
             <div className="grid grid-cols-9 gap-1 sm:grid-cols-12">
                 {Object.entries(MENU_ICONS).map(([name, Icon]) => {
                     const selected = name === current;
+
                     return (
                         <button
                             key={name}

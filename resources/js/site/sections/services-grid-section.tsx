@@ -35,34 +35,171 @@ function resolveImage(item: ServiceItem): { url: string | null } {
 
 function formatDuration(value: number | string | undefined): string {
     if (value === undefined || value === null || value === '') {
-return '';
-}
+        return '';
+    }
 
-    const n = typeof value === 'number' ? value : Number.parseInt(String(value), 10);
+    const n =
+        typeof value === 'number' ? value : Number.parseInt(String(value), 10);
 
     if (Number.isNaN(n) || n <= 0) {
-return '';
-}
+        return '';
+    }
 
     if (n < 60) {
-return `${n} min`;
-}
+        return `${n} min`;
+    }
 
     const hours = Math.floor(n / 60);
     const mins = n % 60;
 
     if (mins === 0) {
-return `${hours} h`;
-}
+        return `${hours} h`;
+    }
 
     return `${hours} h ${mins} min`;
 }
 
+// Columnas desktop. En mobile se renderiza un carrusel horizontal con
+// snap (no grid) — ver ServicesGridSection.
 const COLS_CLASS: Record<string, string> = {
-    '2': 'grid-cols-1 sm:grid-cols-2',
-    '3': 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-    '4': 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+    '2': 'lg:grid-cols-2',
+    '3': 'lg:grid-cols-3',
+    '4': 'lg:grid-cols-4',
 };
+
+/**
+ * Una card individual de servicio. Recibe `className` adicional para
+ * que el wrapper móvil (carrusel horizontal) controle el ancho y el
+ * wrapper desktop (grid) lo omita y deje que el grid lo estire.
+ */
+function ServiceCard({
+    service,
+    primaryColor,
+    defaultCurrency,
+    className = '',
+}: {
+    service: ServiceItem;
+    primaryColor: string | undefined;
+    defaultCurrency: string;
+    className?: string;
+}) {
+    const image = resolveImage(service);
+    const duration = formatDuration(service.duration_minutes);
+    const price = service.price_from ?? '';
+    const isFeatured = service.highlighted === true;
+
+    return (
+        <article
+            className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${className} ${
+                isFeatured ? 'ring-2 ring-primary' : 'border'
+            }`}
+            style={
+                isFeatured && primaryColor
+                    ? {
+                          borderColor: primaryColor,
+                          boxShadow: `0 0 0 2px ${primaryColor}`,
+                      }
+                    : undefined
+            }
+        >
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                {image.url ? (
+                    <img
+                        src={image.url}
+                        alt={service.title ?? ''}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                    />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground">
+                        <ImageIcon className="h-10 w-10" />
+                    </div>
+                )}
+                {service.category && (
+                    <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-foreground uppercase shadow-sm backdrop-blur">
+                        {service.category}
+                    </span>
+                )}
+                {isFeatured && (
+                    <span
+                        className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm"
+                        style={
+                            primaryColor
+                                ? { backgroundColor: primaryColor }
+                                : undefined
+                        }
+                    >
+                        Más popular
+                    </span>
+                )}
+            </div>
+
+            <div className="flex flex-1 flex-col p-5">
+                {service.title && (
+                    <h3 className="text-lg font-semibold text-foreground">
+                        {service.title}
+                    </h3>
+                )}
+                {service.description && (
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                        {service.description}
+                    </p>
+                )}
+
+                <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    {duration && (
+                        <span className="inline-flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5" />
+                            {duration}
+                        </span>
+                    )}
+                    {price && (
+                        <span className="inline-flex items-baseline gap-1">
+                            <span className="text-[10px] tracking-wider uppercase">
+                                Desde
+                            </span>
+                            <span className="text-base font-bold text-foreground">
+                                {price}
+                            </span>
+                            {defaultCurrency && (
+                                <span className="text-xs text-muted-foreground">
+                                    {defaultCurrency}
+                                </span>
+                            )}
+                        </span>
+                    )}
+                </div>
+
+                {service.cta_label && (
+                    <div className="mt-5">
+                        <Button
+                            asChild
+                            size="sm"
+                            variant={isFeatured ? 'default' : 'outline'}
+                            className="w-full"
+                            style={
+                                isFeatured && primaryColor
+                                    ? {
+                                          backgroundColor: primaryColor,
+                                          borderColor: primaryColor,
+                                      }
+                                    : undefined
+                            }
+                        >
+                            <a
+                                href={service.cta_href || '#contact'}
+                                aria-label={`${service.cta_label} — ${service.title ?? ''}`}
+                            >
+                                {service.cta_label}
+                                <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                            </a>
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </article>
+    );
+}
 
 export function ServicesGridSection({ content, theme }: SectionProps) {
     const {
@@ -83,11 +220,11 @@ export function ServicesGridSection({ content, theme }: SectionProps) {
 
     const primaryColor = theme?.primary_color;
     const list: ServiceItem[] = Array.isArray(items) ? items : [];
-    const colsCls = COLS_CLASS[columns] ?? COLS_CLASS['3'];
+    const lgColsCls = COLS_CLASS[columns] ?? COLS_CLASS['3'];
 
     if (!title && list.length === 0) {
-return null;
-}
+        return null;
+    }
 
     return (
         <section
@@ -131,130 +268,48 @@ return null;
                         Agregá servicios desde el panel derecho.
                     </p>
                 ) : (
-                    <div className={`mt-10 grid gap-6 ${colsCls}`}>
-                        {list.map((service, idx) => {
-                            const image = resolveImage(service);
-                            const duration = formatDuration(service.duration_minutes);
-                            const price = service.price_from ?? '';
-                            const isFeatured = service.highlighted === true;
+                    <>
+                        {/* Mobile: carrusel horizontal con scroll-snap.
+                            Cada card tiene w-[85vw]; snap-start ancla la
+                            siguiente al borde izquierdo. La barra nativa
+                            se oculta vía [scrollbar-width:none] + WebKit
+                            vendor. */}
+                        <div className="mt-10 lg:hidden">
+                            <div
+                                className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                                role="region"
+                                aria-label="Servicios"
+                                aria-roledescription="carrusel"
+                            >
+                                {list.map((service, idx) => (
+                                    <ServiceCard
+                                        key={`m-${service.title}-${idx}`}
+                                        service={service}
+                                        primaryColor={primaryColor}
+                                        defaultCurrency={default_currency}
+                                        className="w-[85vw] shrink-0 snap-start"
+                                    />
+                                ))}
+                            </div>
+                        </div>
 
-                            return (
-                                <article
-                                    key={`${service.title}-${idx}`}
-                                    className={`group flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
-                                        isFeatured ? 'ring-2 ring-primary' : 'border'
-                                    }`}
-                                    style={
-                                        isFeatured && primaryColor
-                                            ? { borderColor: primaryColor, boxShadow: `0 0 0 2px ${primaryColor}` }
-                                            : undefined
-                                    }
-                                >
-                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
-                                        {image.url ? (
-                                            <img
-                                                src={image.url}
-                                                alt={service.title ?? ''}
-                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                loading="lazy"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground">
-                                                <ImageIcon className="h-10 w-10" />
-                                            </div>
-                                        )}
-                                        {service.category && (
-                                            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-foreground shadow-sm backdrop-blur">
-                                                {service.category}
-                                            </span>
-                                        )}
-                                        {isFeatured && (
-                                            <span
-                                                className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm"
-                                                style={
-                                                    primaryColor
-                                                        ? { backgroundColor: primaryColor }
-                                                        : undefined
-                                                }
-                                            >
-                                                Más popular
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    <div className="flex flex-1 flex-col p-5">
-                                        {service.title && (
-                                            <h3 className="text-lg font-semibold text-foreground">
-                                                {service.title}
-                                            </h3>
-                                        )}
-                                        {service.description && (
-                                            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                                                {service.description}
-                                            </p>
-                                        )}
-
-                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                                            {duration && (
-                                                <span className="inline-flex items-center gap-1.5">
-                                                    <Clock className="h-3.5 w-3.5" />
-                                                    {duration}
-                                                </span>
-                                            )}
-                                            {price && (
-                                                <span className="inline-flex items-baseline gap-1">
-                                                    <span className="text-[10px] uppercase tracking-wider">
-                                                        Desde
-                                                    </span>
-                                                    <span className="text-base font-bold text-foreground">
-                                                        {price}
-                                                    </span>
-                                                    {default_currency && (
-                                                        <span className="text-xs text-muted-foreground">
-                                                            {default_currency}
-                                                        </span>
-                                                    )}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        {service.cta_label && (
-                                            <div className="mt-5">
-                                                <Button
-                                                    asChild
-                                                    size="sm"
-                                                    variant={
-                                                        isFeatured ? 'default' : 'outline'
-                                                    }
-                                                    className="w-full"
-                                                    style={
-                                                        isFeatured && primaryColor
-                                                            ? {
-                                                                  backgroundColor:
-                                                                      primaryColor,
-                                                                  borderColor:
-                                                                      primaryColor,
-                                                              }
-                                                            : undefined
-                                                    }
-                                                >
-                                                    <a
-                                                        href={
-                                                            service.cta_href ||
-                                                            '#contact'
-                                                        }
-                                                    >
-                                                        {service.cta_label}
-                                                        <ArrowRight className="ml-2 h-3.5 w-3.5" />
-                                                    </a>
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </article>
-                            );
-                        })}
-                    </div>
+                        {/* Desktop: grid de columnas. Render separado del
+                            mobile por la misma razón que en los demás
+                            bloques: Tailwind no resuelve breakpoints
+                            distintos en el mismo wrapper. */}
+                        <div
+                            className={`mt-10 hidden gap-6 lg:grid ${lgColsCls}`}
+                        >
+                            {list.map((service, idx) => (
+                                <ServiceCard
+                                    key={`d-${service.title}-${idx}`}
+                                    service={service}
+                                    primaryColor={primaryColor}
+                                    defaultCurrency={default_currency}
+                                />
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
         </section>

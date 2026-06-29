@@ -31,8 +31,8 @@ En la biblioteca podés:
 2. Click en el bloque donde querés usar el archivo (ej: bloque "Imagen").
 3. En el panel derecho, click en el campo de imagen.
 4. Se abre el selector de medios. Podés:
-   - Elegir un archivo existente.
-   - Subir uno nuevo directamente desde el selector.
+    - Elegir un archivo existente.
+    - Subir uno nuevo directamente desde el selector.
 5. Seleccioná el archivo y listo.
 
 El archivo se inserta en el bloque y se muestra en la página.
@@ -77,13 +77,13 @@ Podés crear imágenes directamente desde el panel usando el modelo **MiniMax im
 
 Escribí una descripción detallada de lo que querés generar.
 
-| Campo | Descripción |
-|---|---|
-| **Descripción** | Texto de hasta 1500 caracteres. Sé específico: estilo, colores, iluminación, composición. |
-| **Relación de aspecto** | Cuadrado (`1:1`), horizontal (`16:9`, `21:9`), vertical (`9:16`, `3:4`), etc. |
-| **Cantidad** | De 1 a 9 imágenes por vez. |
-| **Optimizar descripción** | Mejora automáticamente tu prompt para mejores resultados. |
-| **Semilla** | Número opcional. Usá la misma semilla para reproducir exactamente la misma imagen. |
+| Campo                     | Descripción                                                                               |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| **Descripción**           | Texto de hasta 1500 caracteres. Sé específico: estilo, colores, iluminación, composición. |
+| **Relación de aspecto**   | Cuadrado (`1:1`), horizontal (`16:9`, `21:9`), vertical (`9:16`, `3:4`), etc.             |
+| **Cantidad**              | De 1 a 9 imágenes por vez.                                                                |
+| **Optimizar descripción** | Mejora automáticamente tu prompt para mejores resultados.                                 |
+| **Semilla**               | Número opcional. Usá la misma semilla para reproducir exactamente la misma imagen.        |
 
 ### Imagen a imagen
 

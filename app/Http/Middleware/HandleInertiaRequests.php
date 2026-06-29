@@ -8,7 +8,6 @@ use App\Models\SiteSetting;
 use App\Models\SiteTemplate;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -62,8 +61,13 @@ class HandleInertiaRequests extends Middleware
             'siteSettings' => [
                 'site_name' => $settings->site_name,
                 'site_tagline' => $settings->site_tagline,
-                'logo_url' => self::mediaUrl($settings->logoMedia),
-                'favicon_url' => self::mediaUrl($settings->faviconMedia),
+                // Use the accessors — they already resolve
+                // `logo_url` / `favicon_url` first and only fall back
+                // to the Media library row when no external URL is
+                // set. Without this the operator-set /blocks/foo.svg
+                // path would never reach the frontend.
+                'logo_url' => $settings->logo_url,
+                'favicon_url' => $settings->favicon_url,
                 'contact_info' => $settings->contact_info ?? [],
                 'default_seo' => $settings->default_seo ?? [],
             ],
@@ -72,10 +76,5 @@ class HandleInertiaRequests extends Middleware
                 $activeTemplateId,
             ),
         ];
-    }
-
-    private static function mediaUrl(?Media $media): ?string
-    {
-        return $media?->getUrl();
     }
 }

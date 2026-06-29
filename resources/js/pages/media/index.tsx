@@ -17,11 +17,9 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -48,7 +46,6 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import { Spinner } from '@/components/ui/spinner';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import { generate, index, store, destroy } from '@/routes/media';
 import type { Paginated } from '@/types';
 
@@ -79,21 +76,38 @@ type Props = {
 };
 
 function getIcon(mime: string) {
-    if (mime.startsWith('image/')) return ImageIcon;
-    if (mime.startsWith('video/')) return FileVideo;
-    if (mime.startsWith('audio/')) return FileAudio;
+    if (mime.startsWith('image/')) {
+        return ImageIcon;
+    }
+
+    if (mime.startsWith('video/')) {
+        return FileVideo;
+    }
+
+    if (mime.startsWith('audio/')) {
+        return FileAudio;
+    }
+
     if (
         mime.startsWith('text/') ||
         mime.includes('pdf') ||
         mime.includes('document')
-    )
+    ) {
         return FileText;
+    }
+
     return File;
 }
 
 function formatSize(bytes: number) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
@@ -114,13 +128,26 @@ function isPdf(mime: string) {
 }
 
 function isText(mime: string) {
-    return mime.startsWith('text/') || mime.includes('json') || mime.includes('xml');
+    return (
+        mime.startsWith('text/') ||
+        mime.includes('json') ||
+        mime.includes('xml')
+    );
 }
 
 function modelLabel(model?: string) {
-    if (!model) return '—';
-    if (model.includes('MediaHolder')) return 'Biblioteca';
-    if (model.includes('User')) return 'Avatares';
+    if (!model) {
+        return '—';
+    }
+
+    if (model.includes('MediaHolder')) {
+        return 'Biblioteca';
+    }
+
+    if (model.includes('User')) {
+        return 'Avatares';
+    }
+
     return model.split('\\').pop() ?? model;
 }
 
@@ -138,14 +165,19 @@ export default function MediaIndex({ media, filters }: Props) {
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const firstRender = useRef(true);
 
-    function applyFilters(
-        next?: Partial<{ search: string; type: string }>,
-    ) {
+    function applyFilters(next?: Partial<{ search: string; type: string }>) {
         const params: Record<string, string> = {};
         const s = next?.search ?? search;
         const t = next?.type ?? type;
-        if (s) params.search = s;
-        if (t && t !== 'all') params.type = t;
+
+        if (s) {
+            params.search = s;
+        }
+
+        if (t && t !== 'all') {
+            params.type = t;
+        }
+
         setIsSearching(true);
         router.get(index(), params, {
             preserveState: true,
@@ -159,21 +191,32 @@ export default function MediaIndex({ media, filters }: Props) {
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
+
             return;
         }
-        if (debounceRef.current) clearTimeout(debounceRef.current);
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
         debounceRef.current = setTimeout(() => {
             applyFilters();
         }, 300);
+
         return () => {
-            if (debounceRef.current) clearTimeout(debounceRef.current);
+            if (debounceRef.current) {
+                clearTimeout(debounceRef.current);
+            }
         };
     }, [search]);
 
     function handleUpload(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const file = fileInput.current?.files?.[0];
-        if (!file) return;
+
+        if (!file) {
+            return;
+        }
 
         setUploading(true);
         router.post(
@@ -184,18 +227,27 @@ export default function MediaIndex({ media, filters }: Props) {
                 onFinish: () => {
                     setUploading(false);
                     setOpen(false);
-                    if (fileInput.current) fileInput.current.value = '';
+
+                    if (fileInput.current) {
+                        fileInput.current.value = '';
+                    }
                 },
             },
         );
     }
 
     function confirmDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         router.delete(destroy(deleting.id), {
             onFinish: () => {
                 setDeleting(null);
-                if (selected?.id === deleting.id) setSelected(null);
+
+                if (selected?.id === deleting.id) {
+                    setSelected(null);
+                }
             },
         });
     }
@@ -223,14 +275,14 @@ export default function MediaIndex({ media, filters }: Props) {
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             placeholder="Buscar por nombre..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 pr-20"
+                            className="pr-20 pl-9"
                         />
-                        <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1">
+                        <div className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1">
                             {isSearching && (
                                 <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                             )}
@@ -282,9 +334,7 @@ export default function MediaIndex({ media, filters }: Props) {
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>
-                                    Subir nuevo archivo
-                                </DialogTitle>
+                                <DialogTitle>Subir nuevo archivo</DialogTitle>
                                 <DialogDescription>
                                     Tamaño máximo 10 MB.
                                 </DialogDescription>
@@ -309,10 +359,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                     >
                                         Cancelar
                                     </Button>
-                                    <Button
-                                        type="submit"
-                                        disabled={uploading}
-                                    >
+                                    <Button type="submit" disabled={uploading}>
                                         {uploading && (
                                             <Spinner className="mr-2 h-4 w-4" />
                                         )}
@@ -337,22 +384,19 @@ export default function MediaIndex({ media, filters }: Props) {
                         {media.data.map((item) => {
                             const Icon = getIcon(item.mime_type);
                             const isSelected = selected?.id === item.id;
+
                             return (
                                 <Card
                                     key={item.id}
                                     className={`group cursor-pointer overflow-hidden transition-all hover:shadow-md ${
-                                        isSelected
-                                            ? 'ring-2 ring-primary'
-                                            : ''
+                                        isSelected ? 'ring-2 ring-primary' : ''
                                     }`}
                                     onClick={() => setSelected(item)}
                                 >
                                     <div className="relative aspect-square bg-muted">
                                         {isImage(item.mime_type) ? (
                                             <img
-                                                src={
-                                                    item.thumb_url ?? item.url
-                                                }
+                                                src={item.thumb_url ?? item.url}
                                                 alt={item.name}
                                                 className="h-full w-full object-cover"
                                                 loading="lazy"
@@ -365,7 +409,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                         <Button
                                             variant="destructive"
                                             size="icon"
-                                            className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                                            className="absolute top-2 right-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setDeleting(item);
@@ -451,8 +495,8 @@ export default function MediaIndex({ media, filters }: Props) {
                                             preload="metadata"
                                             className="max-h-72 w-full"
                                         >
-                                            Tu navegador no soporta el
-                                            elemento de video.
+                                            Tu navegador no soporta el elemento
+                                            de video.
                                         </video>
                                     ) : isAudio(selected.mime_type) ? (
                                         <div className="flex flex-col items-center gap-3 p-6">
@@ -460,6 +504,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                                 const Icon = getIcon(
                                                     selected.mime_type,
                                                 );
+
                                                 return (
                                                     <Icon className="h-16 w-16 text-muted-foreground" />
                                                 );
@@ -480,6 +525,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                                 const Icon = getIcon(
                                                     selected.mime_type,
                                                 );
+
                                                 return (
                                                     <Icon className="h-16 w-16 text-muted-foreground" />
                                                 );
@@ -500,6 +546,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                                 const Icon = getIcon(
                                                     selected.mime_type,
                                                 );
+
                                                 return (
                                                     <Icon className="h-16 w-16 text-muted-foreground" />
                                                 );
@@ -520,6 +567,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                                 const Icon = getIcon(
                                                     selected.mime_type,
                                                 );
+
                                                 return (
                                                     <Icon className="h-16 w-16 text-muted-foreground" />
                                                 );
@@ -546,14 +594,13 @@ export default function MediaIndex({ media, filters }: Props) {
                                     <DetailRow
                                         label="Colección"
                                         value={
-                                            selected.collection_name ?? 'default'
+                                            selected.collection_name ??
+                                            'default'
                                         }
                                     />
                                     <DetailRow
                                         label="Origen"
-                                        value={modelLabel(
-                                            selected.model_type,
-                                        )}
+                                        value={modelLabel(selected.model_type)}
                                     />
                                     <DetailRow
                                         label="Subido"
@@ -563,7 +610,7 @@ export default function MediaIndex({ media, filters }: Props) {
                                     />
 
                                     <div className="space-y-1.5">
-                                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                             URL pública
                                         </p>
                                         <div className="flex gap-1.5">
@@ -644,13 +691,10 @@ export default function MediaIndex({ media, filters }: Props) {
 function DetailRow({ label, value }: { label: string; value: string }) {
     return (
         <div className="flex items-start justify-between gap-3 border-b pb-2 last:border-b-0 last:pb-0">
-            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                 {label}
             </span>
-            <span
-                className="text-right text-sm font-medium"
-                title={value}
-            >
+            <span className="text-right text-sm font-medium" title={value}>
                 {value}
             </span>
         </div>

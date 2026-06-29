@@ -1,10 +1,5 @@
-import {
-    Clock,
-    Mail,
-    MapPin,
-    Phone,
-    type LucideIcon,
-} from 'lucide-react';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { MapBlock } from '@site/blocks/map-block';
 import type { SectionProps } from '@site/lib/template-registry';
 
@@ -76,11 +71,11 @@ export function LocationSection({ content, theme }: SectionProps) {
     };
 
     return (
-        <section className="bg-muted/30 px-4 py-12 sm:py-16 sm:px-6 lg:px-8 lg:py-20">
+        <section className="bg-muted/30 px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
             <div className="mx-auto max-w-6xl">
                 <div className="mx-auto max-w-2xl text-center">
                     {eyebrow && (
-                        <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+                        <p className="text-sm font-semibold tracking-wider text-primary uppercase">
                             {eyebrow}
                         </p>
                     )}
@@ -113,7 +108,7 @@ export function LocationSection({ content, theme }: SectionProps) {
                                             </span>
                                             <div className="min-w-0">
                                                 {item.label && (
-                                                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                                    <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                                         {item.label}
                                                     </p>
                                                 )}
@@ -121,12 +116,12 @@ export function LocationSection({ content, theme }: SectionProps) {
                                                     (href ? (
                                                         <a
                                                             href={href}
-                                                            className="mt-0.5 block break-words text-base font-medium text-foreground hover:text-primary"
+                                                            className="mt-0.5 block text-base font-medium break-words text-foreground hover:text-primary"
                                                         >
                                                             {value}
                                                         </a>
                                                     ) : (
-                                                        <p className="mt-0.5 break-words text-base font-medium text-foreground">
+                                                        <p className="mt-0.5 text-base font-medium break-words text-foreground">
                                                             {value}
                                                         </p>
                                                     ))}

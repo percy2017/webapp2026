@@ -15,10 +15,10 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { csrfJson } from '@/lib/csrf';
-import { show as showRoute, send as sendRoute } from '@/routes/widget/chat';
 import { logout as logoutRoute } from '@/routes/widget/auth';
+import { show as showRoute, send as sendRoute } from '@/routes/widget/chat';
 
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB (matches backend rule)
@@ -31,7 +31,10 @@ type AudioState = {
 };
 
 function pickRecorderMimeType(): string {
-    if (typeof MediaRecorder === 'undefined') return '';
+    if (typeof MediaRecorder === 'undefined') {
+        return '';
+    }
+
     const candidates = [
         'audio/webm;codecs=opus',
         'audio/webm',
@@ -39,9 +42,13 @@ function pickRecorderMimeType(): string {
         'audio/ogg',
         'audio/mp4',
     ];
+
     for (const mime of candidates) {
-        if (MediaRecorder.isTypeSupported(mime)) return mime;
+        if (MediaRecorder.isTypeSupported(mime)) {
+            return mime;
+        }
     }
+
     return '';
 }
 
@@ -49,6 +56,7 @@ function formatDuration(ms: number): string {
     const totalSeconds = Math.floor(ms / 1000);
     const m = Math.floor(totalSeconds / 60);
     const s = totalSeconds % 60;
+
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
@@ -60,8 +68,14 @@ function blobToFile(blob: Blob, filename: string): File {
 }
 
 function formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
@@ -73,6 +87,7 @@ function currentPermission(): NotifyPermission {
     if (typeof window === 'undefined' || !('Notification' in window)) {
         return 'unsupported';
     }
+
     return Notification.permission;
 }
 
@@ -80,8 +95,11 @@ function postToServiceWorker(payload: Record<string, unknown>) {
     if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) {
         return;
     }
+
     navigator.serviceWorker.ready
-        .then((reg) => reg.active?.postMessage({ type: 'chat:notify', payload }))
+        .then((reg) =>
+            reg.active?.postMessage({ type: 'chat:notify', payload }),
+        )
         .catch(() => {});
 }
 
@@ -109,7 +127,10 @@ type Props = {
 };
 
 function timeOf(iso: string | null | undefined): string {
-    if (!iso) return '';
+    if (!iso) {
+        return '';
+    }
+
     const d = new Date(iso);
 
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -120,20 +141,26 @@ export function ChatPanel({ chatId, onClose }: Props) {
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
-    const [resolvedChatId, setResolvedChatId] = useState<number | null>(
-        chatId,
-    );
+    const [resolvedChatId, setResolvedChatId] = useState<number | null>(chatId);
     const [pendingFiles, setPendingFiles] = useState<File[]>([]);
-    const [permission, setPermission] = useState<NotifyPermission>(
-        currentPermission,
-    );
+    const [permission, setPermission] =
+        useState<NotifyPermission>(currentPermission);
     const [notifyEnabled, setNotifyEnabled] = useState<boolean>(() => {
-        if (typeof window === 'undefined') return false;
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
         return window.localStorage.getItem(NOTIFY_KEY) === '1';
     });
     const [bannerDismissed, setBannerDismissed] = useState<boolean>(() => {
-        if (typeof window === 'undefined') return false;
-        return window.sessionStorage.getItem('chat_notify_banner_dismissed') === '1';
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
+        return (
+            window.sessionStorage.getItem('chat_notify_banner_dismissed') ===
+            '1'
+        );
     });
 
     // Voice message recorder state
@@ -145,7 +172,9 @@ export function ChatPanel({ chatId, onClose }: Props) {
     const recorderStreamRef = useRef<MediaStream | null>(null);
     const recorderChunksRef = useRef<Blob[]>([]);
     const recorderStartRef = useRef<number>(0);
-    const recorderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const recorderTimerRef = useRef<ReturnType<typeof setInterval> | null>(
+        null,
+    );
 
     const fileRef = useRef<HTMLInputElement | null>(null);
     const endRef = useRef<HTMLDivElement | null>(null);
@@ -158,7 +187,10 @@ export function ChatPanel({ chatId, onClose }: Props) {
     }
 
     function discardAudioPreview() {
-        if (audioPreview) URL.revokeObjectURL(audioPreview.url);
+        if (audioPreview) {
+            URL.revokeObjectURL(audioPreview.url);
+        }
+
         setAudioPreview(null);
     }
 
@@ -166,14 +198,19 @@ export function ChatPanel({ chatId, onClose }: Props) {
         return () => {
             // teardown on unmount
             clearRecorderTimers();
+
             if (
                 recorderRef.current &&
                 recorderRef.current.state !== 'inactive'
             ) {
                 recorderRef.current.stop();
             }
+
             recorderStreamRef.current?.getTracks().forEach((t) => t.stop());
-            if (audioPreview) URL.revokeObjectURL(audioPreview.url);
+
+            if (audioPreview) {
+                URL.revokeObjectURL(audioPreview.url);
+            }
         };
         // we intentionally do not include `audioPreview` in deps — teardown
         // captures the latest value via closure when the component unmounts
@@ -186,15 +223,22 @@ export function ChatPanel({ chatId, onClose }: Props) {
             !navigator.mediaDevices?.getUserMedia
         ) {
             setRecordError('Tu navegador no soporta grabación de audio.');
+
             return;
         }
+
         if (typeof MediaRecorder === 'undefined') {
             setRecordError('Tu navegador no soporta grabación de audio.');
+
             return;
         }
-        if (recording) return;
+
+        if (recording) {
+            return;
+        }
 
         setRecordError(null);
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
@@ -214,14 +258,10 @@ export function ChatPanel({ chatId, onClose }: Props) {
             recorder.onstop = () => {
                 const chunks = recorderChunksRef.current.slice();
                 recorderChunksRef.current = [];
-                const type =
-                    recorder.mimeType ||
-                    mimeType ||
-                    'audio/webm';
+                const type = recorder.mimeType || mimeType || 'audio/webm';
                 const blob = new Blob(chunks, { type });
                 const url = URL.createObjectURL(blob);
-                const durationMs =
-                    Date.now() - recorderStartRef.current;
+                const durationMs = Date.now() - recorderStartRef.current;
                 setAudioPreview({ blob, url, durationMs, mimeType: type });
                 recorderStreamRef.current?.getTracks().forEach((t) => t.stop());
                 recorderStreamRef.current = null;
@@ -249,7 +289,11 @@ export function ChatPanel({ chatId, onClose }: Props) {
 
     function stopRecording() {
         const recorder = recorderRef.current;
-        if (!recorder || recorder.state === 'inactive') return;
+
+        if (!recorder || recorder.state === 'inactive') {
+            return;
+        }
+
         recorder.stop();
         clearRecorderTimers();
         setRecording(false);
@@ -258,6 +302,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
 
     function cancelRecording() {
         const recorder = recorderRef.current;
+
         if (recorder && recorder.state !== 'inactive') {
             // discard the chunks so onstop doesn't keep the blob
             recorderChunksRef.current = [];
@@ -267,6 +312,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
             };
             recorder.stop();
         }
+
         clearRecorderTimers();
         setRecording(false);
         setRecordElapsed(0);
@@ -274,10 +320,19 @@ export function ChatPanel({ chatId, onClose }: Props) {
     }
 
     function confirmAudioPreview() {
-        if (!audioPreview) return;
+        if (!audioPreview) {
+            return;
+        }
+
         const ext = (() => {
-            if (audioPreview.mimeType.includes('ogg')) return 'ogg';
-            if (audioPreview.mimeType.includes('mp4')) return 'm4a';
+            if (audioPreview.mimeType.includes('ogg')) {
+                return 'ogg';
+            }
+
+            if (audioPreview.mimeType.includes('mp4')) {
+                return 'm4a';
+            }
+
             return 'webm';
         })();
         const filename = `voice-message-${Date.now()}.${ext}`;
@@ -287,33 +342,58 @@ export function ChatPanel({ chatId, onClose }: Props) {
     }
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         window.localStorage.setItem(NOTIFY_KEY, notifyEnabled ? '1' : '0');
     }, [notifyEnabled]);
 
     function addFiles(incoming: FileList | null) {
-        if (!incoming) return;
+        if (!incoming) {
+            return;
+        }
+
         const remaining = MAX_FILES - pendingFiles.length;
-        if (remaining <= 0) return;
+
+        if (remaining <= 0) {
+            return;
+        }
+
         const accepted: File[] = [];
+
         for (const file of Array.from(incoming).slice(0, remaining)) {
-            if (file.size > MAX_FILE_BYTES) continue;
+            if (file.size > MAX_FILE_BYTES) {
+                continue;
+            }
+
             accepted.push(file);
         }
-        if (accepted.length === 0) return;
+
+        if (accepted.length === 0) {
+            return;
+        }
+
         setPendingFiles((prev) => [...prev, ...accepted]);
     }
 
     function removeFile(index: number) {
         setPendingFiles((prev) => prev.filter((_, i) => i !== index));
-        if (fileRef.current) fileRef.current.value = '';
+
+        if (fileRef.current) {
+            fileRef.current.value = '';
+        }
     }
 
     async function enableNotifications() {
-        if (permission === 'unsupported') return;
+        if (permission === 'unsupported') {
+            return;
+        }
+
         try {
             const result = await Notification.requestPermission();
             setPermission(result);
+
             if (result === 'granted') {
                 setNotifyEnabled(true);
                 postToServiceWorker({
@@ -330,6 +410,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
 
     function dismissBanner() {
         setBannerDismissed(true);
+
         if (typeof window !== 'undefined') {
             window.sessionStorage.setItem('chat_notify_banner_dismissed', '1');
         }
@@ -342,14 +423,18 @@ export function ChatPanel({ chatId, onClose }: Props) {
             try {
                 const response = await csrfJson(showRoute.url());
 
-                if (!active || !response.ok) return;
+                if (!active || !response.ok) {
+                    return;
+                }
 
                 const data = await response.json();
                 setResolvedChatId(data.chat?.id ?? null);
                 setMessages(data.chat?.messages ?? []);
             } catch {
             } finally {
-                if (active) setLoading(false);
+                if (active) {
+                    setLoading(false);
+                }
             }
         }
 
@@ -361,9 +446,15 @@ export function ChatPanel({ chatId, onClose }: Props) {
     }, []);
 
     useEffect(() => {
-        if (!resolvedChatId) return;
+        if (!resolvedChatId) {
+            return;
+        }
+
         const echo = window.Echo;
-        if (!echo) return;
+
+        if (!echo) {
+            return;
+        }
 
         const channel = echo.private(`chat.${resolvedChatId}`);
 
@@ -371,9 +462,15 @@ export function ChatPanel({ chatId, onClose }: Props) {
             // Pusher delivers the broadcastWith() payload directly to the
             // listener — its top-level keys ARE the message fields. No
             // `.message` wrapper.
-            if (!incoming || incoming.id == null) return;
+            if (!incoming || incoming.id == null) {
+                return;
+            }
+
             setMessages((prev) => {
-                if (prev.some((m) => m.id === incoming.id)) return prev;
+                if (prev.some((m) => m.id === incoming.id)) {
+                    return prev;
+                }
+
                 return [...prev, incoming];
             });
         };
@@ -389,17 +486,27 @@ export function ChatPanel({ chatId, onClose }: Props) {
         endRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    async function send(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        if (sending) return;
-        if (!text.trim() && pendingFiles.length === 0) return;
+    async function send(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
+
+        if (sending) {
+            return;
+        }
+
+        if (!text.trim() && pendingFiles.length === 0) {
+            return;
+        }
 
         setSending(true);
 
         try {
             const hasFiles = pendingFiles.length > 0;
             const formData = new FormData();
-            if (text.trim()) formData.append('content', text);
+
+            if (text.trim()) {
+                formData.append('content', text);
+            }
+
             pendingFiles.forEach((file, i) => {
                 formData.append(`attachments[${i}]`, file);
             });
@@ -421,24 +528,50 @@ export function ChatPanel({ chatId, onClose }: Props) {
 
             if (response.ok) {
                 const data = await response.json().catch(() => null);
+
                 if (data?.message) {
                     setMessages((prev) => {
                         if (prev.some((m) => m.id === data.message.id)) {
                             return prev;
                         }
+
                         return [...prev, data.message];
                     });
                 }
+
                 setText('');
                 setPendingFiles([]);
-                if (fileRef.current) fileRef.current.value = '';
+
+                if (fileRef.current) {
+                    fileRef.current.value = '';
+                }
             }
+
             // we deliberately ignore the unused `hasFiles` to keep the
             // dependency tracking honest
             void hasFiles;
         } catch {
         } finally {
             setSending(false);
+        }
+    }
+
+    /**
+     * Enter sends, Shift+Enter inserts a newline — same as the admin chat
+     * composer, so the keyboard shortcuts work identically on both sides.
+     */
+    function handleComposerKeyDown(
+        e: React.KeyboardEvent<HTMLTextAreaElement>,
+    ) {
+        // IME composition (Chinese / Japanese / Korean) sends Enter as
+        // composition event — let the user commit the IME candidate first.
+        if (e.nativeEvent.isComposing || e.keyCode === 229) {
+            return;
+        }
+
+        if (e.key === 'Enter' && !e.shiftKey && !e.altKey) {
+            e.preventDefault();
+            void send();
         }
     }
 
@@ -451,7 +584,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
 
     return (
         <div className="flex h-full flex-col">
-            <div className="bg-primary text-primary-foreground flex items-center justify-between px-3 py-3">
+            <div className="flex items-center justify-between bg-primary px-3 py-3 pr-12 text-primary-foreground">
                 <div className="flex items-center gap-2">
                     <MessageCircle className="h-4 w-4" />
                     <p className="text-sm font-semibold">Chat en vivo</p>
@@ -543,8 +676,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                 ) : messages.length === 0 ? (
                     <div className="flex h-full items-center justify-center text-center text-xs text-muted-foreground">
                         <p>
-                            Escribí tu mensaje y te responderemos a la
-                            brevedad.
+                            Escribí tu mensaje y te responderemos a la brevedad.
                         </p>
                     </div>
                 ) : (
@@ -565,7 +697,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                         }`}
                                     >
                                         {m.content && (
-                                            <p className="whitespace-pre-wrap break-words">
+                                            <p className="break-words whitespace-pre-wrap">
                                                 {m.content}
                                             </p>
                                         )}
@@ -573,6 +705,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                             <div className="mt-1 space-y-1">
                                                 {m.attachments.map((a) => {
                                                     const mime = a.mime_type;
+
                                                     if (
                                                         mime?.startsWith(
                                                             'image/',
@@ -585,11 +718,15 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                                                 target="_blank"
                                                                 rel="noreferrer"
                                                                 className="block"
-                                                                title={a.file_name}
+                                                                title={
+                                                                    a.file_name
+                                                                }
                                                             >
                                                                 <img
                                                                     src={a.url}
-                                                                    alt={a.file_name}
+                                                                    alt={
+                                                                        a.file_name
+                                                                    }
                                                                     className="max-h-48 max-w-full rounded border object-contain"
                                                                     style={{
                                                                         borderColor:
@@ -601,6 +738,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                                             </a>
                                                         );
                                                     }
+
                                                     if (
                                                         mime?.startsWith(
                                                             'video/',
@@ -623,6 +761,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                                             />
                                                         );
                                                     }
+
                                                     if (
                                                         mime?.startsWith(
                                                             'audio/',
@@ -651,6 +790,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                                                             </div>
                                                         );
                                                     }
+
                                                     return (
                                                         <a
                                                             key={a.id}
@@ -691,13 +831,16 @@ export function ChatPanel({ chatId, onClose }: Props) {
             <form
                 onSubmit={send}
                 className="space-y-2 border-t bg-background p-2"
+                // The composer can be the last focusable element on a
+                // fullscreen mobile panel — keep keyboard tabbing inside
+                // the chat so users can't accidentally slip off the panel.
             >
                 {pendingFiles.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                         {pendingFiles.map((file, idx) => (
                             <div
                                 key={`${file.name}-${idx}`}
-                                className="flex items-center gap-1.5 rounded-md border bg-muted/40 py-0.5 pl-1.5 pr-1 text-[10px]"
+                                className="flex items-center gap-1.5 rounded-md border bg-muted/40 py-0.5 pr-1 pl-1.5 text-[10px]"
                             >
                                 <ImageIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
                                 <span className="max-w-[140px] truncate font-medium">
@@ -773,7 +916,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                             preload="metadata"
                             className="h-8 max-h-8 flex-1"
                         />
-                        <span className="text-[10px] tabular-nums text-muted-foreground">
+                        <span className="text-[10px] text-muted-foreground tabular-nums">
                             {formatDuration(audioPreview.durationMs)}
                         </span>
                         <button
@@ -798,12 +941,17 @@ export function ChatPanel({ chatId, onClose }: Props) {
                     </div>
                 )}
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-end gap-1">
                     <input
                         ref={fileRef}
                         type="file"
                         multiple
-                        accept="image/*,.pdf,.doc,.docx,.txt,audio/*"
+                        // Forced gallery-only: on mobile this opens
+                        // the native photo picker (no camera, no Files
+                        // app, no PDF picker). Audio messages still
+                        // work via the dedicated mic button below,
+                        // which uses MediaRecorder independently.
+                        accept="image/*"
                         onChange={(e) => addFiles(e.target.files)}
                         className="hidden"
                     />
@@ -816,7 +964,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                             recording ||
                             audioPreview !== null
                         }
-                        className="rounded p-2 text-muted-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+                        className="h-9 w-9 shrink-0 rounded p-2 text-muted-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label="Adjuntar archivo"
                         title={
                             pendingFiles.length >= MAX_FILES
@@ -830,7 +978,7 @@ export function ChatPanel({ chatId, onClose }: Props) {
                         type="button"
                         onClick={recording ? stopRecording : startRecording}
                         disabled={sending || audioPreview !== null}
-                        className={`rounded p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        className={`h-9 w-9 shrink-0 rounded p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                             recording
                                 ? 'text-red-500 hover:bg-red-500/10'
                                 : 'text-muted-foreground hover:bg-accent'
@@ -846,17 +994,24 @@ export function ChatPanel({ chatId, onClose }: Props) {
                             <Mic className="h-4 w-4" />
                         )}
                     </button>
-                    <Input
+                    <Textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
+                        onKeyDown={handleComposerKeyDown}
                         placeholder="Escribe un mensaje..."
-                        className="h-9 text-sm"
+                        // Mobile keyboards expect a multi-line input — a
+                        // single-line <Input> rendered at 100dvw on a phone
+                        // is one of the reasons the previous floating
+                        // composer felt cramped.
+                        rows={1}
+                        autoComplete="off"
                         disabled={sending || recording || audioPreview !== null}
+                        className="max-h-32 min-h-9 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     />
                     <Button
                         type="submit"
                         size="icon"
-                        className="h-9 w-9"
+                        className="h-9 w-9 shrink-0"
                         disabled={
                             sending ||
                             (!text.trim() && pendingFiles.length === 0)

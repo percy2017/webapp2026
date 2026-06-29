@@ -12,21 +12,18 @@ type BeforeAfterItem = {
     after_label?: string;
 };
 
-function resolveUrl(
-    field: unknown,
-    fallback?: string,
-): string | null {
+function resolveUrl(field: unknown, fallback?: string): string | null {
     if (field && typeof field === 'object' && 'id' in field) {
         const obj = field as { id?: unknown; url?: unknown };
 
         if (typeof obj.url === 'string') {
-return obj.url;
-}
+            return obj.url;
+        }
     }
 
     if (typeof fallback === 'string' && fallback.length > 0) {
-return fallback;
-}
+        return fallback;
+    }
 
     return null;
 }
@@ -57,14 +54,14 @@ function BeforeAfterSlider({
         const node = containerRef.current;
 
         if (!node) {
-return;
-}
+            return;
+        }
 
         const rect = node.getBoundingClientRect();
 
         if (rect.width <= 0) {
-return;
-}
+            return;
+        }
 
         const pct = ((clientX - rect.left) / rect.width) * 100;
         setPosition(Math.max(0, Math.min(100, pct)));
@@ -73,12 +70,12 @@ return;
     useEffect(() => {
         function handleMove(event: MouseEvent | TouchEvent) {
             if (!draggingRef.current) {
-return;
-}
+                return;
+            }
 
             const clientX =
                 'touches' in event
-                    ? event.touches[0]?.clientX ?? 0
+                    ? (event.touches[0]?.clientX ?? 0)
                     : event.clientX;
             updatePositionFromClientX(clientX);
         }
@@ -104,13 +101,13 @@ return;
         const node = containerRef.current;
 
         if (!node) {
-return;
-}
+            return;
+        }
 
         function onKey(event: KeyboardEvent) {
             if (!node) {
-return;
-}
+                return;
+            }
 
             if (event.key === 'ArrowLeft') {
                 setPosition((p) => Math.max(0, p - 5));
@@ -147,9 +144,7 @@ return;
                 }}
                 onTouchStart={(event) => {
                     draggingRef.current = true;
-                    updatePositionFromClientX(
-                        event.touches[0]?.clientX ?? 0,
-                    );
+                    updatePositionFromClientX(event.touches[0]?.clientX ?? 0);
                 }}
                 className="relative h-full w-full cursor-ew-resize select-none"
             >
@@ -167,17 +162,20 @@ return;
                         src={beforeUrl}
                         alt={item.before_label ?? 'Antes'}
                         className="absolute inset-0 h-full w-full object-cover"
-                        style={{ width: `${100 / (position / 100)}%`, maxWidth: 'none' }}
+                        style={{
+                            width: `${100 / (position / 100)}%`,
+                            maxWidth: 'none',
+                        }}
                         draggable={false}
                     />
                 </div>
 
                 {(item.before_label || item.after_label) && (
                     <>
-                        <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-foreground shadow-sm backdrop-blur">
+                        <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-foreground uppercase shadow-sm backdrop-blur">
                             {item.before_label ?? 'Antes'}
                         </span>
-                        <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-foreground/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-background shadow-sm backdrop-blur">
+                        <span className="pointer-events-none absolute top-3 right-3 rounded-full bg-foreground/90 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-background uppercase shadow-sm backdrop-blur">
                             {item.after_label ?? 'Después'}
                         </span>
                     </>
@@ -203,7 +201,7 @@ return;
                             event.touches[0]?.clientX ?? 0,
                         );
                     }}
-                    className="absolute top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-background bg-foreground text-background shadow-lg transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    className="absolute top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-background bg-foreground text-background shadow-lg transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none"
                     style={{ left: `${position}%` }}
                 >
                     <ArrowLeftRight className="h-4 w-4" />
@@ -246,7 +244,8 @@ export function BeforeAfterBlock({ content }: BlockProps) {
         return (
             <div className="mx-auto flex max-w-md flex-col items-center justify-center rounded-xl border-2 border-dashed bg-muted/30 p-8 text-center text-sm text-muted-foreground">
                 <ImageIcon className="mb-2 h-8 w-8" />
-                Agregá pares de imágenes (antes / después) desde el panel derecho.
+                Agregá pares de imágenes (antes / después) desde el panel
+                derecho.
             </div>
         );
     }

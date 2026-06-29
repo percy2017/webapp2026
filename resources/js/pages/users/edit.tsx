@@ -1,6 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { CheckCircle2, Loader2, Mail, Save, XCircle } from 'lucide-react';
 import { useState } from 'react';
+import { MediaPicker } from '@/components/media-picker';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MediaPicker } from '@/components/media-picker';
+import { useInitials } from '@/hooks/use-initials';
 import { admin } from '@/routes';
 import {
     index as usersIndex,
@@ -19,7 +20,6 @@ import {
     sendVerification as sendVerificationRoute,
     toggleVerified as toggleVerifiedRoute,
 } from '@/routes/users';
-import { useInitials } from '@/hooks/use-initials';
 import type { BreadcrumbItem } from '@/types';
 
 type Role = { id: number; name: string };
@@ -84,6 +84,7 @@ export default function UserEdit({ user, roles }: Props) {
             media_id: id,
             remove_avatar: id === null && !!user.avatar_url,
         });
+
         if (id === null) {
             setPreview(user.avatar_url);
         } else if (url) {
@@ -102,9 +103,18 @@ export default function UserEdit({ user, roles }: Props) {
             phone: form.phone || null,
             roles: form.roles,
         };
-        if (form.password) payload.password = form.password;
-        if (form.media_id !== null) payload.media_id = form.media_id;
-        if (form.remove_avatar) payload.remove_avatar = true;
+
+        if (form.password) {
+            payload.password = form.password;
+        }
+
+        if (form.media_id !== null) {
+            payload.media_id = form.media_id;
+        }
+
+        if (form.remove_avatar) {
+            payload.remove_avatar = true;
+        }
 
         router.patch(usersUpdate(user.id).url, payload, {
             onSuccess: () => setSaving(false),
@@ -160,8 +170,9 @@ export default function UserEdit({ user, roles }: Props) {
                                 <CardContent>
                                     <div className="flex flex-wrap gap-2">
                                         {roles.map((role) => {
-                                            const active =
-                                                form.roles.includes(role.name);
+                                            const active = form.roles.includes(
+                                                role.name,
+                                            );
 
                                             return (
                                                 <button
@@ -172,9 +183,7 @@ export default function UserEdit({ user, roles }: Props) {
                                                             ...form,
                                                             roles: active
                                                                 ? form.roles.filter(
-                                                                      (
-                                                                          r,
-                                                                      ) =>
+                                                                      (r) =>
                                                                           r !==
                                                                           role.name,
                                                                   )
@@ -335,7 +344,9 @@ export default function UserEdit({ user, roles }: Props) {
                                                     variant="outline"
                                                     size="sm"
                                                     disabled={verifying}
-                                                    onClick={sendVerificationEmail}
+                                                    onClick={
+                                                        sendVerificationEmail
+                                                    }
                                                 >
                                                     {verifying && (
                                                         <Loader2 className="mr-2 h-3 w-3 animate-spin" />

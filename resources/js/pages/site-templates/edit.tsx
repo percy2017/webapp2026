@@ -5,14 +5,11 @@ import { Puck } from '@puckeditor/core';
 import { useMemo, useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { update as updateRoute } from '@/routes/site-templates';
-import { buildPuckConfig } from '@site/lib/puck-config';
-import {
-    puckDataToSplit,
-    sectionsToPuckData,
-    type PuckData,
-} from '@site/lib/puck-adapter';
-import type { SectionTheme } from '@site/lib/template-registry';
 import type { BreadcrumbItem } from '@/types';
+import { puckDataToSplit, sectionsToPuckData } from '@site/lib/puck-adapter';
+import type { PuckData } from '@site/lib/puck-adapter';
+import { buildPuckConfig } from '@site/lib/puck-config';
+import type { SectionTheme } from '@site/lib/template-registry';
 
 type ThumbnailMedia = { id: number; url: string } | null;
 
@@ -70,10 +67,8 @@ export default function SiteTemplateEdit({ template }: Props) {
         () =>
             buildPuckConfig({
                 theme: {
-                    primary_color:
-                        template.theme?.primary_color ?? '#3b82f6',
-                    accent_color:
-                        template.theme?.accent_color ?? '#10b981',
+                    primary_color: template.theme?.primary_color ?? '#3b82f6',
+                    accent_color: template.theme?.accent_color ?? '#10b981',
                 },
             }),
         [template.theme],

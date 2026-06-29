@@ -1,6 +1,6 @@
+import L from 'leaflet';
 import { MapPin } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
 import type { BlockProps } from '@site/lib/basic-blocks-registry';
 
 const RADIUS_CLASS: Record<string, string> = {
@@ -26,20 +26,37 @@ function parseCoordinates(input: string): Coordinates | null {
     const match = input
         .trim()
         .match(/^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$/);
-    if (!match) return null;
+
+    if (!match) {
+        return null;
+    }
+
     const lat = Number.parseFloat(match[1]);
     const lng = Number.parseFloat(match[2]);
-    if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
-    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+        return null;
+    }
+
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return null;
+    }
+
     return { lat, lng };
 }
 
 function lookupCoordinates(query: string): Promise<Coordinates | null> {
     const cleaned = query.trim();
-    if (!cleaned) return Promise.resolve(null);
+
+    if (!cleaned) {
+        return Promise.resolve(null);
+    }
 
     const direct = parseCoordinates(cleaned);
-    if (direct) return Promise.resolve(direct);
+
+    if (direct) {
+        return Promise.resolve(direct);
+    }
 
     const url = new URL('https://nominatim.openstreetmap.org/search');
     url.searchParams.set('q', cleaned);
@@ -54,11 +71,18 @@ function lookupCoordinates(query: string): Promise<Coordinates | null> {
     })
         .then((res) => (res.ok ? res.json() : []))
         .then((data: Array<{ lat: string; lon: string }>) => {
-            if (!data.length) return null;
+            if (!data.length) {
+                return null;
+            }
+
             const first = data[0];
             const lat = Number.parseFloat(first.lat);
             const lng = Number.parseFloat(first.lon);
-            if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
+
+            if (Number.isNaN(lat) || Number.isNaN(lng)) {
+                return null;
+            }
+
             return { lat, lng };
         })
         .catch(() => null);
@@ -70,8 +94,7 @@ L.Icon.Default.mergeOptions({
     iconRetinaUrl:
         'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    shadowUrl:
-        'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
 export function MapBlock({ content }: BlockProps) {
@@ -104,12 +127,15 @@ export function MapBlock({ content }: BlockProps) {
         if (typeof lat === 'number' && typeof lng === 'number') {
             return { lat, lng };
         }
+
         return parseCoordinates(address);
     });
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!coords || !containerRef.current) return;
+        if (!coords || !containerRef.current) {
+            return;
+        }
 
         if (!mapRef.current) {
             mapRef.current = L.map(containerRef.current, {
@@ -143,6 +169,7 @@ export function MapBlock({ content }: BlockProps) {
         const timer = setTimeout(() => {
             mapRef.current?.invalidateSize();
         }, 100);
+
         return () => clearTimeout(timer);
     }, [coords?.lat, coords?.lng, zoom, marker, scroll_wheel_zoom]);
 
@@ -155,15 +182,24 @@ export function MapBlock({ content }: BlockProps) {
     }, []);
 
     function handleAddressBlur() {
-        if (typeof lat === 'number' && typeof lng === 'number') return;
+        if (typeof lat === 'number' && typeof lng === 'number') {
+            return;
+        }
+
         const next = address.trim();
-        if (!next) return;
+
+        if (!next) {
+            return;
+        }
+
         setError(null);
         lookupCoordinates(next).then((found) => {
             if (!found) {
                 setError('No se encontró la dirección.');
+
                 return;
             }
+
             setCoords(found);
         });
     }

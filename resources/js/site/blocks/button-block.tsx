@@ -40,7 +40,9 @@ export function ButtonBlock({ content, theme }: BlockProps) {
         align?: string;
     };
 
-    if (!label) return null;
+    if (!label) {
+        return null;
+    }
 
     const primaryColor = theme?.primary_color;
     const isSolid = variant === 'solid';

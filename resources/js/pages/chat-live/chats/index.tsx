@@ -11,19 +11,24 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { playChatBell, unlockChatBell } from '@/lib/chat-bell';
+import { MediaAttachmentsPicker } from '@/components/media-picker/attachments';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useInitials } from '@/hooks/use-initials';
-import { destroy as chatDestroy, poll as chatPoll, show as chatShow } from '@/routes/chat-live/chats';
-import { store as messageStore } from '@/routes/chat-live/messages';
+import { csrfJson } from '@/lib/csrf';
 import { admin } from '@/routes';
+import {
+    destroy as chatDestroy,
+    poll as chatPoll,
+    show as chatShow,
+} from '@/routes/chat-live/chats';
+import { store as messageStore } from '@/routes/chat-live/messages';
 import type { Paginated } from '@/types';
 import type { BreadcrumbItem } from '@/types';
-import { csrfJson } from '@/lib/csrf';
-import { MediaAttachmentsPicker } from '@/components/media-picker/attachments';
 
 type PickedMedia = {
     id: number;
@@ -86,7 +91,10 @@ type Props = {
 };
 
 function formatTime(iso: string | null | undefined): string {
-    if (!iso) return '';
+    if (!iso) {
+        return '';
+    }
+
     const date = new Date(iso);
     const now = new Date();
     const sameDay = date.toDateString() === now.toDateString();
@@ -107,8 +115,14 @@ function formatTime(iso: string | null | undefined): string {
 }
 
 function bytesToReadable(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
@@ -155,18 +169,54 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
 
     useEffect(() => {
         const echo = (window as any).Echo;
-        if (!echo) return;
+
+        if (!echo) {
+            return;
+        }
 
         const chatIds = new Set<number>();
-        if (selectedChatId) chatIds.add(selectedChatId);
-        for (const c of chats.data) chatIds.add(c.id);
+
+        if (selectedChatId) {
+            chatIds.add(selectedChatId);
+        }
+
+        for (const c of chats.data) {
+            chatIds.add(c.id);
+        }
 
         const channels: any[] = [];
+
         for (const id of chatIds) {
             const ch = echo.private(`chat.${id}`);
-            ch.listen('.message.sent', () => {
-                router.reload({ only: ['chats', 'activeChat'] });
-            });
+            ch.listen(
+                '.message.sent',
+                (
+                    event:
+                        | {
+                              sender_type?: string;
+                              sender_id?: number | null;
+                              chat_id?: number;
+                          }
+                        | undefined,
+                ) => {
+                    router.reload({ only: ['chats', 'activeChat'] });
+
+                    // Bell: suena cuando llega un mensaje del visitor
+                    // (sender_type === 'visitor') y pertenece al chat que el
+                    // admin tiene abierto en este momento. Si llega un
+                    // mensaje a otro chat del sidebar NO suena — solo se
+                    // ve el unread_count. Tampoco suena cuando el admin
+                    // mismo envía (sender_type === 'agent' o el sender_id
+                    // coincide con el admin logueado).
+                    if (
+                        event?.sender_type === 'visitor' &&
+                        event.chat_id !== undefined &&
+                        event.chat_id === selectedChatIdRef.current
+                    ) {
+                        void playChatBell();
+                    }
+                },
+            );
             channels.push(ch);
         }
 
@@ -177,14 +227,34 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
         };
     }, [selectedChatId, chats.data.length]);
 
+    // selectedChatIdRef: el listener de Echo se registra UNA vez por
+    // cambio de selectedChatId (gracias al array de deps), pero por
+    // seguridad usamos un ref para que el handler siempre lea el
+    // valor actual sin re-suscribirse dentro del tick.
+    const selectedChatIdRef = useRef<number | null>(selectedChatId);
+    useEffect(() => {
+        selectedChatIdRef.current = selectedChatId;
+    }, [selectedChatId]);
+
+    // Desbloqueo del bell en el primer user gesture (autoplay policy).
+    useEffect(() => {
+        unlockChatBell();
+    }, []);
+
     function selectChat(chat: ChatItem) {
-        if (chat.id === selectedChatId) return;
+        if (chat.id === selectedChatId) {
+            return;
+        }
+
         setSelectedChatId(chat.id);
         router.get(chatShow(chat.id), {}, { preserveState: false });
     }
 
     function confirmDelete() {
-        if (!selectedChatId) return;
+        if (!selectedChatId) {
+            return;
+        }
+
         router.delete(chatDestroy(selectedChatId), {
             onSuccess: () => {
                 setSelectedChatId(null);
@@ -196,13 +266,23 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
 
     function send(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (!selectedChatId) return;
-        if (!text.trim() && pendingMedia.length === 0) return;
+
+        if (!selectedChatId) {
+            return;
+        }
+
+        if (!text.trim() && pendingMedia.length === 0) {
+            return;
+        }
 
         setSending(true);
 
         const formData = new FormData();
-        if (text.trim()) formData.append('content', text);
+
+        if (text.trim()) {
+            formData.append('content', text);
+        }
+
         // Media picked from the library — backend copies them onto the
         // message's `attachments` collection.
         pendingMedia.forEach((m) => {
@@ -244,12 +324,12 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
         <>
             <Head title="Chats" />
 
-            <div className="flex h-[calc(100vh-5rem)] flex-col pl-2 pt-2 sm:pl-3 sm:pt-3">
+            <div className="flex h-[calc(100vh-5rem)] flex-col pt-2 pl-2 sm:pt-3 sm:pl-3">
                 <div className="flex flex-1 overflow-hidden rounded-lg border bg-card">
                     <aside className="flex w-full max-w-sm flex-col border-r md:w-80">
                         <div className="border-b p-3">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
@@ -383,8 +463,10 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
                                                         }`}
                                                     >
                                                         {message.content && (
-                                                            <p className="whitespace-pre-wrap break-words">
-                                                                {message.content}
+                                                            <p className="break-words whitespace-pre-wrap">
+                                                                {
+                                                                    message.content
+                                                                }
                                                             </p>
                                                         )}
                                                         {message.attachments
@@ -435,14 +517,16 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
                                             {pendingMedia.map((item) => (
                                                 <div
                                                     key={item.id}
-                                                    className="flex items-center gap-2 rounded-md border bg-muted/40 py-1 pl-2 pr-1 text-xs"
+                                                    className="flex items-center gap-2 rounded-md border bg-muted/40 py-1 pr-1 pl-2 text-xs"
                                                 >
                                                     <ImageIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
                                                     <span className="max-w-[180px] truncate font-medium">
                                                         {item.name}
                                                     </span>
                                                     <span className="text-muted-foreground">
-                                                        {bytesToReadable(item.size)}
+                                                        {bytesToReadable(
+                                                            item.size,
+                                                        )}
                                                     </span>
                                                     <button
                                                         type="button"
@@ -472,7 +556,8 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
                                             size="icon"
                                             onClick={() => setAttachOpen(true)}
                                             disabled={
-                                                sending || pendingMedia.length >= 5
+                                                sending ||
+                                                pendingMedia.length >= 5
                                             }
                                             className="h-9 w-9 shrink-0"
                                             title="Adjuntar desde la biblioteca"
@@ -490,7 +575,7 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
                                             disabled={sending}
                                             autoComplete="off"
                                             rows={1}
-                                            className="min-h-9 max-h-40 resize-none py-2"
+                                            className="max-h-40 min-h-9 resize-none py-2"
                                         />
                                         <Button
                                             type="submit"
@@ -543,13 +628,7 @@ export default function ChatsIndex({ chats, activeChat }: Props) {
     );
 }
 
-function AttachmentBubble({
-    att,
-    mine,
-}: {
-    att: Attachment;
-    mine: boolean;
-}) {
+function AttachmentBubble({ att, mine }: { att: Attachment; mine: boolean }) {
     if (isImageAttachment(att.mime_type)) {
         return (
             <a
@@ -582,9 +661,7 @@ function AttachmentBubble({
                 playsInline
                 className="max-h-72 max-w-full rounded border"
                 style={{
-                    borderColor: mine
-                        ? 'rgba(255,255,255,0.30)'
-                        : undefined,
+                    borderColor: mine ? 'rgba(255,255,255,0.30)' : undefined,
                 }}
             />
         );
@@ -616,7 +693,9 @@ function AttachmentBubble({
                     rel="noreferrer"
                     title="Abrir audio en pestaña nueva"
                     className={`shrink-0 rounded p-1 ${
-                        mine ? 'hover:bg-primary-foreground/10' : 'hover:bg-accent'
+                        mine
+                            ? 'hover:bg-primary-foreground/10'
+                            : 'hover:bg-accent'
                     }`}
                 >
                     <ExternalLink className="h-3.5 w-3.5" />

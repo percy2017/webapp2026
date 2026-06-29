@@ -14,14 +14,17 @@ type ImageFieldRenderProps = {
 function normalize(value: unknown): ImageFieldValue {
     if (value && typeof value === 'object' && 'id' in value) {
         const v = value as { id: unknown; url: unknown };
+
         return {
             id: typeof v.id === 'number' ? v.id : null,
             url: typeof v.url === 'string' ? v.url : null,
         };
     }
+
     if (typeof value === 'number') {
         return { id: value, url: null };
     }
+
     return { id: null, url: null };
 }
 
@@ -71,9 +74,11 @@ export const imageField: CustomField<ImageFieldValue> = {
         <ImageFieldRender
             value={props.value}
             onChange={(v) => props.onChange(v)}
-            config={props.field?.config as
-                | { mediaKind?: 'image' | 'video'; label?: string }
-                | undefined}
+            config={
+                props.field?.config as
+                    | { mediaKind?: 'image' | 'video'; label?: string }
+                    | undefined
+            }
         />
     ),
 };

@@ -1,10 +1,10 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Loader2, Mail, Phone, Plus, Search, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import { useInitials } from '@/hooks/use-initials';
 import { destroy, edit, index } from '@/routes/users';
 import type { Paginated } from '@/types';
@@ -41,12 +41,21 @@ export default function UsersIndex({ users, filters }: Props) {
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
+
             return;
         }
-        if (debounceRef.current) clearTimeout(debounceRef.current);
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
         debounceRef.current = setTimeout(() => {
             const params: Record<string, string> = {};
-            if (search) params.search = search;
+
+            if (search) {
+                params.search = search;
+            }
+
             setIsSearching(true);
             router.get(index().url, params, {
                 preserveState: true,
@@ -56,13 +65,19 @@ export default function UsersIndex({ users, filters }: Props) {
                 onFinish: () => setIsSearching(false),
             });
         }, 300);
+
         return () => {
-            if (debounceRef.current) clearTimeout(debounceRef.current);
+            if (debounceRef.current) {
+                clearTimeout(debounceRef.current);
+            }
         };
     }, [search]);
 
     function handleDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         router.delete(destroy(deleting.id).url, {
             onFinish: () => setDeleting(null),
         });
@@ -81,14 +96,14 @@ export default function UsersIndex({ users, filters }: Props) {
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             placeholder="Buscar por nombre, email o teléfono..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 pr-20"
+                            className="pr-20 pl-9"
                         />
-                        <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1">
+                        <div className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1">
                             {isSearching && (
                                 <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                             )}
@@ -114,7 +129,7 @@ export default function UsersIndex({ users, filters }: Props) {
 
                 <div className="overflow-hidden rounded-lg border bg-card">
                     <table className="w-full">
-                        <thead className="border-b bg-muted/50 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <thead className="border-b bg-muted/50 text-left text-xs font-medium tracking-wider text-muted-foreground uppercase">
                             <tr>
                                 <th className="px-4 py-3">Usuario</th>
                                 <th className="px-4 py-3">Email</th>
@@ -151,7 +166,9 @@ export default function UsersIndex({ users, filters }: Props) {
                                                 <Avatar className="h-9 w-9">
                                                     {user.avatar_url ? (
                                                         <AvatarImage
-                                                            src={user.avatar_url}
+                                                            src={
+                                                                user.avatar_url
+                                                            }
                                                             alt={user.name}
                                                         />
                                                     ) : null}

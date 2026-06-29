@@ -1,13 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
-import {
-    ChevronDown,
-    Menu,
-    Monitor,
-    Moon,
-    Sun,
-    type LucideIcon,
-} from 'lucide-react';
+import { ChevronDown, Menu, Monitor, Moon, Sun } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
+import { getMenuIcon } from '@/components/icon-picker';
 import {
     Sheet,
     SheetClose,
@@ -17,7 +12,6 @@ import {
 } from '@/components/ui/sheet';
 import { useAppearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
-import { getMenuIcon } from '@/components/icon-picker';
 
 type Appearance = 'light' | 'dark' | 'system';
 
@@ -47,8 +41,7 @@ export function SiteHeader() {
     const siteName = props.siteSettings?.site_name ?? 'Sitio';
     const logoUrl = props.siteSettings?.logo_url ?? null;
     const nav = (props.siteMenu ?? []).filter(
-        (item): item is NavItem =>
-            Boolean(item.label) && Boolean(item.href),
+        (item): item is NavItem => Boolean(item.label) && Boolean(item.href),
     );
     const [open, setOpen] = useState(false);
     const { appearance, updateAppearance } = useAppearance();
@@ -97,10 +90,7 @@ export function SiteHeader() {
                         }
 
                         return (
-                            <div
-                                key={item.href}
-                                className="group relative"
-                            >
+                            <div key={item.href} className="group relative">
                                 <button
                                     type="button"
                                     className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
@@ -109,11 +99,12 @@ export function SiteHeader() {
                                     {item.label}
                                     <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
                                 </button>
-                                <div className="invisible absolute right-0 top-full z-50 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground opacity-0 shadow-md transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                                <div className="invisible absolute top-full right-0 z-50 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground opacity-0 shadow-md transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                                     {item.children!.map((child) => {
                                         const ChildIcon = getMenuIcon(
                                             child.icon ?? null,
                                         );
+
                                         return (
                                             <a
                                                 key={child.href}
@@ -190,20 +181,17 @@ export function SiteHeader() {
                                 }
 
                                 return (
-                                    <div
-                                        key={item.href}
-                                        className="space-y-1"
-                                    >
+                                    <div key={item.href} className="space-y-1">
                                         <div className="inline-flex w-full items-center justify-end gap-2 px-3 py-2 text-base font-semibold text-foreground">
                                             {item.label}
                                             <Icon className="h-4 w-4 text-muted-foreground" />
                                         </div>
                                         <div className="flex flex-col gap-0.5 pe-3">
                                             {item.children!.map((child) => {
-                                                const ChildIcon =
-                                                    getMenuIcon(
-                                                        child.icon ?? null,
-                                                    );
+                                                const ChildIcon = getMenuIcon(
+                                                    child.icon ?? null,
+                                                );
+
                                                 return (
                                                     <SheetClose
                                                         asChild
@@ -231,9 +219,7 @@ export function SiteHeader() {
                                     <button
                                         key={value}
                                         type="button"
-                                        onClick={() =>
-                                            updateAppearance(value)
-                                        }
+                                        onClick={() => updateAppearance(value)}
                                         aria-label={`Tema ${label}`}
                                         className={cn(
                                             'inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground',

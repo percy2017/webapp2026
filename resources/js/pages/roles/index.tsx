@@ -1,6 +1,7 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { Edit, Plus, Save, Shield, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import { destroy, index, store, update } from '@/routes/roles';
 
 type RoleItem = {
@@ -62,19 +62,28 @@ export default function RolesIndex({ roles, permissions }: Props) {
     }
 
     function togglePermission(name: string) {
-        if (!editing) return;
+        if (!editing) {
+            return;
+        }
+
         const set = new Set(editing.permissions);
+
         if (set.has(name)) {
             set.delete(name);
         } else {
             set.add(name);
         }
+
         setEditing({ ...editing, permissions: Array.from(set) });
     }
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (!editing) return;
+
+        if (!editing) {
+            return;
+        }
+
         setSaving(true);
 
         const url = editing.id ? update(editing.id) : store();
@@ -97,7 +106,10 @@ export default function RolesIndex({ roles, permissions }: Props) {
     }
 
     function confirmDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         router.delete(destroy(deleting.id), {
             onFinish: () => setDeleting(null),
         });
@@ -237,7 +249,10 @@ export default function RolesIndex({ roles, permissions }: Props) {
                 open={open}
                 onOpenChange={(o) => {
                     setOpen(o);
-                    if (!o) setEditing(null);
+
+                    if (!o) {
+                        setEditing(null);
+                    }
                 }}
             >
                 <DialogContent>

@@ -71,4 +71,24 @@ class SiteTemplate extends Model
             ])
             ->all();
     }
+
+    /**
+     * Promote this template to active AND point the SiteSetting singleton
+     * at it. Brand identity (logo, favicon, PWA theme) is owned by the
+     * operator on /admin/site-settings — it does NOT travel with the
+     * template, so this method only flips the active flag and writes the
+     * slug into SiteSetting.
+     */
+    public function activate(): SiteSetting
+    {
+        static::query()->update(['is_active' => false]);
+        $this->update(['is_active' => true]);
+
+        $setting = SiteSetting::instance();
+        $setting->active_template_slug = $this->slug;
+        $setting->save();
+        SiteSetting::flushCache();
+
+        return $setting;
+    }
 }

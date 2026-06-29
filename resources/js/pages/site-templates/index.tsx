@@ -1,9 +1,16 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { ExternalLink, Loader2, Pencil, Plus, ScanQrCode, Settings, Trash2 } from 'lucide-react';
+import {
+    ExternalLink,
+    Loader2,
+    Pencil,
+    Plus,
+    ScanQrCode,
+    Settings,
+    Trash2,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
-import AppLayout from '@/layouts/app-layout';
-import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/confirm-dialog';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -16,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { QrShareButton } from '@site/components/qr-share-button';
+import AppLayout from '@/layouts/app-layout';
 import {
     activate as activateRoute,
     destroy as destroyRoute,
@@ -25,6 +32,7 @@ import {
     update as updateRoute,
 } from '@/routes/site-templates';
 import type { BreadcrumbItem } from '@/types';
+import { QrShareButton } from '@site/components/qr-share-button';
 
 type SiteTemplate = {
     id: number;
@@ -70,8 +78,13 @@ export default function SiteTemplatesIndex({ templates }: Props) {
      */
     function publicUrlFor(slug: string, isActive: boolean): string {
         const path = isActive ? '/' : `/?template=${encodeURIComponent(slug)}`;
-        if (typeof window === 'undefined') return path;
+
+        if (typeof window === 'undefined') {
+            return path;
+        }
+
         const { origin } = window.location;
+
         return `${origin}${path}`;
     }
 
@@ -84,7 +97,10 @@ export default function SiteTemplatesIndex({ templates }: Props) {
     }
 
     function handleDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         router.delete(destroyRoute(deleting.id).url, {
             preserveScroll: true,
             onFinish: () => setDeleting(null),
@@ -135,7 +151,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                 ) : (
                     <div className="overflow-hidden rounded-xl border bg-card">
                         <table className="w-full text-sm">
-                            <thead className="border-b bg-muted/40 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            <thead className="border-b bg-muted/40 text-left text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                 <tr>
                                     <th className="px-4 py-3">Página</th>
                                     <th className="hidden px-4 py-3 sm:table-cell">
@@ -155,6 +171,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                 {templates.data.map((template) => {
                                     const primary =
                                         template.theme?.primary_color;
+
                                     return (
                                         <tr
                                             key={template.id}
@@ -246,7 +263,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                                     </div>
                                                 ) : (
                                                     <span
-                                                        className="inline-flex items-center gap-1.5 rounded-full border border-dashed bg-muted/40 px-2.5 py-1 text-xs italic text-muted-foreground"
+                                                        className="inline-flex items-center gap-1.5 rounded-full border border-dashed bg-muted/40 px-2.5 py-1 text-xs text-muted-foreground italic"
                                                         title="Activá esta página para generar su QR"
                                                     >
                                                         <ScanQrCode className="h-3 w-3" />
@@ -262,9 +279,11 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                                         size="sm"
                                                     >
                                                         <Link
-                                                            href={editRoute(
-                                                                template.id,
-                                                            ).url}
+                                                            href={
+                                                                editRoute(
+                                                                    template.id,
+                                                                ).url
+                                                            }
                                                             prefetch
                                                             className="inline-flex h-8 w-8 items-center justify-center"
                                                             title="Editar"
@@ -277,9 +296,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            setEditing(
-                                                                template,
-                                                            )
+                                                            setEditing(template)
                                                         }
                                                     >
                                                         <Settings className="h-3.5 w-3.5" />
@@ -364,9 +381,7 @@ function TemplateSettingsDialog({
 }) {
     const [name, setName] = useState(template?.name ?? '');
     const [slug, setSlug] = useState(template?.slug ?? '');
-    const [description, setDescription] = useState(
-        template?.description ?? '',
-    );
+    const [description, setDescription] = useState(template?.description ?? '');
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -379,7 +394,9 @@ function TemplateSettingsDialog({
         }
     }, [template?.id]);
 
-    if (!template) return null;
+    if (!template) {
+        return null;
+    }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -406,9 +423,7 @@ function TemplateSettingsDialog({
         <Dialog open onOpenChange={(o) => !o && onClose()}>
             <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>
-                        Configuración — {template.name}
-                    </DialogTitle>
+                    <DialogTitle>Configuración — {template.name}</DialogTitle>
                     <DialogDescription>
                         Datos básicos. El contenido se edita en "Editar".
                     </DialogDescription>
@@ -420,9 +435,7 @@ function TemplateSettingsDialog({
                     className="grid gap-4 py-2"
                 >
                     <div className="space-y-2">
-                        <Label htmlFor={`name-${template.id}`}>
-                            Nombre
-                        </Label>
+                        <Label htmlFor={`name-${template.id}`}>Nombre</Label>
                         <Input
                             id={`name-${template.id}`}
                             value={name}

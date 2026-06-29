@@ -8,12 +8,13 @@ function auditRegistry(file, registryName) {
     // Find the registry declaration.
     const declRe = new RegExp(`export const ${registryName}[\\s\\S]+?^};`, 'm');
     const block = src.match(declRe)?.[0];
+
     if (!block) {
         console.error(`Could not find ${registryName} in ${file}`);
         process.exit(1);
     }
 
-    const entryRe = /^    ([a-z][a-z0-9-]*|\'[a-z][a-z0-9-]*\'|\"[a-z][a-z0-9-]*\"):\s*\{/gm;
+    const entryRe = /^ {4}([a-z][a-z0-9-]*|\'[a-z][a-z0-9-]*\'|\"[a-z][a-z0-9-]*\"):\s*\{/gm;
     const entries = [...block.matchAll(entryRe)].map((m) => ({
         key: m[1].replace(/['"]/g, ''),
         index: m.index,
@@ -22,6 +23,7 @@ function auditRegistry(file, registryName) {
     console.log(`\n=== ${registryName} (${entries.length} entries) ===\n`);
 
     let allOk = true;
+
     for (let i = 0; i < entries.length; i++) {
         const start = entries[i].index;
         const end = i + 1 < entries.length ? entries[i + 1].index : block.length;
@@ -31,6 +33,7 @@ function auditRegistry(file, registryName) {
         const label = labelMatch ? labelMatch[1] : '?';
 
         const dcOpenIdx = slice.indexOf('defaultContent:');
+
         if (dcOpenIdx === -1) {
             console.log(`  ✗ ${entries[i].key.padEnd(15)} ${label.padEnd(20)} MISSING`);
             allOk = false;
@@ -38,6 +41,7 @@ function auditRegistry(file, registryName) {
         }
 
         const braceIdx = slice.indexOf('{', dcOpenIdx);
+
         if (braceIdx === -1) {
             console.log(`  ✗ ${entries[i].key.padEnd(15)} ${label.padEnd(20)} MISSING brace`);
             allOk = false;
@@ -47,18 +51,34 @@ function auditRegistry(file, registryName) {
         let depth = 0;
         let inStr = null;
         let dcEnd = -1;
+
         for (let j = braceIdx; j < slice.length; j++) {
             const c = slice[j];
+
             if (inStr) {
-                if (c === '\\') { j += 1; continue; }
-                if (c === inStr) inStr = null;
+                if (c === '\\') {
+ j += 1; continue; 
+}
+
+                if (c === inStr) {
+inStr = null;
+}
+
                 continue;
             }
-            if (c === '"' || c === "'" || c === '`') { inStr = c; continue; }
-            if (c === '{') depth += 1;
-            else if (c === '}') {
+
+            if (c === '"' || c === "'" || c === '`') {
+ inStr = c; continue; 
+}
+
+            if (c === '{') {
+depth += 1;
+} else if (c === '}') {
                 depth -= 1;
-                if (depth === 0) { dcEnd = j; break; }
+
+                if (depth === 0) {
+ dcEnd = j; break; 
+}
             }
         }
 
@@ -77,17 +97,27 @@ function auditRegistry(file, registryName) {
 
         let totalKeys = 0;
         let populatedKeys = 0;
+
         if (indents.length > 0) {
             const minIndent = Math.min(...indents);
+
             for (const line of lines) {
                 const m = line.match(
                     new RegExp(`^\\s{${minIndent}}([a-zA-Z_][a-zA-Z0-9_]*)\\s*:`),
                 );
-                if (!m) continue;
+
+                if (!m) {
+continue;
+}
+
                 totalKeys += 1;
                 const after = line.slice(m.index + m[0].length);
                 const trimmed = after.trim().replace(/,$/, '').trim();
-                if (trimmed === '' || trimmed === 'null' || trimmed === 'undefined') continue;
+
+                if (trimmed === '' || trimmed === 'null' || trimmed === 'undefined') {
+continue;
+}
+
                 populatedKeys += 1;
             }
         }
@@ -95,7 +125,10 @@ function auditRegistry(file, registryName) {
         const isPopulated = populatedKeys > 0;
         const flag = isPopulated ? '✓' : '✗';
         console.log(`  ${flag} ${entries[i].key.padEnd(15)} ${label.padEnd(20)} ${populatedKeys}/${totalKeys} keys`);
-        if (!isPopulated) allOk = false;
+
+        if (!isPopulated) {
+allOk = false;
+}
     }
 
     return allOk;

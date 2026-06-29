@@ -39,19 +39,25 @@ Encontrás la navegación completa en la **sidebar izquierda** del panel.
 ## Conceptos básicos
 
 ### Página
+
 Una página es tu tarjeta digital. Es lo que ven los visitantes cuando entran a tu sitio. Podés tener varias páginas (por ejemplo, una principal y una de "Sobre nosotros") y activar solo una a la vez.
 
 ### Plantilla
+
 Una plantilla es un diseño pre-armado. Al crear una página nueva elegís una plantilla y se carga con contenido de ejemplo. Después lo editás como quieras.
 
 ### Sección
+
 Una sección es un bloque grande de tu página (hero, características, galería, precios, etc). Las secciones vienen con las plantillas pero podés reorganizarlas o eliminarlas.
 
 ### Bloque
+
 Un bloque es un elemento más chico dentro o fuera de las secciones (texto, imagen, video, galería, mapa, contador). Lo editás desde el editor visual.
 
 ### Chat widget
+
 Es el botón flotante que aparece en tu sitio público. Los visitantes hacen click y pueden escribirte. Vos respondés desde el panel.
 
 ### Calendario
+
 Es donde gestionás turnos y eventos. Cada evento tiene fecha, hora y descripción.

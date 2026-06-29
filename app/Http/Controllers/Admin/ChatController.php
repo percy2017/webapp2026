@@ -18,7 +18,7 @@ class ChatController extends Controller
 {
     public function index(): Response
     {
-        $chats = Chat::with(['user:id,name,email', 'latestMessage'])
+        $chats = Chat::with(['user:id,name,email,avatar_media_id', 'latestMessage'])
             ->withCount(['messages as unread_count' => function ($query) {
                 $query->where('sender_type', 'visitor')->whereNull('read_at');
             }])
@@ -34,10 +34,11 @@ class ChatController extends Controller
             // user form had an avatar but the chat list showed their
             // initials because we only checked the Spatie collection.
             $chat->user_avatar_url = $chat->user?->avatar_url;
-            $chat->preview = $chat->latestMessage?->content
-                ?? ($chat->latestMessage?->getMedia('attachments')->count()
-                    ? '📎 Archivo adjunto'
-                    : 'Sin mensajes aún');
+            // preview now goes through ChatMessage::previewText() so
+            // media-only messages (text empty + media_ids filled) stop
+            // falling through to "Sin mensajes aún".
+            $chat->preview = $chat->latestMessage?->previewText()
+                ?? 'Sin mensajes aún';
 
             return $chat;
         });
@@ -54,7 +55,7 @@ class ChatController extends Controller
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
-        $chat->load(['user:id,name,email', 'messages.sender.media']);
+        $chat->load(['user:id,name,email,avatar_media_id', 'messages.sender.media']);
         $chat->user_avatar_url = $chat->user?->avatar_url;
 
         $messages = $chat->messages->map(function (ChatMessage $message) {
@@ -70,14 +71,27 @@ class ChatController extends Controller
             ];
         });
 
+        $chats = Chat::with(['user:id,name,email,avatar_media_id', 'latestMessage'])
+            ->withCount(['messages as unread_count' => function ($query) {
+                $query->where('sender_type', 'visitor')->whereNull('read_at');
+            }])
+            ->orderByDesc('last_message_at')
+            ->orderByDesc('id')
+            ->paginate(20);
+
+        // Same transform as index() — without this the sidebar
+        // `user_avatar_url` field is null when visiting a specific chat
+        // URL (/admin/chat-live/chats/{id}).
+        $chats->getCollection()->transform(function (Chat $chat) {
+            $chat->user_avatar_url = $chat->user?->avatar_url;
+            $chat->preview = $chat->latestMessage?->previewText()
+                ?? 'Sin mensajes aún';
+
+            return $chat;
+        });
+
         return Inertia::render('chat-live/chats/index', [
-            'chats' => Chat::with(['user:id,name,email', 'latestMessage'])
-                ->withCount(['messages as unread_count' => function ($query) {
-                    $query->where('sender_type', 'visitor')->whereNull('read_at');
-                }])
-                ->orderByDesc('last_message_at')
-                ->orderByDesc('id')
-                ->paginate(20),
+            'chats' => $chats,
             'activeChat' => [
                 'id' => $chat->id,
                 'user' => [

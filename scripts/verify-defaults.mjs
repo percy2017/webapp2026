@@ -11,21 +11,35 @@ function extractIds(content) {
   let curLabel = null;
   let curDefault = null;
   let depth = 0;
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+
     if (!inRegistry) {
-      if (/BASIC_BLOCKS_REGISTRY|SECTION_REGISTRY/.test(line)) inRegistry = true;
+      if (/BASIC_BLOCKS_REGISTRY|SECTION_REGISTRY/.test(line)) {
+inRegistry = true;
+}
+
       continue;
     }
+
     if (!inBlock) {
       const idMatch = line.match(/^\s+id:\s*['"]([^'"]+)['"]/);
       const labelMatch = line.match(/^\s+label:\s*['"]([^'"]+)['"]/);
-      if (idMatch) { curId = idMatch[1]; }
-      if (labelMatch) { curLabel = labelMatch[1]; }
+
+      if (idMatch) {
+ curId = idMatch[1]; 
+}
+
+      if (labelMatch) {
+ curLabel = labelMatch[1]; 
+}
+
       if (/defaultContent:/.test(line)) {
         inBlock = true;
         curDefault = '';
         depth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+
         // if depth is 0, the entire defaultContent is on this line; treat as one-liner
         if (depth <= 0) {
           // single line like: defaultContent: { foo: 'bar' }
@@ -33,14 +47,17 @@ function extractIds(content) {
           result[curId] = { label: curLabel, content: line.split('defaultContent:')[1] || '' };
           curId = null;
         }
+
         continue;
       }
+
       if (/^\s*\},\s*$/.test(line) && curId) {
         // end of object — shouldn't normally hit before defaultContent
       }
     } else {
       curDefault += line + '\n';
       depth += (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+
       if (depth <= 0) {
         // we just closed defaultContent
         // check for image-bearing fields
@@ -56,12 +73,14 @@ function extractIds(content) {
       }
     }
   }
+
   return result;
 }
 
 function audit(file, registryName) {
   const result = extractIds(file);
   console.log(`\n=== ${registryName} (${file}) ===`);
+
   for (const [id, info] of Object.entries(result)) {
     const imgStr = info.imageRefs && info.imageRefs.length
       ? `→ ${info.imageRefs.join(', ')}`
